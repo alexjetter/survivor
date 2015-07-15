@@ -1,0 +1,150 @@
+﻿body {
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	background-color: #444444;
+	color: #222222;
+	padding: 4;
+}
+
+.thecontainer {
+	margin-left: auto;
+	margin-right: auto;
+	display: table;
+}
+
+.content {
+	min-width: 512;
+	background-color: #FFFFFF;
+	padding: 8;
+}
+
+.menu {
+	min-width: 128;
+	background-color: #DDDDDD;
+	padding: 8;
+}
+
+div {
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: 2;
+	padding-right: 2;
+	margin: 2;
+}
+
+span {
+	padding: 2;
+	margin: 2;
+}
+
+form {margin-bottom: 0;}
+
+.title {
+	font-size: 2em;
+	font-weight: bold;
+}
+.subtitle {
+	font-size: 1.25em;
+}
+
+.spacer {height: 1em;}
+.halfspacer {height: 0.5em;}
+.quarterspacer {height: 0.25em;}
+
+.bgwhite {background-color: #FFFFFF;}
+.bggrey {background-color: #888888;}
+.bgblack {background-color: #222222;}
+.bgtribeGreen {background-color: #64e4b8; color: #222222;}
+.bgtribeMagenta {background-color: #ff5cad; color: #222222;}
+.bgmerge {background-color: #B4A7D6; color: #222222;}
+.bggreen5 {background-color: #66ff66; color: #222222;}
+.bggreen4 {background-color: #88ff66; color: #222222;}
+.bggreen3 {background-color: #aaff66; color: #222222;}
+.bggreen2 {background-color: #ccff66; color: #222222;}
+.bggreen1 {background-color: #eeff66; color: #222222;}
+.bgred1 {background-color: #ffee66; color: #222222;}
+.bgred2 {background-color: #ffcc66; color: #222222;}
+.bgred3 {background-color: #ffaa66; color: #222222;}
+.bgred4 {background-color: #ff8866; color: #222222;}
+.bgred5 {background-color: #ff6666; color: #222222;}
+
+.fgwhite {color: #FFFFFF;}
+.fggrey {color: #888888;}
+.fgblack {color: #222222;}
+.fgtribeGreen {color: #46b58f;}
+.fgtribeMagenta {color: #e62e8a;}
+.fgmerge {color: #B4A7D6;}
+.fggreen5 {color: #66ff66;;}
+.fggreen4 {color: #88ff66;;}
+.fggreen3 {color: #aaff66;;}
+.fggreen2 {color: #ccff66;;}
+.fggreen1 {color: #eeff66;;}
+.fgred1 {color: #ffee66;}
+.fgred2 {color: #ffcc66;}
+.fgred3 {color: #ffaa66;}
+.fgred4 {color: #ff8866;}
+.fgred5 {color: #ff6666;}
+
+.castawayimgsmall {height: 48;}
+.pickwidth {width: 60;}
+.pickwidthsm {width: 16;}
+
+.padlr0 {padding-left: 0; padding-right: 0;}
+.padlr1 {padding-left: 1; padding-right: 1;}
+.padlr2 {padding-left: 2; padding-right: 2;}
+.padlr4 {padding-left: 4; padding-right: 4;}
+
+.padtb0 {padding-top: 0; padding-bottom: 0;}
+.padtb1 {padding-top: 1; padding-bottom: 1;}
+.padtb2 {padding-top: 2; padding-bottom: 2;}
+.padtb4 {padding-top: 4; padding-bottom: 4;}
+
+.pad0 {padding: 0;}
+.pad1 {padding: 1;}
+.pad2 {padding: 2;}
+.pad4 {padding: 4;}
+
+.marg0 {margin: 0;}
+.marg1 {margin: 1;}
+.marg2 {margin: 2;}
+.marg4 {margin: 4;}
+
+.textleft {text-align: left;}
+.textcenter {text-align: center;}
+.textright {text-align: right;}
+
+table, th, td{
+	border: 1px solid #222222;
+	padding: 1;
+	spacing: 0;
+	border-collapse: collapse;
+	text-align: center;
+}
+
+.border {border: 1px solid #222222;}
+.borderleft {border-left: 1px solid #222222;}
+.borderright {border-right: 1px solid #222222;}
+.bordertop {border-top: 1px solid #222222;}
+.borderbottom {border-bottom: 1px solid #222222;}
+.noborder {border: 0px;}
+	
+.inline {display: inline-block;}
+.floatright {float: right;}
+.floatleft {float: left;}
+
+.font0{font-size: 0;}
+
+.columnheader {
+	background-color: #222222;
+}
+
+.textbold {font-weight: bold;}
+
+a {
+	text-decoration: none;
+	padding: 0;
+	margin: 0;
+}
+
+a:hover {
+	text-decoration: underline;
+}

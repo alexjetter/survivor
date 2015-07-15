@@ -1,0 +1,75 @@
+﻿{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
+
+<div class="marg0 pad0 thecontainer">
+
+<div class="content floatleft marg0">
+
+<span class="title">actions</span>
+
+<div class="spacer"></div>
+
+{% if user.is_superuser %}
+<table class="floatright marg4">
+	<tr>
+		<td>
+			<div class="textright">
+				<form action="{% url 'season31:addaction' %}" method="post">
+					{% csrf_token %}
+					<div>
+						<label for="name">Name</label>
+						<input type="text" name="name" id="name" />
+					</div>
+					<div>
+						<label for="icon_filename">Icon Filename</label>
+						<input type="text" name="icon_filename" id="icon_filename" />
+					</div>
+					<div>
+						<label for="score">Score</label>
+						<input type="number" name="score" id="score" min=-10 max=10 value=1 />
+					</div>
+					<div>
+						<input type="submit" value="Add action" />
+					</div>
+				</form>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="textright">
+				<form action="{% url 'season31:deleteaction' %}" method="post">
+					{% csrf_token %}
+					<select name="id">
+						{% for action in actions %}
+						<option value="{{ action.id }}">{{ action.name }}</option>
+						{% endfor %}
+					</select>
+					<input type="submit" value="Delete action" />
+				</form>
+			</div>
+		</td>
+	</tr>
+</table>
+{% endif %}
+
+<table>
+	{% for action in actions %}
+	<tr>
+		<td class="columnheader fgwhite">{{ action }}</td>
+		<td>{{ action.score }}</td>
+		<td>
+			<img src="{% static 'season31/images/'%}{{ action.icon_filename }}.png" title="{{ action.name }}" />
+			</td>
+	</tr>
+	{% endfor %}
+</table>
+
+</div>
+<div class="menu floatleft marg0">
+	{% include "season31/menu.html" %}
+	{% include "season31/leaderboard.html" %}
+</div>
+
+</div>

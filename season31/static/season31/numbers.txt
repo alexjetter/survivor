@@ -1,0 +1,92 @@
+﻿Carolyn Rivera
+Corporate Executive
+52
+
+Dan Foley
+Postal Worker
+47
+
+Hali Ford
+Law Student
+25
+
+Jenn Brown
+Sailing Instructor
+22
+
+Joaquin Souberielle
+Marketing Director
+27
+
+Joe Anglim
+Jewelry Designer
+25
+
+Kelly Remington
+State Trooper
+44
+
+Lindsey Cascaddan
+Hairstylist
+24
+
+Max Dawson
+Media Consultant
+37
+
+Mike Holloway
+Oil Driller
+38
+
+Nina Poersch
+Hearing Advocate
+51
+
+Rodney Lavoie Jr
+General Contractor
+24
+
+Shirin Oskooi
+Yahoo Executive
+31
+
+Sierra Thomas
+Barrel Racer
+27
+
+So Kim
+Retail Buyer
+31
+
+Tyler Frederickson
+Ex-Talent Agent Assistant
+33
+
+Vince Sly
+Coconut Vendor
+32
+
+Will Sims II
+YouTube Sensation
+41
+
+1	Coined Episode Title
+1	Got Immunity Idol Clue
+1	Found Immunity Idol
+1	Held Immunity Idol
+4	Won Tribal Immunity
+6	Won Individial Immunity
+2	Won Tribal Reward
+4	Won Individual Reward
+2	Invited To Individual Reward
+4	Voted Correctly
+-1	Recieved Votes
+-2	Voted Out
+10	Correctly Predicted Vote
+
+
+12	0.75
+16	1.0
+20	1.25
+24	1.5
+32	2.0

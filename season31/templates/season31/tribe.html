@@ -1,0 +1,34 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
+
+<div class="marg0 pad0 thecontainer">
+
+<div class="content floatleft marg0">
+
+<span class="title">{{ tribe.name }}</span>
+<div class="subtitle fgtribe{{ tribe.color }}">{{ tribe.color }}</div>
+
+<div class="spacer"></div>
+
+
+<table>
+{% for episode in tribe.get_all_episodes %}
+	<tr>
+		<td class="columnheader fgwhite"><a href="{% url 'season31:episode' episode.id %}" class="fgwhite">{{ episode }}</a></td>
+		{% for castawayepisode in tribe.castawayepisode_set.all %}
+		{% if castawayepisode.episode == episode %}
+		<td class="bgtribe{{ castawayepisode.tribe.color }}"><a href="{% url 'season31:castaway' castawayepisode.castaway.id %}" class="fgblack">{{ castawayepisode.castaway }}</a></td>
+		{% endif %}
+		{% endfor %}
+	</tr>
+{% endfor %}
+</table>
+
+</div>
+<div class="menu floatleft marg0">
+	{% include "season31/menu.html" %}
+	{% include "season31/leaderboard.html" %}
+</div>
+
+</div>

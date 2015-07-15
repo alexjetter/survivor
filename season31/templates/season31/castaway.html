@@ -1,0 +1,61 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
+
+<div class="marg0 pad0 thecontainer">
+
+<div class="content floatleft marg0">
+
+<div class="floatleft">
+	<img src="{% static 'season31/images/'%}{{ castaway.name }}.png" title="{{ castaway.name }}" />
+</div>
+<div>
+	<span class="title">{{ castaway.full_name }}</span>
+	<span class="subtitle"><a href="{% url 'season31:tribe' castaway.get_tribe.id %}" class="fg{{ castaway.get_tribe }}">{{ castaway.get_tribe }}</a></span>
+	<div class="subtitle">{{ castaway.occupation }}, Age {{ castaway.age }}</div>
+</div>
+
+
+
+<div class="spacer"></div>
+
+<table>
+	<tr>
+		<td></td>
+		<td class="columnheader fgwhite">Tribe</td>
+		<td class="columnheader fgwhite"></td>
+		<td class="columnheader fgwhite">Actions</td>
+		<td class="columnheader fgwhite"></td>
+		<td class="columnheader fgwhite">Voted For</td>
+		<td class="columnheader fgwhite"></td>
+		<td class="columnheader fgwhite">Score</td>
+	</tr>
+	{% for castawayepisode in castaway.castawayepisode_set.all %}
+	<tr>
+		<td class="columnheader fgwhite"><a href="{% url 'season31:episode' castawayepisode.episode.id %}" class="fgwhite">{{ castawayepisode.episode }}</a></td>
+		<td class="bgtribe{{ castawayepisode.tribe.color }}"><a href="{% url 'season31:tribe' castawayepisode.tribe.id %}" class="fgblack">{{ castawayepisode.tribe }}</a></td>
+		<td class="columnheader fgwhite"></td>
+		<td>
+		{% for action in castawayepisode.actions.all %}
+			<img src="{% static 'season31/images/'%}{{ action.icon_filename }}.png" title="{{ action.name }}" />
+		{% endfor %}
+		</td>
+		<td class="columnheader fgwhite"></td>
+		{% if castawayepisode.vote_set.all %}
+		<td class="bgtribe{{ castawayepisode.tribe.color }}"><a href="{% url 'season31:castaway' castawayepisode.vote_set.all.0.castaway.id %}" class="fgblack">{{ castawayepisode.vote_set.all.0.castaway }}</a></td>
+		{% else %}
+		<td>-</td>
+		{% endif %}
+		<td class="columnheader fgwhite"></td>
+		<td>{{ castawayepisode.score }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+</div>
+<div class="menu floatleft marg0">
+	{% include "season31/menu.html" %}
+	{% include "season31/leaderboard.html" %}
+</div>
+
+</div>

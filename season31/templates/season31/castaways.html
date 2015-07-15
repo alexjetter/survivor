@@ -1,0 +1,84 @@
+﻿{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
+
+<div class="marg0 pad0 thecontainer">
+
+<div class="content floatleft marg0">
+
+<span class="title">Castaways</span>
+
+<div class="spacer"></div>
+
+{% if user.is_superuser %}
+<table class="floatright marg4">
+	<tr>
+		<td>
+			<div class="textright">
+				<form action="{% url 'season31:addcastaway' %}" method="post">
+					{% csrf_token %}
+					<div>
+						<label for="name">Name</label>
+						<input type="text" name="name" id="name" />
+					</div>
+					<div>
+						<label for="fullname">Full Name</label>
+						<input type="text" name="fullname" id="fullname" />
+					</div>
+					<div>
+						<label for="occupation">Occupation</label>
+						<input type="text" name="occupation" id="occupation" />
+					</div>
+					<div>
+						<label for="age">Age</label>
+						<input type="number" name="age" id="age" min=18 max=99 />
+					</div>
+					<div>
+						<input type="submit" value="Add Castaway" />
+					</div>
+				</form>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="textright">
+				<form action="{% url 'season31:deletecastaway' %}" method="post">
+					{% csrf_token %}
+					<select name="id">
+						{% for castaway in castaways %}
+						<option value="{{ castaway.id }}">{{ castaway.name }}</option>
+						{% endfor %}
+					</select>
+					<input type="submit" value="Delete Castaway" />
+				</form>
+			</div>
+		</td>
+	</tr>
+</table>
+{% endif %}
+
+<table>
+	<tr>
+		<td class="columnheader"></td>
+		{% for episode in episodes%}
+		<td class="columnheader fgwhite"><a href="{% url 'season31:episode' episode.id %}" class="fgwhite">{{ episode.short }}</a></td>
+		{% endfor %}
+	</tr>
+	{% for castaway in castaways %}
+	<tr>
+		<td class="columnheader fgwhite"><a href="{% url 'season31:castaway' castaway.id %}" class="fgwhite">{{ castaway }}</a></td>
+		{% for ce in castaway.castawayepisode_set.all %}
+		<td class="bgtribe{{ ce.tribe.color }}"><a href="{% url 'season31:tribe' ce.tribe.id %}" class="fgblack">{{ ce.score }}</a></td>
+		{% endfor %}
+	</tr>
+	{% endfor %}
+</table>
+
+</div>
+<div class="menu floatleft marg0">
+	{% include "season31/menu.html" %}
+	{% include "season31/leaderboard.html" %}
+</div>
+
+</div>

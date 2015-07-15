@@ -1,0 +1,29 @@
+﻿{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
+
+<div class="marg0 pad0 thecontainer">
+
+<div class="content floatleft marg0">
+
+<div class="title">Fantasy Survivor</div>
+<div class="subtitle">Worlds Apart</div>
+<div class="spacer"></div>
+
+<div class="subtitle">Login</div>
+
+<form id="login_form" method="post" action="/season31/login/">
+	{% csrf_token %}
+	<div><input type="text" name="username" value="" size="30"/></div>
+	<div><input type="password" name="password" value="" size="30"/></div>
+	{{ profile_form.as_p }}
+	<input type="submit" name="submit" value="Login" />
+</form>
+
+</div>
+<div class="menu floatleft marg0">
+	{% include "season31/menu.html" %}
+	{% include "season31/leaderboard.html" %}
+</div>
+
+</div>

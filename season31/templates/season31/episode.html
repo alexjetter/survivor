@@ -1,0 +1,234 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
+
+<div class="marg0 pad0 thecontainer">
+
+<div class="content floatleft marg0">
+
+<span class="title">"{{ episode.title }}"</span>
+{% if episode.get_prev_episode %}
+<span><a href="{% url 'season31:episode' episode.get_prev_episode.id %}" class="fggrey">{{ episode.get_prev_episode.short}}</a></span>
+{% endif %}
+<span class="subtitle">{{ episode.short }}</span>
+{% if episode.get_next_episode %}
+<span><a href="{% url 'season31:episode' episode.get_next_episode.id %}" class="fggrey">{{ episode.get_next_episode.short }}</a></span>
+{% endif %}
+<div class="subtitle">{{ episode.air_day}}, {{ episode.air_date}} ET</div>
+
+<div class="spacer"></div>
+
+{% if user.is_superuser %}
+<table class="floatright marg4">
+	<tr>
+		<td colspan=3>
+			<form action="{% url 'season31:deleteepisode' episode.id %}" method="post">
+				{% csrf_token %}
+				<input type="submit" value="Delete This Episode" />
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3>
+			<form action="{% url 'season31:updateepisodetitle' episode.id %}" method="post">
+				{% csrf_token %}
+				<input type="text" name="title" />
+				<input type="submit" value="Update Episode Title" />
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3>
+			<form action="{% url 'season31:updateepisodedatetime' episode.id %}" method="post">
+				{% csrf_token %}
+				<input type="text" name="airdatetime" value="YYYYmmdd HH"/>
+				<input type="submit" value="Update Air Date / Time" />
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3>
+			<form action="{% url 'season31:updateepisodeteamsize' episode.id %}" method="post">
+				{% csrf_token %}
+				<input type="number" name="teamsize" id="teamsize" min="2" max="5" value="{{ episode.team_size }}" />
+				<input type="submit" value="Update Team Size" />
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<td class="columnheader fgwhite">Actions</td>
+		<td class="columnheader fgwhite">Votes</td>
+		<td class="columnheader fgwhite">Tribes</td>
+	</tr>
+	<tr>
+		<td class="textleft">
+			<form action="{% url 'season31:updateceactions' episode.id %}" method="post">
+				{% csrf_token %}
+				<div class="marg0 pad0">
+					<select name="action">
+						{% for action in episode.get_possible_actions %}
+						<option value="{{ action.id }}">{{ action.name }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				{% for castawayepisode in episode.castawayepisode_set.all %}
+				<div class="marg0 pad0 fgtribe{{ castawayepisode.color }}">
+					<input type="checkbox" name="castaways" id="{{ castawayepisode.id }}" value="{{ castawayepisode.id }}" />
+					<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
+				</div>
+				{% endfor %}
+				<div class="fggrey">
+					<input type="checkbox" name="delete" id="delete" />
+					<label for="delete">Delete Instead</label>
+				</div>
+				<input type="submit" value="Update Actions" />
+			</form>
+		</td>
+		<td class="textleft">
+			<form action="{% url 'season31:updatecevotes' episode.id %}" method="post">
+				{% csrf_token %}
+				Votee:
+				<div class="marg0 pad0">
+					<select name="votee">
+						{% for castawayepisode in episode.castawayepisode_set.all %}
+						<option value="{{ castawayepisode.castaway.id }}">{{ castawayepisode.castaway }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				{% for castawayepisode in episode.castawayepisode_set.all %}
+				<div class="marg0 pad0 fgtribe{{ castawayepisode.color }}">
+					<input type="checkbox" name="voters" id="{{ castawayepisode.id }}" value="{{ castawayepisode.id }}" />
+					<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
+				</div>
+				{% endfor %}
+				<div>
+					<input type="submit" value="Update Votes" />
+				</div>
+			</form>
+		</td>
+		<td class="textleft">
+			<form action="{% url 'season31:updatecetribes' episode.id %}" method="post">
+				{% csrf_token %}
+				New Tribe:
+				<div class="marg0 pad0">
+					<select name="tribe">
+						{% for tribe in episode.season.tribe_set.all %}
+						<option value="{{ tribe.id }}">{{ tribe }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				{% for castawayepisode in episode.castawayepisode_set.all %}
+				<div class="marg0 pad0 fgtribe{{ castawayepisode.color }}">
+					<input type="checkbox" name="castaways" id="{{ castawayepisode.id }}" value="{{ castawayepisode.id }}" />
+					<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
+				</div>
+				{% endfor %}
+				<div>
+					<input type="submit" value="Update Tribes" />
+				</div>
+			</form>
+		</td>
+	</tr>
+</table>
+{% endif %}
+
+<!-- Castaway Table -->
+
+<table>
+	<tr>
+		<td class="columnheader fgwhite"><a href="{% url 'season31:castaways' %}" class="fgwhite">Castaways</a></td>
+		<td class="columnheader fgwhite"><a href="{% url 'season31:tribes' %}" class="fgwhite">Tribes</a></td>
+		<td class="columnheader fgwhite"></td>
+		<td class="columnheader fgwhite">Actions</td>
+		<td class="columnheader fgwhite"></td>
+		<td class="columnheader fgwhite">Voted For</td>
+		<td class="columnheader fgwhite"></td>
+		<td class="columnheader fgwhite">Score</td>
+	</tr>
+	{% for castawayepisode in episode.castawayepisode_set.all %}
+	<tr>
+		<td class="columnheader fgwhite textright"><a href="{% url 'season31:castaway' castawayepisode.castaway.id %}" class="fgwhite">{{ castawayepisode.castaway }}</a></td>
+		<td class="bgtribe{{ castawayepisode.tribe.color }}"><a href="{% url 'season31:tribe' castawayepisode.tribe.id %}" class="fgblack">{{ castawayepisode.tribe }}</a></td>
+		<td class="columnheader fgwhite"></td>
+		<td>
+		{% for action in castawayepisode.actions.all %}
+			<img src="{% static 'season31/images/'%}{{ action.icon_filename }}.png" title="{{ action.name }}: {{ action.score }} Point(s)" />
+		{% endfor %}
+		</td>
+		<td class="columnheader fgwhite"></td>
+		{% if castawayepisode.vote_set.all %}
+		<td class="bgtribe{{ castawayepisode.tribe.color }}"><a href="{% url 'season31:castaway' castawayepisode.vote_set.all.0.castaway.id %}" class="fgblack">{{ castawayepisode.vote_set.all.0.castaway }}</a></td>
+		{% else %}
+		<td>-</td>
+		{% endif %}
+		<td class="columnheader fgwhite"></td>
+		<td>{{ castawayepisode.score }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+<div class="spacer"></div>
+
+<!-- Player Table -->
+<table>
+	<tr>
+		<td class="columnheader fgwhite textright"><a href="{% url 'season31:players' %}" class="fgwhite">Players</a></td>
+		<td class="columnheader fgwhite">Team</td>
+		<td class="columnheader fgwhite"></td>
+		<td class="columnheader fgwhite">Vote Off</td>
+		<td class="columnheader fgwhite"></td>
+		<td class="columnheader fgwhite">LB</td>
+		<td class="columnheader fgwhite"></td>
+		<td class="columnheader fgwhite">Action</td>
+		<td class="columnheader fgwhite">Vote Off</td>
+		<td class="columnheader fgwhite">JSP</td>
+		<td class="columnheader fgwhite"></td>
+		<td class="columnheader fgwhite">Week</td>
+		<td class="columnheader fgwhite"></td>
+		<td class="columnheader fgwhite">Total</td>
+	</tr>
+	{% for playerepisode in episode.playerepisode_set.all %}
+	<tr>
+		<td class="columnheader fgwhite textright"><a href="{% url 'season31:player' playerepisode.player.id %}" class="fgwhite">{{ playerepisode.player }}</a></td>
+
+		<td class="pad0 marg0">
+			{% for pick in playerepisode.get_team_picks %}
+			<div class="bgtribe{{ pick.castaway_episode.tribe.color }} floatleft pad2 marg0 pickwidth">
+				<a href="{% url 'season31:castaway' pick.castaway_episode.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway_episode.castaway.name }}
+				</a>
+			</div>
+		{% endfor %}
+		</td>
+
+		<td class="columnheader fgwhite"></td>
+
+		<td class="pad0 marg0">
+			{% for pick in playerepisode.get_vote_picks %}
+			<div class="bgtribe{{ pick.castaway_episode.tribe.color }} floatleft pad2 marg0 pickwidth">
+				<a href="{% url 'season31:castaway' pick.castaway_episode.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway_episode.castaway.name }}
+				</a>
+			</div>
+		{% endfor %}
+		</td>
+
+		<td class="columnheader fgwhite"></td>
+		<td>{{ playerepisode.get_loyalty_bonus }}</td>
+		<td class="columnheader fgwhite"></td>
+		<td>{{ playerepisode.action_score }}</td>
+		<td>{{ playerepisode.vote_off_score }}</td>
+		<td>{{ playerepisode.jsp_score }}</td>
+		<td class="columnheader fgwhite"></td>
+		<td>{{ playerepisode.week_score }}</td>
+		<td class="columnheader fgwhite"></td>
+		<td>{{ playerepisode.total_score }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+</div>
+<div class="menu floatleft marg0">
+	{% include "season31/menu.html" %}
+	{% include "season31/leaderboard.html" %}
+</div>
+
+</div>
