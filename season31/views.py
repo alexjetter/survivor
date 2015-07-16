@@ -227,7 +227,9 @@ def updatecevotes(request, e_id):
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
 
 def updateepisodescore(request, e_id):
-	update_episode_score(Episode.objects.get(id = e_id))
+	e = Episode.objects.get(id = e_id)
+	if e:
+		update_episode_score(e)
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
 	
 def updatecetribes(request, e_id):
