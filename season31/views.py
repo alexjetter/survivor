@@ -208,7 +208,6 @@ def updateceactions(request, e_id):
 				ce.actions.remove(badaction)
 		else:
 			ce.actions.add(action)
-	update_episode_score(Episode.objects.get(id = e_id))
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
 
 def updatecevotes(request, e_id):
@@ -227,6 +226,10 @@ def updatecevotes(request, e_id):
 		vote.save()
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
 
+def updateepisodescore(request, e_id):
+	update_episode_score(Episode.objects.get(id = e_id))
+	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
+	
 def updatecetribes(request, e_id):
 	tribe = Tribe.objects.get(id = int(request.POST['tribe']))
 	ce_ids = request.POST.getlist('castaways')

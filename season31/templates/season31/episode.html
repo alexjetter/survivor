@@ -56,6 +56,14 @@
 		</td>
 	</tr>
 	<tr>
+		<td colspan=3>
+			<form action="{% url 'season31:updateepisodescore' episode.id %}" method="post">
+				{% csrf_token %}
+				<input type="submit" value="Update Episode Score" />
+			</form>
+		</td>
+	</tr>
+	<tr>
 		<td class="columnheader fgwhite">Actions</td>
 		<td class="columnheader fgwhite">Votes</td>
 		<td class="columnheader fgwhite">Tribes</td>

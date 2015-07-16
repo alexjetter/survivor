@@ -18,6 +18,7 @@ urlpatterns = [
 	url(r'^pickvotes/(?P<pe_id>[0-9]+)/$', views.pickvotes, name='pickvotes'),
 	url(r'^updateceactions/(?P<e_id>[0-9]+)/$', views.updateceactions, name='updateceactions'),
 	url(r'^updatecevotes/(?P<e_id>[0-9]+)/$', views.updatecevotes, name='updatecevotes'),
+	url(r'^updateepisodescore/(?P<e_id>[0-9]+)/$', views.updateepisodescore, name='updateepisodescore'),
 	url(r'^updatecetribes/(?P<e_id>[0-9]+)/$', views.updatecetribes, name='updatecetribes'),
 	url(r'^showleaguetoggle/(?P<p_id>[0-9]+)/$', views.showleaguetoggle, name='showleaguetoggle'),
 	url(r'^addcastaway/$', views.addcastaway, name='addcastaway'),
