@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Player, Castaway, Pick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action, Season, League
+from .models import Player, Castaway, Pick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action, League
 
 # Inlines
 class CastawayEpisodeInline(admin.TabularInline):
@@ -29,21 +29,17 @@ class CastawayActionInline(admin.StackedInline):
 	model = CastawayEpisode.actions.through
 	extra = 1
 	
-class PlayerActionInline(admin.StackedInline):
-	model = PlayerEpisode.actions.through
-	extra = 1
-	
 # ModelAdmins
 class EpisodeAdmin(admin.ModelAdmin):
 	fieldsets = [
-		('General', {'fields': ['number','title','season']}),
+		('General', {'fields': ['number','title']}),
 		('Date',    {'fields': ['air_date']}),
 	]
 	inlines = [CastawayEpisodeEpisodeInline]
 	
 class CastawayAdmin(admin.ModelAdmin):
 	fieldsets = [
-		('General', {'fields': ['name','age','occupation','season']}),
+		('General', {'fields': ['name','age','occupation']}),
 		('Full Name',    {'fields': ['full_name']}),
 	]
 	inlines = [CastawayEpisodeInline]
@@ -51,7 +47,7 @@ class CastawayAdmin(admin.ModelAdmin):
 	
 class PlayerAdmin(admin.ModelAdmin):
 	fieldsets = [
-		('General', {'fields': ['user','paid','season','league']}),
+		('General', {'fields': ['user','paid','league']}),
 		('Score', {'fields': ['score','place','movement']}),
 	]
 	inlines = [PlayerEpisodeInline]
@@ -67,10 +63,10 @@ class CastawayEpisodeAdmin(admin.ModelAdmin):
 	
 class PlayerEpisodeAdmin(admin.ModelAdmin):
 	fieldsets = [
-		('General', {'fields': ['player','episode','week_score','total_score']}),
+		('General', {'fields': ['player','episode','correctly_predicted_votes''week_score','total_score']}),
 		('Score Breakdown',    {'fields': ['action_score','vote_off_score','jsp_score']}),
 	]
-	inlines = [PickInline, PlayerActionInline]
+	inlines = [PickInline]
 	list_filter = ['episode']
 	list_display = ('player','episode','week_score','total_score', 'action_score','vote_off_score','jsp_score')
 	
@@ -108,7 +104,6 @@ admin.site.register(Pick, PickAdmin)
 admin.site.register(PlayerEpisode, PlayerEpisodeAdmin)
 admin.site.register(CastawayEpisode, CastawayEpisodeAdmin)
 admin.site.register(Tribe)
-admin.site.register(Season)
 admin.site.register(League)
 admin.site.register(Action, ActionAdmin)
 admin.site.register(Vote, VoteAdmin)

@@ -46,21 +46,21 @@
 	<div class="spacer"></div>
 
 	<div class="marg0 pad4 border">
-		<form action="{% url 'season31:updatescores' user.player.season.id %}" method="post">
+		<form action="{% url 'season31:updatescores' %}" method="post">
 			{% csrf_token %}
 			<input type="submit" value="Update Scores" />
 		</form>
 	</div>
 
 	<div class="marg0 pad4 border">
-		<form action="{% url 'season31:addepisode' user.player.season.id %}" method="post">
+		<form action="{% url 'season31:addepisode' %}" method="post">
 			{% csrf_token %}
 			<div>
 				<input type="checkbox" name="random" id="random" checked />
 				<label for="random">Random Picks</label>
 			</div>
 			<div>
-				<input type="number" name="teamsize" id="teamsize" min="2" max="5" value="{{ user.player.season.episode_set.latest.team_size }}" />
+				<input type="number" name="teamsize" id="teamsize" min="2" max="5" value="{{ user.player.get_latest_episode.team_size }}" />
 				<label for="teamsize">Team Size</label>
 			</div>
 			<input type="submit" value="Add Episode" />

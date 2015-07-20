@@ -3,22 +3,8 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
-class Season(models.Model):
-	name = models.CharField(max_length = 64)
-	number = models.PositiveIntegerField(default = 0)
-	air_date = models.DateTimeField()
-	def __unicode__(self):
-		return "Season %i: %s" % (self.number, self.name)
-	def get_episodes(self):
-		return Episode.objects.all()
-#		return Episode.objects.exclude(number = 0)
-	class Meta:
-		ordering = ('number',)
-		get_latest_by = 'air_date'
-
 class League(models.Model):
 	name = models.CharField(max_length = 64)
-	season = models.ForeignKey(Season, blank = True, null = True)
 	def __unicode__(self):
 		return self.name
 	class Meta:
@@ -29,7 +15,6 @@ class Castaway(models.Model):
 	full_name = models.CharField(max_length = 32)
 	age = models.PositiveIntegerField(default = 0)
 	occupation = models.CharField(max_length = 32)
-	season = models.ForeignKey(Season, blank = True, null = True)
 	def __unicode__(self):
 		return self.name
 	def get_tribe(self):
@@ -40,7 +25,7 @@ class Castaway(models.Model):
 		voted_out = False
 		for ce in self.castawayepisode_set.all():
 			for action in ce.actions.all():
-				if action == Action.objects.get(name = "Voted Out"):
+				if action == Action.objects.get(name = "Out"):
 					return True
 		return False
 	class Meta:
@@ -49,7 +34,6 @@ class Castaway(models.Model):
 class Player(models.Model):
 	user = models.OneToOneField(User)
 	paid = models.BooleanField(default = False)
-	season = models.ForeignKey(Season, blank = True, null = True)
 	league = models.ForeignKey(League, blank = True, null = True)
 	score = models.PositiveIntegerField(default = 0)
 	place = models.PositiveIntegerField(default = 0)
@@ -61,18 +45,19 @@ class Player(models.Model):
 		return '%s %s' % (self.user.first_name, self.user.last_name)
 	def get_latest_player_episode(self):
 		return PlayerEpisode.objects.filter(player = self).latest()
+	def get_latest_episode(self):
+		return Episode.objects.latest()
 	def get_leaderboard_players(self):
 		if self.league and self.show_league_only:
 			return self.league.player_set.order_by('place').all()
 		else:
-			return self.season.player_set.order_by('place').all()
+			return Player.objects.order_by('place').all()
 	class Meta:
 		ordering = ('user',)
 
 class Tribe(models.Model):
 	name = models.CharField(max_length = 32)
 	color = models.CharField(max_length = 32)
-	season = models.ForeignKey(Season, blank = True, null = True)
 	def __unicode__(self):
 		return self.name
 	def get_all_episodes(self):
@@ -93,7 +78,6 @@ class Episode(models.Model):
 	title = models.CharField(max_length = 64)
 	number = models.PositiveIntegerField(default = 0)
 	air_date = models.DateTimeField()
-	season = models.ForeignKey(Season, blank = True, null = True)
 	players = models.ManyToManyField(Player, through = 'PlayerEpisode', through_fields = ('episode', 'player'))
 	castaways = models.ManyToManyField(Castaway, through = 'CastawayEpisode', through_fields = ('episode', 'castaway'))
 	team_size = models.PositiveIntegerField(default = 5)
@@ -101,8 +85,6 @@ class Episode(models.Model):
 		return "Episode %i" % (self.number)
 	def update_scores(self):
 		return update_scores()
-	def get_possible_actions(self):
-		return Action.objects.exclude(name = "Correctly Predicted Vote")
 	def get_prev_episode(self):
 		try:
 			prev_e = Episode.objects.get(number = self.number - 1)
@@ -126,7 +108,7 @@ class Episode(models.Model):
 class PlayerEpisode(models.Model):
 	player = models.ForeignKey(Player)
 	episode = models.ForeignKey(Episode)
-	actions = models.ManyToManyField(Action, blank = True)
+	correctly_predicted_votes = models.PositiveIntegerField(default = 0)
 	action_score = models.PositiveIntegerField(default = 0)
 	vote_off_score = models.PositiveIntegerField(default = 0)
 	jsp_score = models.PositiveIntegerField(default = 0)
@@ -134,6 +116,7 @@ class PlayerEpisode(models.Model):
 	total_score = models.PositiveIntegerField(default = 0)
 	place = models.PositiveIntegerField(default = 0)
 	movement = models.IntegerField(default = 0)
+	has_score_changed = models.BooleanField(default = False)
 	def __unicode__(self):
 		return "%s | %s" % (self.player.user.username, self.episode)
 	def get_team_picks(self):
@@ -161,19 +144,24 @@ class PlayerEpisode(models.Model):
 					loyalty_bonus += 1;
 		return loyalty_bonus
 	def update_score(self):
+		self.week_score = 0
+		self.total_score = 0
 		self.action_score = 0
-		self.vote_off_score = 0
+		self.jsp_score = 0
+		self.correctly_predicted_votes = 0
 		teampicks = self.get_team_picks()
 		votepicks = self.get_vote_picks()
 		for pick in teampicks:
 			ce = pick.castaway_episode
 			self.action_score += ce.score
-		for pick in votepicks:
-			for action in pick.castaway_episode.actions.all():
-				if action == Action.objects.get(name = "Voted Out"):
-					self.actions.add(Action.objects.get(name = "Correctly Predicted Vote"))
-		for action in self.actions.all():
-			self.vote_off_score += action.score
+		for pick in votepicks:	
+			try:
+				vo_action = pick.castaway_episode.actions.filter(name = "Out") # TODO: dont hardcode this name
+			except:
+				vo_action = None
+			if vo_action:
+				self.correctly_predicted_votes += 1;
+		self.vote_off_score = self.correctly_predicted_votes * 10 # TODO: dont hardcode this score
 		self.week_score = self.action_score + self.vote_off_score + self.jsp_score + self.get_loyalty_bonus()
 	class Meta:
 		ordering = ('episode', 'player')
@@ -185,6 +173,7 @@ class CastawayEpisode(models.Model):
 	tribe = models.ForeignKey(Tribe)
 	actions = models.ManyToManyField(Action, blank = True)
 	score = models.IntegerField(default = 0)
+	has_score_changed = models.BooleanField(default = False)
 	def __unicode__(self):
 		return "%s | %s" % (self.castaway.name, self.episode)
 	def update_score(self):
@@ -216,6 +205,3 @@ class Vote(models.Model):
 		return "%s | %s voted for %s" % (self.castaway_episode.episode, self.castaway_episode.castaway.name, self.castaway.name)
 	class Meta:
 		ordering = ('castaway_episode', 'castaway')
-	
-def get_all_episodes():
-	return Episode.objects.all()

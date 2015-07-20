@@ -13,7 +13,7 @@
 
 
 <table>
-{% for episode in tribe.get_all_episodes %}
+{% for episode in episodes %}
 	<tr>
 		<td class="columnheader fgwhite"><a href="{% url 'season31:episode' episode.id %}" class="fgwhite">{{ episode }}</a></td>
 		{% for castawayepisode in tribe.castawayepisode_set.all %}

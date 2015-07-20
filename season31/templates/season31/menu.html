@@ -11,7 +11,7 @@
 	{% endif %}
 	<div><a href="{% url 'season31:index' %}" class="fgblack">Home</a></div>
 	{% if user.player %}
-	<div><a href="{% url 'season31:episode' user.player.season.episode_set.latest.id%}" class="fgblack">Latest Episode</a></div>
+	<div><a href="{% url 'season31:episode' user.player.get_latest_episode.id %}" class="fgblack">Latest Episode</a></div>
 	{% endif %}
 	{% if user.player.league %}
 	<span class="floatright">

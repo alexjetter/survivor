@@ -74,7 +74,7 @@
 				{% csrf_token %}
 				<div class="marg0 pad0">
 					<select name="action">
-						{% for action in episode.get_possible_actions %}
+						{% for action in actions %}
 						<option value="{{ action.id }}">{{ action.name }}</option>
 						{% endfor %}
 					</select>
@@ -120,7 +120,7 @@
 				New Tribe:
 				<div class="marg0 pad0">
 					<select name="tribe">
-						{% for tribe in episode.season.tribe_set.all %}
+						{% for tribe in tribes %}
 						<option value="{{ tribe.id }}">{{ tribe }}</option>
 						{% endfor %}
 					</select>

@@ -11,31 +11,25 @@ from django.views import generic
 from random import randint
 
 from .forms import UserForm
-from .models import Player, Castaway, Pick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action, Season, League
+from .models import Player, Castaway, Pick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action, League
 
 def index(request):
-	season = Season.objects.latest()
 	template = loader.get_template('season31/index.html')
-	context = RequestContext(request, {'season': season, })
-	return HttpResponse(template.render(context))
+	return HttpResponseRedirect('/season31/episode/%d' % Episode.objects.all().latest().id)
 
 class CastawaysView(generic.ListView):
-	context_object_name = 'castaways'	
+	context_object_name = 'castaways'
 	template_name = 'season31/castaways.html'
-	queryset = Season.objects.latest().castaway_set.all()
+	queryset = Castaway.objects.all()
 	def get_context_data(self, **kwargs):
 		context = super(CastawaysView, self).get_context_data(**kwargs)
-		context['episodes'] = Season.objects.latest().episode_set.all()
+		context['episodes'] = Episode.objects.all()
 		return context
 
 class PlayersView(generic.ListView):
 	context_object_name = 'players'
 	template_name = 'season31/players.html'
-	queryset = Season.objects.latest().player_set.all()
-	def get_context_data(self, **kwargs):
-		context = super(PlayersView, self).get_context_data(**kwargs)
-		context['episodes'] = Season.objects.latest().episode_set.all()
-		return context
+	queryset = Player.objects.all()
 		
 class TribesView(generic.ListView):
 	template_name = 'season31/tribes.html'
@@ -60,10 +54,19 @@ class CastawayView(generic.DetailView):
 class EpisodeView(generic.DetailView):
 	model = Episode
 	template_name = 'season31/episode.html'
+	def get_context_data(self, **kwargs):
+		context = super(EpisodeView, self).get_context_data(**kwargs)
+		context['actions'] = Action.objects.all()
+		context['tribes'] = Tribe.objects.all()
+		return context
 
 class TribeView(generic.DetailView):
 	model = Tribe
 	template_name = 'season31/tribe.html'
+	def get_context_data(self, **kwargs):
+		context = super(TribeView, self).get_context_data(**kwargs)
+		context['episodes'] = Episode.objects.all()
+		return context
 
 def register(request):
 	context = RequestContext(request)
@@ -77,7 +80,6 @@ def register(request):
 			user.save()
 			player = Player()
 			player.user = user
-			player.season = Season.objects.latest()
 			player.save()
 			for episode in Episode.objects.all():
 				playerepisode = PlayerEpisode(player = player, episode = episode)
@@ -120,14 +122,12 @@ def user_logout(request):
 	logout(request)
 	return HttpResponseRedirect('/season31/')
 
-def updatescores(request, season_id):
-	s = get_object_or_404(Season, pk=season_id)
-	for player in s.player_set.all():
+def updatescores(request):
+	for player in Player.objects.all():
 		player.score = 0
 		player.save()
-	episodes = s.episode_set.exclude(number = 0)
 	lastepisode = None
-	for episode in episodes:
+	for episode in Episode.objects.all():
 		update_episode_score(episode)
 	return HttpResponseRedirect('/season31/')
 
@@ -146,6 +146,8 @@ def update_episode_score(episode):
 		if lastepisode:
 			last_pe = PlayerEpisode.objects.get(player = player, episode = lastepisode)
 			player.score = last_pe.total_score
+		else:
+			player.score = 0
 		player.score += playerepisode.week_score
 		playerepisode.total_score = player.score
 		player.save()
@@ -167,20 +169,19 @@ def update_episode_score(episode):
 		lastplace = playerepisode.place
 		lastscore = playerepisode.total_score
 
-def addepisode(request, season_id): # TODO: Add random toggle
-	s = get_object_or_404(Season, pk=season_id)
-	le = s.episode_set.all().latest()
+def addepisode(request): # TODO: Add random toggle
+	le = Episode.objects.all().latest()
 	try:
 		teamsize = request.POST['teamsize']
 	except:
 		return HttpResponseRedirect('/season31/')
-	ne = Episode(title = "New Episode", season = s, number = le.number + 1, air_date = timezone.now(), team_size = teamsize)
+	ne = Episode(title = "New Episode", number = le.number + 1, air_date = timezone.now(), team_size = teamsize)
 	ne.save()
-	for c in s.castaway_set.all():
+	for c in Castaway.objects.all():
 		if not c.voted_out():
 			nce = CastawayEpisode(castaway = c, episode = ne, tribe = c.get_tribe())
 			nce.save()
-	for p in s.player_set.all():
+	for p in Player.objects.all():
 		npe = PlayerEpisode(player = p, episode = ne)
 		npe.save()
 		if "random" in request.POST:
@@ -295,7 +296,6 @@ def addcastaway(request):
 	occupation = request.POST['occupation']
 	age = request.POST['age']
 	c = Castaway(name = name, full_name = fullname, age = age, occupation = occupation)
-	c.season = Season.objects.latest()
 	c.save()
 	for e in Episode.objects.all():
 		ce = CastawayEpisode(castaway = c, episode = e, tribe = Tribe.objects.first())
@@ -315,7 +315,6 @@ def addtribe(request):
 	name = request.POST['name']
 	color = request.POST['color']
 	t = Tribe(name = name, color = color)
-	t.season = Season.objects.latest()
 	t.save()
 	return HttpResponseRedirect('/season31/tribes/')
 
