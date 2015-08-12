@@ -13,16 +13,4 @@
 	{% if user.player %}
 	<div><a href="{% url 'season31:episode' user.player.get_latest_episode.id %}" class="fgblack">Latest Episode</a></div>
 	{% endif %}
-	{% if user.player.league %}
-	<span class="floatright">
-		<form action="{% url 'season31:showleaguetoggle' user.player.id %}" method="post">
-			{% csrf_token %}
-			{% if user.player.show_league_only %}
-			<input type="submit" value="Show Everyone" />
-			{% else %}
-			<input type="submit" value="Show Leage Only" />
-			{% endif %}
-		</form>
-	</span>
-	{% endif %}
 </div>

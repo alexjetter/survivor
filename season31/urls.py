@@ -20,7 +20,6 @@ urlpatterns = [
 	url(r'^updatecevotes/(?P<e_id>[0-9]+)/$', views.updatecevotes, name='updatecevotes'),
 	url(r'^updateepisodescore/(?P<e_id>[0-9]+)/$', views.updateepisodescore, name='updateepisodescore'),
 	url(r'^updatecetribes/(?P<e_id>[0-9]+)/$', views.updatecetribes, name='updatecetribes'),
-	url(r'^showleaguetoggle/(?P<p_id>[0-9]+)/$', views.showleaguetoggle, name='showleaguetoggle'),
 	url(r'^addcastaway/$', views.addcastaway, name='addcastaway'),
 	url(r'^deletecastaway/$', views.deletecastaway, name='deletecastaway'),
 	url(r'^addtribe/$', views.addtribe, name='addtribe'),

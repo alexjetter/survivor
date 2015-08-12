@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Player, Castaway, Pick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action, League
+from .models import Player, Castaway, Pick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action
 
 # Inlines
 class CastawayEpisodeInline(admin.TabularInline):
@@ -47,11 +47,10 @@ class CastawayAdmin(admin.ModelAdmin):
 	
 class PlayerAdmin(admin.ModelAdmin):
 	fieldsets = [
-		('General', {'fields': ['user','paid','league']}),
-		('Score', {'fields': ['score','place','movement']}),
+		('General', {'fields': ['user','paid','hidden']}),
 	]
 	inlines = [PlayerEpisodeInline]
-	list_display = ('user','league', 'paid')
+	list_display = ('user', 'paid', 'hidden')
 	
 class CastawayEpisodeAdmin(admin.ModelAdmin):
 	fieldsets = [
@@ -63,18 +62,13 @@ class CastawayEpisodeAdmin(admin.ModelAdmin):
 	
 class PlayerEpisodeAdmin(admin.ModelAdmin):
 	fieldsets = [
-		('General', {'fields': ['player','episode','correctly_predicted_votes''week_score','total_score']}),
+		('General', {'fields': ['player','episode','correctly_predicted_votes','week_score','total_score']}),
 		('Score Breakdown',    {'fields': ['action_score','vote_off_score','jsp_score']}),
+		('Leaderboard',    {'fields': ['movement','place']}),
 	]
 	inlines = [PickInline]
 	list_filter = ['episode']
 	list_display = ('player','episode','week_score','total_score', 'action_score','vote_off_score','jsp_score')
-	
-#class PickAdmin(admin.ModelAdmin):
-#	fieldsets = [
-#		('General', {'fields': ['player_episode','type']}),
-#	]
-#	list_display = ('type','player_episode')
 	
 class PickAdmin(admin.ModelAdmin):
 	fieldsets = [
@@ -104,6 +98,5 @@ admin.site.register(Pick, PickAdmin)
 admin.site.register(PlayerEpisode, PlayerEpisodeAdmin)
 admin.site.register(CastawayEpisode, CastawayEpisodeAdmin)
 admin.site.register(Tribe)
-admin.site.register(League)
 admin.site.register(Action, ActionAdmin)
 admin.site.register(Vote, VoteAdmin)

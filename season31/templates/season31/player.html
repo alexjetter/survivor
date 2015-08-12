@@ -7,9 +7,6 @@
 <div class="content floatleft marg0">
 
 <div class="title">{{ player.user.username }}</div>
-{% if player.league %}
-<span class="subtitle">League: {{ player.league }}</span>
-{% endif %}
 <div class="subtitle">{{ player.user.get_full_name }}</div>
 
 <div class="spacer"></div>
@@ -36,8 +33,8 @@
 	{% for playerepisode in player.playerepisode_set.all %}
 	<tr>
 		<td class="columnheader texttop"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode }}</a></td>
-		<td>{{ playerepisode.movement }}</td>
-		<td>{{ playerepisode.place }}</td>
+		<td>0</td>
+		<td>0</td>
 		<td>{{ playerepisode.total_score }}</td>
 		<td class="columnheader"></td>
 

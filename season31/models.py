@@ -3,13 +3,6 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
-class League(models.Model):
-	name = models.CharField(max_length = 64)
-	def __unicode__(self):
-		return self.name
-	class Meta:
-		ordering = ('name',)
-
 class Castaway(models.Model):
 	name = models.CharField(max_length = 32)
 	full_name = models.CharField(max_length = 32)
@@ -34,11 +27,7 @@ class Castaway(models.Model):
 class Player(models.Model):
 	user = models.OneToOneField(User)
 	paid = models.BooleanField(default = False)
-	league = models.ForeignKey(League, blank = True, null = True)
-	score = models.PositiveIntegerField(default = 0)
-	place = models.PositiveIntegerField(default = 0)
-	movement = models.IntegerField(default = 0)
-	show_league_only = models.BooleanField(default = False)
+	hidden = models.BooleanField(default = False)
 	def __unicode__(self):
 		return self.user.username
 	def get_full_name(self):
@@ -48,10 +37,7 @@ class Player(models.Model):
 	def get_latest_episode(self):
 		return Episode.objects.latest()
 	def get_leaderboard_players(self):
-		if self.league and self.show_league_only:
-			return self.league.player_set.order_by('place').all()
-		else:
-			return Player.objects.order_by('place').all()
+		return Player.objects.all()
 	class Meta:
 		ordering = ('user',)
 
@@ -109,13 +95,13 @@ class PlayerEpisode(models.Model):
 	player = models.ForeignKey(Player)
 	episode = models.ForeignKey(Episode)
 	correctly_predicted_votes = models.PositiveIntegerField(default = 0)
-	action_score = models.PositiveIntegerField(default = 0)
+	action_score = models.IntegerField(default = 0)
 	vote_off_score = models.PositiveIntegerField(default = 0)
 	jsp_score = models.PositiveIntegerField(default = 0)
-	week_score = models.PositiveIntegerField(default = 0)
-	total_score = models.PositiveIntegerField(default = 0)
-	place = models.PositiveIntegerField(default = 0)
+	week_score = models.IntegerField(default = 0)
+	total_score = models.IntegerField(default = 0)
 	movement = models.IntegerField(default = 0)
+	place = models.PositiveIntegerField(default = 0)
 	has_score_changed = models.BooleanField(default = False)
 	def __unicode__(self):
 		return "%s | %s" % (self.player.user.username, self.episode)

@@ -64,14 +64,18 @@
 		</td>
 	</tr>
 	<tr>
-		<td class="columnheader fgwhite">Actions</td>
-		<td class="columnheader fgwhite">Votes</td>
-		<td class="columnheader fgwhite">Tribes</td>
+		<td class="columnheader fgwhite textleft">Actions</td>
+		<td class="columnheader fgwhite textleft">Votes</td>
+		<td class="columnheader fgwhite textleft">Tribes</td>
 	</tr>
 	<tr>
 		<td class="textleft">
 			<form action="{% url 'season31:updateceactions' episode.id %}" method="post">
 				{% csrf_token %}
+				<div class="fggrey marg0 pad0">
+					<input type="checkbox" name="delete" id="delete" />
+					<label for="delete">Delete:</label>
+				</div>
 				<div class="marg0 pad0">
 					<select name="action">
 						{% for action in actions %}
@@ -85,10 +89,6 @@
 					<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
 				</div>
 				{% endfor %}
-				<div class="fggrey">
-					<input type="checkbox" name="delete" id="delete" />
-					<label for="delete">Delete Instead</label>
-				</div>
 				<input type="submit" value="Update Actions" />
 			</form>
 		</td>

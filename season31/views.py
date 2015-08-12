@@ -11,7 +11,7 @@ from django.views import generic
 from random import randint
 
 from .forms import UserForm
-from .models import Player, Castaway, Pick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action, League
+from .models import Player, Castaway, Pick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action
 
 def index(request):
 	template = loader.get_template('season31/index.html')
@@ -152,22 +152,23 @@ def update_episode_score(episode):
 		playerepisode.total_score = player.score
 		player.save()
 		playerepisode.save()
-	lastplace = 0
-	lastscore = 0
-	for counter, playerepisode in enumerate(episode.playerepisode_set.order_by('-total_score').all()):
-		player = playerepisode.player
-		playerepisode.place = counter + 1
-		if playerepisode.total_score == lastscore:
-			playerepisode.place = lastplace
-		player.place = playerepisode.place
-		if lastepisode:
-			last_pe = PlayerEpisode.objects.get(player = player, episode = lastepisode)
-			playerepisode.movement = last_pe.place - playerepisode.place
-		player.movement = playerepisode.movement
-		playerepisode.save()
-		player.save()
-		lastplace = playerepisode.place
-		lastscore = playerepisode.total_score
+	
+#	lastplace = 0
+#	lastscore = 0
+#	for counter, playerepisode in enumerate(episode.playerepisode_set.order_by('-total_score').all()):
+#		player = playerepisode.player
+#		playerepisode.place = counter + 1
+#		if playerepisode.total_score == lastscore:
+#			playerepisode.place = lastplace
+#		player.place = playerepisode.place
+#		if lastepisode:
+#			last_pe = PlayerEpisode.objects.get(player = player, episode = lastepisode)
+#			playerepisode.movement = last_pe.place - playerepisode.place
+#		player.movement = playerepisode.movement
+#		playerepisode.save()
+#		player.save()
+#		lastplace = playerepisode.place
+#		lastscore = playerepisode.total_score
 
 def addepisode(request): # TODO: Add random toggle
 	le = Episode.objects.all().latest()
@@ -284,12 +285,6 @@ def deleteepisode(request, e_id):
 		e.delete()
 	return HttpResponseRedirect('/season31/')
 
-def showleaguetoggle(request, p_id):
-	p = Player.objects.get(id = p_id)
-	p.show_league_only = not p.show_league_only
-	p.save()
-	return HttpResponseRedirect('/season31/player/%i' % int(p_id))
-	
 def addcastaway(request):
 	name = request.POST['name']
 	fullname = request.POST['fullname']

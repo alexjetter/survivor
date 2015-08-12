@@ -1,10 +1,5 @@
 ﻿<div class="pad0 marg0">
-	{% if user.player.league and user.player.show_league_only %}
-	<div class="subtitle">{{ user.player.league }}</div>
-	<div class="subtitle">League Leaderboard</div>
-	{% else %}
 	<div class="subtitle">Leaderboard</div>
-	{% endif %}
 
 	<table>
 
@@ -18,15 +13,8 @@
 		</tr>
 		{% for player in user.player.get_leaderboard_players %}
 		<tr>
-			{% if player.movement > 0 %}
-			<td class="columnheader fggreen5">+{{ player.movement }}</td>
-			{% elif player.movement == 0 %}
-			<td class="columnheader fggrey">{{ player.movement }}</td>
-			{% else %}
-			<td class=" columnheader fgred5">{{ player.movement }}</td>
-			{% endif %}
-			
-			<td>{{ player.place }}</td>
+			<td class="columnheader fggreen5">+##</td>
+			<td>##</td>
 			<td class="columnheader fgwhite"><a href="{% url 'season31:player' player.id %}" class="fgwhite">{{ player }}</a></td>
 			<td>{{ player.score }}</td>
 			<td class="columnheader"></td>
