@@ -1,5 +1,7 @@
-import datetime
 import logging
+import pytz
+from pytz import timezone
+from datetime import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -36,9 +38,19 @@ class Player(models.Model):
 	def get_latest_player_episode(self):
 		return PlayerEpisode.objects.filter(player = self).latest()
 	def get_latest_episode(self):
-		return Episode.objects.latest()
+		try:
+			latestepisode = Episode.objects.filter(is_locked = True).latest()
+		except:
+			latestepisode = None;
+		return latestepisode
+	def get_next_episode(self):
+		try:
+			nextepisode = Episode.objects.filter(is_locked = False).latest()
+		except:
+			nextepisode = None;
+		return nextepisode
 	def get_leaderboard_player_episodes(self):
-		return PlayerEpisode.objects.filter(episode = Episode.objects.latest).order_by('-total_score')
+		return PlayerEpisode.objects.filter(episode = self.get_latest_episode()).order_by('-total_score')
 	class Meta:
 		ordering = ('user',)
 
@@ -68,6 +80,7 @@ class Episode(models.Model):
 	players = models.ManyToManyField(Player, through = 'PlayerEpisode', through_fields = ('episode', 'player'))
 	castaways = models.ManyToManyField(Castaway, through = 'CastawayEpisode', through_fields = ('episode', 'castaway'))
 	team_size = models.PositiveIntegerField(default = 5)
+	is_locked = models.BooleanField(default = False)
 	def __unicode__(self):
 		return "Episode %i" % (self.number)
 	def update_scores(self):
@@ -88,6 +101,25 @@ class Episode(models.Model):
 		return "E%s" % ("{0:02d}".format(self.number))
 	def air_day(self):
 		return self.air_date.strftime("%A")
+	def check_lock(self):
+		if self.is_locked:
+			return
+		est = timezone('US/Eastern')
+		if datetime.now(est) > self.air_date:
+			self.is_locked = True
+			self.save()
+			return True
+		return False
+	def time_to_lock(self):
+		est = timezone('US/Eastern')
+		if self.is_locked:
+			return "Locked"
+		timedelta = self.air_date - datetime.now(est)
+		if timedelta.days > 0:
+			return "%i day(s), %i hour(s), %i minute(s)" % (timedelta.days, timedelta.seconds//3600, (timedelta.seconds//60)%60)
+		if timedelta.days == 0 and timedelta.seconds//3600 > 0:
+			return "%i hour(s), %i minute(s)" % (timedelta.seconds//3600, (timedelta.seconds//60)%60)
+		return "%i minute(s)" % ((timedelta.seconds//60)%60)
 	class Meta:
 		ordering = ('number',)
 		get_latest_by = 'air_date'

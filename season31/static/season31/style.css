@@ -116,8 +116,8 @@ table, th, td{
 	border: 1px solid #222222;
 	padding-top: 1;
 	padding-bottom: 1;
-	padding-left: 4;
-	padding-right: 4;
+	padding-left: 2;
+	padding-right: 2;
 	spacing: 0;
 	border-collapse: collapse;
 	text-align: center;
@@ -134,7 +134,13 @@ table, th, td{
 .floatright {float: right;}
 .floatleft {float: left;}
 
-.font0{font-size: 0;}
+.font0{font-size: 0em;}
+.font12{font-size: 0.75em;}
+.font14{font-size: 0.875em;}
+.font16{font-size: 1em;}
+.font18{font-size: 1.125em;}
+.font20{font-size: 1.25em;}
+.font24{font-size: 1.5em;}
 
 .columnheader {
 	background-color: #222222;

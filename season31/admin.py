@@ -33,9 +33,10 @@ class CastawayActionInline(admin.StackedInline):
 class EpisodeAdmin(admin.ModelAdmin):
 	fieldsets = [
 		('General',{'fields': ['number','title']}),
-		('Date',{'fields': ['air_date']}),
+		('Date',{'fields': ['air_date','is_locked']}),
 	]
 	inlines = [CastawayEpisodeEpisodeInline]
+	list_display = ('number','title','air_date','is_locked')
 
 class CastawayAdmin(admin.ModelAdmin):
 	fieldsets = [

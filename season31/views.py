@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.shortcuts import render_to_response
 from django.template import RequestContext, loader
-from django.utils import timezone
+from pytz import timezone
 from django.views import generic
 from random import randint
 
@@ -97,8 +97,10 @@ def register(request):
 				for ce in votepicks:
 					pick = Pick(player_episode = playerepisode, castaway_episode = ce, type = "VO")
 					pick.save()
-			registered = True
-			return render_to_response('season31/login.html', {}, context)
+			registered = True 
+			user = authenticate(username = request.POST['username'], password = request.POST['password'])
+			login(request, user)
+			return render(request, 'season31/player.html', {'player': user.player,})
 		else:
 			print user_form.errors
 	else:
@@ -110,7 +112,7 @@ def user_login(request):
 	if request.method == 'POST':
 		username = request.POST['username']
 		password = request.POST['password']
-		user = authenticate(username=username, password=password)
+		user = authenticate(username = username, password = password)
 		if user:
 			if user.is_active:
 				login(request, user)
@@ -167,7 +169,8 @@ def addepisode(request): # TODO: Add random toggle
 		teamsize = request.POST['teamsize']
 	except:
 		return HttpResponseRedirect('/season31/')
-	ne = Episode(title = "New Episode", number = le.number + 1, air_date = timezone.now(), team_size = teamsize)
+	est = timezone('US/Eastern')
+	ne = Episode(title = "New Episode", number = le.number + 1, air_date = datetime.now(est), team_size = teamsize)
 	ne.save()
 	for c in Castaway.objects.all():
 		if not c.voted_out():
@@ -186,6 +189,8 @@ def addepisode(request): # TODO: Add random toggle
 				pick = Pick(player_episode = npe, castaway_episode = ce, type = "VO")
 				pick.save()
 	return HttpResponseRedirect('/season31/episode/%d' % (ne.id))
+
+# def fillskippedmoves
 
 def updateceactions(request, e_id):
 	action = Action.objects.get(id = int(request.POST['action']))
@@ -261,6 +266,8 @@ def updateepisodedatetime(request, e_id):
 		airdatetime = datetime.strptime(airdatetime_str, "%Y%m%d %H")
 	except:
 		airdatetime = None
+	est = timezone('US/Eastern')
+	airdatetime.replace(tzinfo = est)
 	print airdatetime
 	if airdatetime:
 		e.air_date = airdatetime

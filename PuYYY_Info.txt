@@ -1,0 +1,4 @@
+﻿hostname:
+	ssh.phx.nearlyfreespeech.net
+username:
+	alexjetter_aj3dsurvivor

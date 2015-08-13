@@ -36,17 +36,20 @@
 		<td class="columnheader"></td>
 	</tr>
 	{% for playerepisode in player.playerepisode_set.all %}
-	{% if playerepisode == player.playerepisode_set.latest %}
+	{% if playerepisode.episode.check_lock %}
+	{% endif %}
+	{% if not playerepisode.episode.is_locked and player == user.player and playerepisode.episode = player.get_next_episode %}
 	<tr>
 		<td class="noborder padtb4" colspan=17></td>
 	</tr>
 	<tr>
-		<td class="noborder textleft" colspan=17>Next Episode Picks</td>
+		<td class="noborder textleft" colspan=17>{{ playerepisode.episode.time_to_lock }} left to make your picks</td>
 	</tr>
 	<tr>
 		<td class="bgblack padtb4" colspan=17></td>
 	</tr>
 	{% endif %}
+	{% if playerepisode.episode.is_locked or player == user.player%}
 	<tr>
 		<td class="columnheader texttop"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode }}</a></td>
 		<td>{{ playerepisode.movement }}</td>
@@ -84,8 +87,15 @@
 		<td>{{ playerepisode.week_score }}</td>
 		<td class="columnheader fgwhite"></td>
 	</tr>
+	{% else %}
+	<tr>
+		<td class="columnheader texttop"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode }}</a></td>
+		<td class="textleft" colspan=15>Picks will be revealed in {{ playerepisode.episode.time_to_lock }}</td>
+		<td class="columnheader fgwhite"></td>
+	</tr>
+	{% endif %}
 	{% endfor %}
-	{% if user.player == player %}
+	{% if user.player == player and not player.playerepisode_set.latest.episode.is_locked %}
 	<!--
 	<tr>
 		<td class="bgwhite noborder"></td>

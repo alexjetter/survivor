@@ -199,6 +199,11 @@
 		<td class="columnheader fgwhite"></td>
 		<td class="columnheader fgwhite">Total</td>
 	</tr>
+	{% if not episode.is_locked %}
+	<tr>
+		<td colspan=14>Picks will be revealed in {{ episode.time_to_lock }}</td>
+	</tr>
+	{% else %}
 	{% for playerepisode in episode.playerepisode_set.all %}
 	<tr>
 		<td class="columnheader fgwhite textright"><a href="{% url 'season31:player' playerepisode.player.id %}" class="fgwhite">{{ playerepisode.player }}</a></td>
@@ -235,6 +240,7 @@
 		<td>{{ playerepisode.total_score }}</td>
 	</tr>
 	{% endfor %}
+	{% endif %}
 </table>
 
 </div>

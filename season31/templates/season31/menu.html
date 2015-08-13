@@ -1,24 +1,27 @@
 <div class="pad0 marg0">
 	{% if user.is_authenticated %}
 	<!--<div><a href="{% url 'season31:player' user.player.id %}" class="fgblack textbold">{{ user.username }}</a> ( <a href="{% url 'season31:logout' %}" class="fgblack">logout</a>)</div>-->
-	<div class="textcenter"><a href="{% url 'season31:player' user.player.id %}" class="fgblack textbold">My Moves</a></div>
-	<div class="textcenter">( <a href="{% url 'season31:logout' %}" class="fgblack">logout</a>)</div>
+	<div class="textleft font14 pad0 marg0"><a href="{% url 'season31:logout' %}" class="fgblack">logout</a></div>
+	<div class="textcenter textbold font24"><a href="{% url 'season31:player' user.player.id %}" class="fgblack">{{ user.username }}</a></div>
+	<div class="textcenter textbold"><a href="{% url 'season31:player' user.player.id %}" class="fgblack">Your Picks</a></div>
 	{% else %}
-	<div class="textcenter">
-		<span><a href="{% url 'season31:login' %}" class="fgblack">Login</a></span>
-		|
-		<span><a href="{% url 'season31:register' %}" class="fgblack">Register</a></span>
+	<div class="textleft textbold">
+		<a href="{% url 'season31:login' %}" class="fgblack">Login</a>
+		<a href="{% url 'season31:register' %}" class="fgblack floatright">Register</a>
 	</div>
 	{% endif %}
 	<div class="quarterspacer bgblack"></div>
-	{% if user.player %}
-	<div class="textcenter"><a href="{% url 'season31:episode' user.player.get_latest_episode.id %}" class="fgblack">Latest Episode</a></div>
-	<div class="quarterspacer bgblack"></div>
+	{% if user.player and user.player.get_latest_episode%}
+	<div class="textcenter textbold"><a href="{% url 'season31:episode' user.player.get_latest_episode.id %}" class="fgblack">Latest Episode</a></div>
 	{% endif %}
-	<div class="textcenter"><a href="{% url 'season31:episodes' %}" class="fgblack">Episodes</a></div>
-	<div class="textcenter"><a href="{% url 'season31:castaways' %}" class="fgblack">Castaways</a></div>
-	<div class="textcenter"><a href="{% url 'season31:tribes' %}" class="fgblack">Tribes</a></div>
-	<div class="textcenter"><a href="{% url 'season31:actions' %}" class="fgblack">Actions</a></div>
-	<div class="textcenter"><a href="{% url 'season31:players' %}" class="fgblack">Players</a></div>
+	{% if user.player and user.player.get_next_episode%}
+	<div class="textcenter textbold"><a href="{% url 'season31:episode' user.player.get_next_episode.id %}" class="fgblack">Next Episode</a></div>
+	{% endif %}
+	<div class="quarterspacer bgblack"></div>
+	<div class="textcenter textbold"><a href="{% url 'season31:episodes' %}" class="fgblack">Episodes</a></div>
+	<div class="textcenter textbold"><a href="{% url 'season31:castaways' %}" class="fgblack">Castaways</a></div>
+	<div class="textcenter textbold"><a href="{% url 'season31:tribes' %}" class="fgblack">Tribes</a></div>
+	<div class="textcenter textbold"><a href="{% url 'season31:actions' %}" class="fgblack">Actions</a></div>
+	<div class="textcenter textbold"><a href="{% url 'season31:players' %}" class="fgblack">Players</a></div>
 	<div class="quarterspacer bgblack"></div>
 </div>
