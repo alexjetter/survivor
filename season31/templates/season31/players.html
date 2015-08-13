@@ -4,6 +4,10 @@
 
 <div class="marg0 pad0 thecontainer">
 
+<div class="menu floatleft marg0">
+	{% include "season31/menu.html" %}
+	{% include "season31/leaderboard.html" %}
+</div>
 <div class="content floatleft marg0">
 
 <span class="title">Players</span>
@@ -12,14 +16,14 @@
 
 <table>
 	<tr>
-		<td class="columnheader"></td>
-		<td class="columnheader fgwhite">Full Name</td>
-		<td class="columnheader fgwhite">Paid?</td>
+		<td class="columnheader fggrey">Username</td>
+		<td class="columnheader fggrey">Full Name</td>
+		<td class="columnheader fggrey">Paid?</td>
 	</tr>
 	{% for player in players %}
 	<tr>
-		<td class="columnheader fgwhite textright padlr2"><a href="{% url 'season31:player' player.id %}" class="fgwhite">{{ player }}</a></td>
-		<td class="padlr2">{{ player.user.get_full_name }}</td>
+		<td class="columnheader fgwhite textright"><a href="{% url 'season31:player' player.id %}" class="fgwhite">{{ player }}</a></td>
+		<td>{{ player.user.get_full_name }}</td>
 		{% if player.paid %}
 		<td class="bggreen4">Y</td>
 		{% else %}
@@ -29,10 +33,6 @@
 	{% endfor %}
 </table>
 
-</div>
-<div class="menu floatleft marg0">
-	{% include "season31/menu.html" %}
-	{% include "season31/leaderboard.html" %}
 </div>
 
 </div>

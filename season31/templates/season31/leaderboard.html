@@ -1,25 +1,25 @@
 ﻿<div class="pad0 marg0">
-	<div class="subtitle">Leaderboard</div>
+	<div class="subtitle textcenter">Leaderboard</div>
 
 	<table>
 
 		<tr>
-			<td class="columnheader fgwhite">±</td>
-			<td class="columnheader fgwhite">Plc</td>
-			<td class="columnheader fgwhite">Player</td>
-			<td class="columnheader fgwhite">Pts</td>
+			<td class="columnheader fggrey">±</td>
+			<td class="columnheader fggrey">Plc</td>
+			<td class="columnheader fggrey">Player</td>
+			<td class="columnheader fggrey">Pts</td>
 			<td class="columnheader"></td>
-			<td class="columnheader fgwhite">Team</td>
+			<td class="columnheader fggrey">Team</td>
 		</tr>
-		{% for player in user.player.get_leaderboard_players %}
+		{% for playerepisode in user.player.get_leaderboard_player_episodes %}
 		<tr>
-			<td class="columnheader fggreen5">+##</td>
-			<td>##</td>
-			<td class="columnheader fgwhite"><a href="{% url 'season31:player' player.id %}" class="fgwhite">{{ player }}</a></td>
-			<td>{{ player.score }}</td>
+			<td class="columnheader fggreen5">{{ playerepisode.movement }}</td>
+			<td>{{ playerepisode.place }}</td>
+			<td class="columnheader fgwhite"><a href="{% url 'season31:player' playerepisode.player.id %}" class="fgwhite">{{ playerepisode.player }}</a></td>
+			<td>{{ playerepisode.total_score }}</td>
 			<td class="columnheader"></td>
 			<td class="pad0 marg0">			
-				{% for pick in player.playerepisode_set.latest.get_team_picks %}
+				{% for pick in playerepisode.get_team_picks %}
 				<div class="bgtribe{{ pick.castaway_episode.tribe.color }} floatleft padlr2 padtb1 marg0 pickwidthsm" title="{{ pick.castaway_episode.castaway }}">
 					<a href="{% url 'season31:castaway' pick.castaway_episode.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway_episode.castaway.get_first_initial }}
 					</a>

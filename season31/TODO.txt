@@ -1,3 +1,1 @@
-Nuke database and rebuild it to get proper stuff into player episode
-Auto start with everyone league
 gracefully handle lack of picks

@@ -114,7 +114,10 @@ form {margin-bottom: 0;}
 
 table, th, td{
 	border: 1px solid #222222;
-	padding: 1;
+	padding-top: 1;
+	padding-bottom: 1;
+	padding-left: 4;
+	padding-right: 4;
 	spacing: 0;
 	border-collapse: collapse;
 	text-align: center;

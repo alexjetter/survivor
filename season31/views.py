@@ -30,7 +30,12 @@ class PlayersView(generic.ListView):
 	context_object_name = 'players'
 	template_name = 'season31/players.html'
 	queryset = Player.objects.all()
-		
+
+class EpisodesView(generic.ListView):
+	context_object_name = 'episodes'
+	template_name = 'season31/episodes.html'
+	queryset = Episode.objects.all()
+
 class TribesView(generic.ListView):
 	template_name = 'season31/tribes.html'
 	context_object_name = 'tribes'
@@ -123,52 +128,38 @@ def user_logout(request):
 	return HttpResponseRedirect('/season31/')
 
 def updatescores(request):
-	for player in Player.objects.all():
-		player.score = 0
-		player.save()
-	lastepisode = None
+	for ce in CastawayEpisode.objects.all():
+		ce.score_has_changed = True
+		ce.save()
+	for pe in PlayerEpisode.objects.all():
+		pe.score_has_changed = True
+		pe.save()
 	for episode in Episode.objects.all():
 		update_episode_score(episode)
 	return HttpResponseRedirect('/season31/')
 
 def update_episode_score(episode):
+	for castawayepisode in episode.castawayepisode_set.all():
+		castawayepisode.update_score()
+	for playerepisode in episode.playerepisode_set.all():
+		playerepisode.update_score()
+	lastplace = 0
+	lastscore = 0
 	try:
 		lastepisode = Episode.objects.get(number = episode.number - 1)
 	except:
 		lastepisode = None
-	castawayepisodes = episode.castawayepisode_set.all()
-	for castawayepisode in castawayepisodes:
-		castawayepisode.update_score()
-		castawayepisode.save()
-	for playerepisode in episode.playerepisode_set.all():
+	for counter, playerepisode in enumerate(episode.playerepisode_set.order_by('-total_score').all()):
 		player = playerepisode.player
-		playerepisode.update_score()
+		playerepisode.place = counter + 1
+		if playerepisode.total_score == lastscore:
+			playerepisode.place = lastplace
 		if lastepisode:
 			last_pe = PlayerEpisode.objects.get(player = player, episode = lastepisode)
-			player.score = last_pe.total_score
-		else:
-			player.score = 0
-		player.score += playerepisode.week_score
-		playerepisode.total_score = player.score
-		player.save()
+			playerepisode.movement = last_pe.place - playerepisode.place
 		playerepisode.save()
-	
-#	lastplace = 0
-#	lastscore = 0
-#	for counter, playerepisode in enumerate(episode.playerepisode_set.order_by('-total_score').all()):
-#		player = playerepisode.player
-#		playerepisode.place = counter + 1
-#		if playerepisode.total_score == lastscore:
-#			playerepisode.place = lastplace
-#		player.place = playerepisode.place
-#		if lastepisode:
-#			last_pe = PlayerEpisode.objects.get(player = player, episode = lastepisode)
-#			playerepisode.movement = last_pe.place - playerepisode.place
-#		player.movement = playerepisode.movement
-#		playerepisode.save()
-#		player.save()
-#		lastplace = playerepisode.place
-#		lastscore = playerepisode.total_score
+		lastplace = playerepisode.place
+		lastscore = playerepisode.total_score
 
 def addepisode(request): # TODO: Add random toggle
 	le = Episode.objects.all().latest()
@@ -208,8 +199,16 @@ def updateceactions(request, e_id):
 				badaction = None
 			if badaction != None:
 				ce.actions.remove(badaction)
+				ce.score_has_changed = True
+				ce.save()
+				for pe in PlayerEpisode.objects.all():
+					pe.score_has_changed = True
 		else:
 			ce.actions.add(action)
+			ce.score_has_changed = True
+			ce.save()
+			for pe in PlayerEpisode.objects.all():
+				pe.score_has_changed = True
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
 
 def updatecevotes(request, e_id):
@@ -233,7 +232,7 @@ def updateepisodescore(request, e_id):
 	if e:
 		update_episode_score(e)
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
-	
+
 def updatecetribes(request, e_id):
 	tribe = Tribe.objects.get(id = int(request.POST['tribe']))
 	ce_ids = request.POST.getlist('castaways')
@@ -352,6 +351,9 @@ def pickteams(request, pe_id):
 			ce = CastawayEpisode.objects.get(castaway = c, episode = pe.episode)
 			pick = Pick(player_episode = pe, castaway_episode = ce, type = "TM")
 			pick.save()
+		pe.score_has_changed = True
+		pe.save()
+		pe.update_score()
 		return render(request, 'season31/player.html', {'player': pe.player,})
 
 def pickvotes(request, pe_id):
@@ -367,4 +369,7 @@ def pickvotes(request, pe_id):
 			ce = CastawayEpisode.objects.get(castaway = c, episode = pe.episode)
 			p = Pick(player_episode = pe, castaway_episode = ce, type = "VO")
 			p.save()
+		pe.score_has_changed = True
+		pe.save()
+		pe.update_score()
 		return render(request, 'season31/player.html', {'player': pe.player,})

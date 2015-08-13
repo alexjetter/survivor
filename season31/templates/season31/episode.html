@@ -4,6 +4,10 @@
 
 <div class="marg0 pad0 thecontainer">
 
+<div class="menu floatleft marg0">
+	{% include "season31/menu.html" %}
+	{% include "season31/leaderboard.html" %}
+</div>
 <div class="content floatleft marg0">
 
 <span class="title">"{{ episode.title }}"</span>
@@ -21,7 +25,7 @@
 {% if user.is_superuser %}
 <table class="floatright marg4">
 	<tr>
-		<td colspan=3>
+		<td colspan=3 class="bgblack textright">
 			<form action="{% url 'season31:deleteepisode' episode.id %}" method="post">
 				{% csrf_token %}
 				<input type="submit" value="Delete This Episode" />
@@ -29,7 +33,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td colspan=3>
+		<td colspan=3 class="bgblack textright">
 			<form action="{% url 'season31:updateepisodetitle' episode.id %}" method="post">
 				{% csrf_token %}
 				<input type="text" name="title" />
@@ -38,7 +42,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td colspan=3>
+		<td colspan=3 class="bgblack textright">
 			<form action="{% url 'season31:updateepisodedatetime' episode.id %}" method="post">
 				{% csrf_token %}
 				<input type="text" name="airdatetime" value="YYYYmmdd HH"/>
@@ -47,7 +51,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td colspan=3>
+		<td colspan=3 class="bgblack textright">
 			<form action="{% url 'season31:updateepisodeteamsize' episode.id %}" method="post">
 				{% csrf_token %}
 				<input type="number" name="teamsize" id="teamsize" min="2" max="5" value="{{ episode.team_size }}" />
@@ -56,7 +60,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td colspan=3>
+		<td colspan=3 class="bgblack textright">
 			<form action="{% url 'season31:updateepisodescore' episode.id %}" method="post">
 				{% csrf_token %}
 				<input type="submit" value="Update Episode Score" />
@@ -144,7 +148,7 @@
 
 <table>
 	<tr>
-		<td class="columnheader fgwhite"><a href="{% url 'season31:castaways' %}" class="fgwhite">Castaways</a></td>
+		<td class="columnheader fgwhite textright"><a href="{% url 'season31:castaways' %}" class="fgwhite">Castaways</a></td>
 		<td class="columnheader fgwhite"><a href="{% url 'season31:tribes' %}" class="fgwhite">Tribes</a></td>
 		<td class="columnheader fgwhite"></td>
 		<td class="columnheader fgwhite">Actions</td>
@@ -220,7 +224,7 @@
 		</td>
 
 		<td class="columnheader fgwhite"></td>
-		<td>{{ playerepisode.get_loyalty_bonus }}</td>
+		<td>{{ playerepisode.loyalty_bonus }}</td>
 		<td class="columnheader fgwhite"></td>
 		<td>{{ playerepisode.action_score }}</td>
 		<td>{{ playerepisode.vote_off_score }}</td>
@@ -233,10 +237,6 @@
 	{% endfor %}
 </table>
 
-</div>
-<div class="menu floatleft marg0">
-	{% include "season31/menu.html" %}
-	{% include "season31/leaderboard.html" %}
 </div>
 
 </div>
