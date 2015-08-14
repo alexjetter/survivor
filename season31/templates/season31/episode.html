@@ -67,6 +67,7 @@
 			</form>
 		</td>
 	</tr>
+	{% if episode.is_locked %}
 	<tr>
 		<td class="columnheader fgwhite textleft">Actions</td>
 		<td class="columnheader fgwhite textleft">Votes</td>
@@ -141,6 +142,7 @@
 			</form>
 		</td>
 	</tr>
+	{% endif %}
 </table>
 {% endif %}
 
@@ -185,9 +187,9 @@
 <table>
 	<tr>
 		<td class="columnheader fgwhite textright"><a href="{% url 'season31:players' %}" class="fgwhite">Players</a></td>
-		<td class="columnheader fgwhite">Team</td>
+		<td class="columnheader fgwhite">Team Members</td>
 		<td class="columnheader fgwhite"></td>
-		<td class="columnheader fgwhite">Vote Off</td>
+		<td class="columnheader fgwhite">Vote Off Picks</td>
 		<td class="columnheader fgwhite"></td>
 		<td class="columnheader fgwhite">LB</td>
 		<td class="columnheader fgwhite"></td>

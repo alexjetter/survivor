@@ -18,44 +18,54 @@
 <table class="noborder">
 	<tr>
 		<td class="columnheader"></td>
-		<td class="columnheader fgwhite">±</td>
-		<td class="columnheader fgwhite">Plc</td>
-		<td class="columnheader fgwhite">Score</td>
+		<td class="columnheader fggreen4">Team Members</td>
 		<td class="columnheader"></td>
-		<td class="columnheader fgwhite">Team</td>
+		<td class="columnheader fgred4">Vote Off Picks</td>
 		<td class="columnheader"></td>
-		<td class="columnheader fgwhite">Vote Off</td>
+		<td class="columnheader fggrey">LB</td>
 		<td class="columnheader"></td>
-		<td class="columnheader fgwhite">LB</td>
+		<td class="columnheader fggrey">Action</td>
+		<td class="columnheader fggrey">Vote Off</td>
+		<td class="columnheader fggrey">JSP</td>
 		<td class="columnheader"></td>
-		<td class="columnheader fgwhite">Action</td>
-		<td class="columnheader fgwhite">Vote Off</td>
-		<td class="columnheader fgwhite">JSP</td>
+		<td class="columnheader fggrey">Week</td>
 		<td class="columnheader"></td>
-		<td class="columnheader fgwhite">Week</td>
+		<td class="columnheader fggrey">±</td>
+		<td class="columnheader fggrey">Plc</td>
+		<td class="columnheader fggrey">Score</td>
 		<td class="columnheader"></td>
 	</tr>
 	{% for playerepisode in player.playerepisode_set.all %}
-	{% if playerepisode.episode.check_lock %}
-	{% endif %}
 	{% if not playerepisode.episode.is_locked and player == user.player and playerepisode.episode = player.get_next_episode %}
 	<tr>
 		<td class="noborder padtb4" colspan=17></td>
 	</tr>
 	<tr>
-		<td class="noborder textleft" colspan=17>{{ playerepisode.episode.time_to_lock }} left to make your picks</td>
+		<td class="noborder textleft" colspan=17>{{ playerepisode.episode.time_to_lock }} left to make or change your picks</td>
 	</tr>
 	<tr>
-		<td class="bgblack padtb4" colspan=17></td>
+		<td class="columnheader"></td>
+		<td class="columnheader fggreen4">Team Members</td>
+		<td class="columnheader"></td>
+		<td class="columnheader fgred4">Vote Off Picks</td>
+		<td class="columnheader"></td>
+		<td class="columnheader fggrey">LB</td>
+		<td class="columnheader"></td>
+		<td class="columnheader fggrey">Action</td>
+		<td class="columnheader fggrey">Vote Off</td>
+		<td class="columnheader fggrey">JSP</td>
+		<td class="columnheader"></td>
+		<td class="columnheader fggrey">Week</td>
+		<td class="columnheader"></td>
+		<td class="columnheader fggrey">±</td>
+		<td class="columnheader fggrey">Plc</td>
+		<td class="columnheader fggrey">Score</td>
+		<td class="columnheader"></td>
 	</tr>
 	{% endif %}
 	{% if playerepisode.episode.is_locked or player == user.player%}
 	<tr>
 		<td class="columnheader texttop"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode }}</a></td>
-		<td>{{ playerepisode.movement }}</td>
-		<td>{{ playerepisode.place }}</td>
-		<td>{{ playerepisode.total_score }}</td>
-		<td class="columnheader"></td>
 
 		<td class="pad0 marg0">
 			{% for pick in playerepisode.get_team_picks %}
@@ -77,21 +87,25 @@
 			{% endfor %}
 		</td>
 
-		<td class="columnheader fgwhite"></td>
+		<td class="columnheader"></td>
 		<td>{{ playerepisode.loyalty_bonus }}</td>
-		<td class="columnheader fgwhite"></td>
+		<td class="columnheader"></td>
 		<td>{{ playerepisode.action_score }}</td>
 		<td>{{ playerepisode.vote_off_score }}</td>
 		<td>{{ playerepisode.jsp_score }}</td>
-		<td class="columnheader fgwhite"></td>
+		<td class="columnheader"></td>
 		<td>{{ playerepisode.week_score }}</td>
-		<td class="columnheader fgwhite"></td>
+		<td class="columnheader"></td>
+		<td>{{ playerepisode.movement }}</td>
+		<td>{{ playerepisode.place }}</td>
+		<td>{{ playerepisode.total_score }}</td>
+		<td class="columnheader"></td>
 	</tr>
 	{% else %}
 	<tr>
 		<td class="columnheader texttop"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode }}</a></td>
 		<td class="textleft" colspan=15>Picks will be revealed in {{ playerepisode.episode.time_to_lock }}</td>
-		<td class="columnheader fgwhite"></td>
+		<td class="columnheader"></td>
 	</tr>
 	{% endif %}
 	{% endfor %}
@@ -102,18 +116,17 @@
 	</tr>
 	-->
 	<tr>
-		<td class="bgblack" colspan=4></td>
-		<td class="columnheader"></td>
+		<td class="bgblack" colspan=1></td>
 
-		<td class="columnheader fgwhite pad0 marg0">
+		<td class="columnheader fggreen4 pad0 marg0">
 			{% if player.get_latest_player_episode == player.playerepisode_set.latest%}
 			<form action="{% url 'season31:pickteams' player.playerepisode_set.latest.id %}" method="post">
 				{% csrf_token %}
 				<div class="bgtribe{{ castawayepisode.tribe.color }} pad2 marg0">
 					{% if player.playerepisode_set.latest.get_team_picks %}
-					Change Team:
+					Pick New Team:
 					{% else %}
-					Pick Team:
+					Pick {{ player.get_next_episode.team_size }} Team Members:
 					{% endif %}
 				</div>
 				{% for castawayepisode in player.playerepisode_set.latest.get_pick_options %}
@@ -132,17 +145,17 @@
 			{% endif %}
 		</td>
 
-		<td class="columnheader fgwhite"></td>
+		<td class="columnheader"></td>
 
-		<td class="columnheader fgwhite pad0 marg0">
+		<td class="columnheader fgred4 pad0 marg0">
 			{% if player.get_latest_player_episode == player.playerepisode_set.latest%}
 			<form action="{% url 'season31:pickvotes' player.playerepisode_set.latest.id %}" method="post">
 				{% csrf_token %}
 				<div class="bgtribe{{ castawayepisode.tribe.color }} pad2 marg0">
 					{% if player.playerepisode_set.latest.get_vote_picks %}
-					Change Votes:
+					Pick New Votes:
 					{% else %}
-					Pick Votes:
+					Pick 2 Votes:
 					{% endif %}
 				</div>
 				{% for castawayepisode in player.playerepisode_set.latest.get_pick_options %}
@@ -162,7 +175,7 @@
 		</td>
 
 		<td class="columnheader"></td>
-		<td class="bgblack" colspan=8></td>
+		<td class="bgblack" colspan=12></td>
 	</tr>
 	{% endif %}
 </table>

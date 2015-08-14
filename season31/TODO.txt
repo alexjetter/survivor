@@ -1,1 +1,5 @@
-gracefully handle lack of picks
+gracefully handle lack of picks on a timer?
+lock on a timer if possible
+team and votes unclear, maybe color code
+show voted off players contextually
+episode scoring doesnt work properly (players dont get flagged i think)

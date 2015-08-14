@@ -86,7 +86,7 @@ def register(request):
 			player = Player()
 			player.user = user
 			player.save()
-			for episode in Episode.objects.all():
+			for episode in Episode.objects.flter(is_locked = True):
 				playerepisode = PlayerEpisode(player = player, episode = episode)
 				playerepisode.save()
 				teampicks = episode.castawayepisode_set.order_by('?')[:episode.team_size]
@@ -361,7 +361,7 @@ def pickteams(request, pe_id):
 		pe.score_has_changed = True
 		pe.save()
 		pe.update_score()
-		return render(request, 'season31/player.html', {'player': pe.player,})
+		return HttpResponseRedirect('/season31/player/%d' % (pe.player.id))
 
 def pickvotes(request, pe_id):
 	pe = get_object_or_404(PlayerEpisode, pk=pe_id)
@@ -379,4 +379,4 @@ def pickvotes(request, pe_id):
 		pe.score_has_changed = True
 		pe.save()
 		pe.update_score()
-		return render(request, 'season31/player.html', {'player': pe.player,})
+		return HttpResponseRedirect('/season31/player/%d' % (pe.player.id))

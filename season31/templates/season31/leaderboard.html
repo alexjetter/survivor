@@ -12,6 +12,8 @@
 			<td class="columnheader fggrey">Team</td>
 		</tr>
 		{% for playerepisode in user.player.get_leaderboard_player_episodes %}
+		{% if player.get_next_episode.check_lock %}
+		{% endif %}
 		<tr>
 			<td class="columnheader fggreen5">{{ playerepisode.movement }}</td>
 			<td>{{ playerepisode.place }}</td>
