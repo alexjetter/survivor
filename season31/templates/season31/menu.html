@@ -13,11 +13,11 @@
 	{% if player.get_next_episode.check_lock %}
 	{% endif %}
 	<div class="quarterspacer bgblack"></div>
-	{% if user.player and user.player.get_latest_episode%}
-	<div class="textcenter textbold"><a href="{% url 'season31:episode' user.player.get_latest_episode.id %}" class="fgblack">Latest Episode</a></div>
+	{% if user.player and user.player.get_latest_episode %}
+	<div class="textcenter textbold"><a href="{% url 'season31:episode' user.player.get_latest_episode.id %}" class="fgblack">{{ user.player.get_latest_episode }} (Last Ep.)</a></div>
 	{% endif %}
-	{% if user.player and user.player.get_next_episode%}
-	<div class="textcenter textbold"><a href="{% url 'season31:episode' user.player.get_next_episode.id %}" class="fgblack">Next Episode</a></div>
+	{% if user.player and user.player.get_next_episode %}
+	<div class="textcenter textbold"><a href="{% url 'season31:episode' user.player.get_next_episode.id %}" class="fgblack">{{ user.player.get_next_episode }} (Next Ep.)</a></div>
 	{% endif %}
 	<div class="quarterspacer bgblack"></div>
 	<div class="textcenter textbold"><a href="{% url 'season31:episodes' %}" class="fgblack">Episodes</a></div>

@@ -28,6 +28,7 @@ urlpatterns = [
 	url(r'^addaction/$', views.addaction, name='addaction'),
 	url(r'^deleteaction/$', views.deleteaction, name='deleteaction'),
 	url(r'^deleteepisode/(?P<e_id>[0-9]+)/$', views.deleteepisode, name='deleteepisode'),
+	url(r'^togglehelptext/(?P<p_id>[0-9]+)/$', views.togglehelptext, name='togglehelptext'),
 	url(r'^updateepisodetitle/(?P<e_id>[0-9]+)/$', views.updateepisodetitle, name='updateepisodetitle'),
 	url(r'^updateepisodedatetime/(?P<e_id>[0-9]+)/$', views.updateepisodedatetime, name='updateepisodedatetime'),
 	url(r'^updateepisodeteamsize/(?P<e_id>[0-9]+)/$', views.updateepisodeteamsize, name='updateepisodeteamsize'),

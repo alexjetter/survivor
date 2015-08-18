@@ -12,11 +12,11 @@
 
 <span class="title">"{{ episode.title }}"</span>
 {% if episode.get_prev_episode %}
-<span><a href="{% url 'season31:episode' episode.get_prev_episode.id %}" class="fggrey">{{ episode.get_prev_episode.short}}</a></span>
+<span><a href="{% url 'season31:episode' episode.get_prev_episode.id %}" class="fglightgrey">{{ episode.get_prev_episode.short}}</a></span>
 {% endif %}
 <span class="subtitle">{{ episode.short }}</span>
 {% if episode.get_next_episode %}
-<span><a href="{% url 'season31:episode' episode.get_next_episode.id %}" class="fggrey">{{ episode.get_next_episode.short }}</a></span>
+<span><a href="{% url 'season31:episode' episode.get_next_episode.id %}" class="fglightgrey">{{ episode.get_next_episode.short }}</a></span>
 {% endif %}
 <div class="subtitle">{{ episode.air_day}}, {{ episode.air_date}} ET</div>
 
@@ -77,7 +77,7 @@
 		<td class="textleft">
 			<form action="{% url 'season31:updateceactions' episode.id %}" method="post">
 				{% csrf_token %}
-				<div class="fggrey marg0 pad0">
+				<div class="fglightgrey marg0 pad0">
 					<input type="checkbox" name="delete" id="delete" />
 					<label for="delete">Delete:</label>
 				</div>

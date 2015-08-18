@@ -19,7 +19,7 @@
 
 .menu {
 	min-width: 128;
-	background-color: #DDDDDD;
+	background-color: #c8c8c8;
 	padding: 8;
 }
 
@@ -51,7 +51,9 @@ form {margin-bottom: 0;}
 .quarterspacer {height: 0.25em;}
 
 .bgwhite {background-color: #FFFFFF;}
-.bggrey {background-color: #888888;}
+.bglightgrey {background-color: #c8c8c8;}
+.bggrey {background-color: #909090;}
+.bgdarkgrey {background-color: #595959;}
 .bgblack {background-color: #222222;}
 .bgtribeGreen {background-color: #64e4b8; color: #222222;}
 .bgtribeMagenta {background-color: #ff5cad; color: #222222;}
@@ -68,7 +70,9 @@ form {margin-bottom: 0;}
 .bgred5 {background-color: #ff6666; color: #222222;}
 
 .fgwhite {color: #FFFFFF;}
-.fggrey {color: #888888;}
+.fglightgrey {color: #c8c8c8;}
+.fggrey {color: #999999;}
+.fgdarkgrey {color: #595959;}
 .fgblack {color: #222222;}
 .fgtribeGreen {color: #46b58f;}
 .fgtribeMagenta {color: #e62e8a;}
@@ -92,21 +96,25 @@ form {margin-bottom: 0;}
 .padlr1 {padding-left: 1; padding-right: 1;}
 .padlr2 {padding-left: 2; padding-right: 2;}
 .padlr4 {padding-left: 4; padding-right: 4;}
+.padlr8 {padding-left: 8; padding-right: 8;}
 
 .padtb0 {padding-top: 0; padding-bottom: 0;}
 .padtb1 {padding-top: 1; padding-bottom: 1;}
 .padtb2 {padding-top: 2; padding-bottom: 2;}
 .padtb4 {padding-top: 4; padding-bottom: 4;}
+.padtb8 {padding-top: 8; padding-bottom: 8;}
 
 .pad0 {padding: 0;}
 .pad1 {padding: 1;}
 .pad2 {padding: 2;}
 .pad4 {padding: 4;}
+.pad8 {padding: 8;}
 
 .marg0 {margin: 0;}
 .marg1 {margin: 1;}
 .marg2 {margin: 2;}
 .marg4 {margin: 4;}
+.marg8 {margin: 8;}
 
 .textleft {text-align: left;}
 .textcenter {text-align: center;}

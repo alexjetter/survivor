@@ -1,15 +1,19 @@
 ﻿<div class="pad0 marg0">
 	<div class="subtitle textcenter">Leaderboard</div>
+	
+	{% if user.player and user.player.get_latest_episode %}
+	<div class="text14 textcenter">after {{user.player.get_latest_episode}}</div>
+	{% endif %}
 
 	<table>
 
 		<tr>
-			<td class="columnheader fggrey">±</td>
-			<td class="columnheader fggrey">Plc</td>
-			<td class="columnheader fggrey">Player</td>
-			<td class="columnheader fggrey">Pts</td>
+			<td class="columnheader fglightgrey">±</td>
+			<td class="columnheader fglightgrey">Plc</td>
+			<td class="columnheader fglightgrey">Player</td>
+			<td class="columnheader fglightgrey">Pts</td>
 			<td class="columnheader"></td>
-			<td class="columnheader fggrey">Team</td>
+			<td class="columnheader fglightgrey">Team</td>
 		</tr>
 		{% for playerepisode in user.player.get_leaderboard_player_episodes %}
 		<tr>

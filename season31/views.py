@@ -291,6 +291,13 @@ def deleteepisode(request, e_id):
 		e.delete()
 	return HttpResponseRedirect('/season31/')
 
+def togglehelptext(request, p_id):
+	p = Player.objects.get(id = p_id)
+	if p:
+		p.show_help_text = not p.show_help_text
+		p.save()
+	return HttpResponseRedirect('/season31/player/%d' % int(p_id))
+
 def addcastaway(request):
 	name = request.POST['name']
 	fullname = request.POST['fullname']
