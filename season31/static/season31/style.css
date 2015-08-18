@@ -142,6 +142,13 @@ table, th, td{
 .font20{font-size: 1.25em;}
 .font24{font-size: 1.5em;}
 
+.width40{width: 40%}
+.width45{width: 45%}
+.width50{width: 50%}
+.width55{width: 55%}
+.width60{width: 60%}
+.width100{width: 100%}
+
 .columnheader {
 	background-color: #222222;
 }

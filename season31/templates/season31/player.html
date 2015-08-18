@@ -129,12 +129,18 @@
 					Pick {{ player.get_next_episode.team_size }} Team Members:
 					{% endif %}
 				</div>
+				<table class="noborder width100">
 				{% for castawayepisode in player.playerepisode_set.latest.get_pick_options %}
-				<div class="bgtribe{{ castawayepisode.tribe.color }} pad0 marg0">
-					<input type="checkbox" name="picks" id="{{ castawayepisode.id }}" value="{{ castawayepisode.castaway.name }}" />
-					<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
-				</div>
+					<tr>
+						<td class="bgtribe{{ castawayepisode.tribe.color }} textright noborder width45">
+							<input type="checkbox" name="picks" id="{{ castawayepisode.id }}" value="{{ castawayepisode.castaway.name }}" />
+						</td>
+						<td class="bgtribe{{ castawayepisode.tribe.color }} textleft noborder width55">
+							<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
+						</td>
+					</tr>
 				{% endfor %}
+				</table>
 				<div>
 					<input type="submit" value="Update Team" />
 				</div>
@@ -158,12 +164,18 @@
 					Pick 2 Votes:
 					{% endif %}
 				</div>
+				<table class="noborder width100">
 				{% for castawayepisode in player.playerepisode_set.latest.get_pick_options %}
-				<div class="bgtribe{{ castawayepisode.tribe.color }} pad0 marg0">
-					<input type="checkbox" name="picks" id="{{ castawayepisode.id }}" value="{{ castawayepisode.castaway.name }}" />
-					<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
-				</div>
+					<tr>
+						<td class="bgtribe{{ castawayepisode.tribe.color }} textright noborder width40">
+							<input type="checkbox" name="picks" id="{{ castawayepisode.id }}" value="{{ castawayepisode.castaway.name }}" />
+						</td>
+						<td class="bgtribe{{ castawayepisode.tribe.color }} textleft noborder width60">
+							<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
+						</td>
+					</tr>
 				{% endfor %}
+				</table>
 				<div>
 					<input type="submit" value="Update Votes" />
 				</div>

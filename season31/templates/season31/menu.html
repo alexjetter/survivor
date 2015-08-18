@@ -9,6 +9,8 @@
 		<a href="{% url 'season31:login' %}" class="fgblack">Login</a>
 		<a href="{% url 'season31:register' %}" class="fgblack floatright">Register</a>
 	</div>
+	{% endif %}	
+	{% if player.get_next_episode.check_lock %}
 	{% endif %}
 	<div class="quarterspacer bgblack"></div>
 	{% if user.player and user.player.get_latest_episode%}

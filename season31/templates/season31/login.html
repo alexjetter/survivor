@@ -14,12 +14,19 @@
 <div class="subtitle">Worlds Apart</div>
 <div class="spacer"></div>
 
-<div class="subtitle">Login</div>
-
 <form id="login_form" method="post" action="/season31/login/">
 	{% csrf_token %}
-	<div><input type="text" name="username" value="" size="30"/></div>
-	<div><input type="password" name="password" value="" size="30"/></div>
+	<table class="noborder">
+		<tr>
+			<td class="noborder">username: </td>
+			<td class="noborder"><input type="text" name="username" value="" size="30"/></td>
+		</tr>
+		<tr>
+			<td class="noborder">password: </td>
+			<td class="noborder"><input type="password" name="password" value="" size="30"/></td>
+		</tr>
+	</table>
+	<div class="spacer"></div>
 	{{ profile_form.as_p }}
 	<input type="submit" name="submit" value="Login" />
 </form>
