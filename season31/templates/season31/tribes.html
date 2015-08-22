@@ -56,15 +56,11 @@
 
 <table>
 	<tr>
-		<td class="columnheader fglightgrey">Tribe</td>
-		<td class="columnheader fglightgrey">Color</td>
+		<td class="columnheader"></td>
+		{% for tribe in tribes %}
+		<td class="columnheader fgtribe{{ tribe.color }}">{{ tribe }}</td>
+		{% endfor %}
 	</tr>
-	{% for tribe in tribes %}
-	<tr>
-		<td class="columnheader"><a href="{% url 'season31:tribe' tribe.id %}" class="fgwhite">{{ tribe }}</a></td>
-		<td class="bgtribe{{ tribe.color }}">{{ tribe.color }}</td>
-	</tr>
-	{% endfor %}
 </table>
 
 </div>

@@ -73,7 +73,7 @@
 	<tr>
 		<td class="columnheader fgwhite"><a href="{% url 'season31:castaway' castaway.id %}" class="fgwhite">{{ castaway }}</a></td>
 		{% for ce in castaway.castawayepisode_set.all %}
-		<td class="bgtribe{{ ce.tribe.color }}"><a href="{% url 'season31:tribe' ce.tribe.id %}" class="fgblack">{{ ce.score }}</a></td>
+		<td class="bgtribe{{ ce.tribe.color }}">{{ ce.score }}</td>
 		{% endfor %}
 	</tr>
 	{% endfor %}

@@ -213,7 +213,7 @@
 		<td class="pad0 marg0">
 			{% for pick in playerepisode.get_team_picks %}
 			<div class="bgtribe{{ pick.castaway_episode.tribe.color }} floatleft pad2 marg0 pickwidth">
-				<a href="{% url 'season31:castaway' pick.castaway_episode.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway_episode.castaway.name }}
+				<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway.name }}
 				</a>
 			</div>
 		{% endfor %}
@@ -224,7 +224,7 @@
 		<td class="pad0 marg0">
 			{% for pick in playerepisode.get_vote_picks %}
 			<div class="bgtribe{{ pick.castaway_episode.tribe.color }} floatleft pad2 marg0 pickwidth">
-				<a href="{% url 'season31:castaway' pick.castaway_episode.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway_episode.castaway.name }}
+				<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway.name }}
 				</a>
 			</div>
 		{% endfor %}

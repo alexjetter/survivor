@@ -11,7 +11,7 @@ from django.views import generic
 from random import randint
 
 from .forms import UserForm
-from .models import Player, Castaway, Pick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action
+from .models import Player, Castaway, TeamPick, VotePick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action
 
 def index(request):
 	template = loader.get_template('season31/index.html')
@@ -65,14 +65,6 @@ class EpisodeView(generic.DetailView):
 		context['tribes'] = Tribe.objects.all()
 		return context
 
-class TribeView(generic.DetailView):
-	model = Tribe
-	template_name = 'season31/tribe.html'
-	def get_context_data(self, **kwargs):
-		context = super(TribeView, self).get_context_data(**kwargs)
-		context['episodes'] = Episode.objects.all()
-		return context
-
 def register(request):
 	context = RequestContext(request)
 	registered = False
@@ -86,17 +78,8 @@ def register(request):
 			player = Player()
 			player.user = user
 			player.save()
-			for episode in Episode.objects.flter(is_locked = True):
-				playerepisode = PlayerEpisode(player = player, episode = episode)
-				playerepisode.save()
-				teampicks = episode.castawayepisode_set.order_by('?')[:episode.team_size]
-				votepicks = episode.castawayepisode_set.order_by('?')[:2]
-				for ce in teampicks:
-					pick = Pick(player_episode = playerepisode, castaway_episode = ce, type = "TM")
-					pick.save()
-				for ce in votepicks:
-					pick = Pick(player_episode = playerepisode, castaway_episode = ce, type = "VO")
-					pick.save()
+			for episode in Episode.objects.filter(is_locked = True):
+				pickrandomifempty(episode)
 			registered = True 
 			user = authenticate(username = request.POST['username'], password = request.POST['password'])
 			login(request, user)
@@ -107,6 +90,47 @@ def register(request):
 		user_form = UserForm()
 	return render_to_response('season31/register.html', {'user_form': user_form, 'registered': registered}, context)
 
+def backfillteams(request):
+	pickrandomifempty(Episode.objects.order_by('air_date').first())
+	for episode in Episode.objects.filter(is_locked = True):
+		rolloverteamifempty(episode)
+	return HttpResponseRedirect('/season31/episode/%d' % (Episode.objects.latest().id))
+	
+def pickrandomifempty(episode):
+	for player in Player.objects.all():
+		if not TeamPick.objects.filter(episode = episode, player = player):
+			teampicks = episode.castawayepisode_set.order_by('?')[:episode.team_size]
+			for ce in teampicks:
+				pick = TeamPick(episode = episode, player = player, castaway = ce.castaway)
+				pick.save()
+		if not VotePick.objects.filter(episode = episode, player = player):
+			votepicks = episode.castawayepisode_set.order_by('?')[:2]
+			for ce in votepicks:
+				pick = VotePick(episode = episode, player = player, castaway = ce.castaway)
+				pick.save()
+
+def rolloverteamifempty(episode):
+	lastepisode = episode.get_prev_episode()
+	if not lastepisode:
+		return
+	for player in Player.objects.all():
+		if not TeamPick.objects.filter(episode = episode, player = player):
+			lastepisodeteampicks = TeamPick.objects.filter(player = player, episode = lastepisode)
+			for pick in lastepisodeteampicks:
+				if pick.castaway.out_episode_number == 0:
+					newpick = TeamPick(episode = episode, player = player, castaway = pick.castaway)
+					newpick.save()
+				else:
+					print "select random pick here"
+		if not VotePick.objects.filter(episode = episode, player = player):
+			lastepisodevotepicks = VotePick.objects.filter(player = player, episode = lastepisode)
+			for pick in lastepisodevotepicks:
+				if pick.castaway.out_episode_number == 0:
+					newpick = VotePick(episode = episode, player = player, castaway = pick.castaway)
+					newpick.save()
+				else:
+					print "select random pick here"
+				
 def user_login(request):
 	context = RequestContext(request)
 	if request.method == 'POST':
@@ -164,33 +188,27 @@ def update_episode_score(episode):
 		lastscore = playerepisode.total_score
 
 def addepisode(request): # TODO: Add random toggle
-	le = Episode.objects.all().latest()
+	lastepisode = Episode.objects.all().latest()
 	try:
 		teamsize = request.POST['teamsize']
 	except:
 		return HttpResponseRedirect('/season31/')
 	est = timezone('US/Eastern')
-	ne = Episode(title = "New Episode", number = le.number + 1, air_date = datetime.now(est), team_size = teamsize)
-	ne.save()
+	newepisode = Episode(title = "New Episode", number = lastepisode.number + 1, air_date = datetime.now(est), team_size = teamsize)
+	newepisode.save()
+	viablepicks = []
 	for c in Castaway.objects.all():
 		if not c.voted_out():
-			nce = CastawayEpisode(castaway = c, episode = ne, tribe = c.get_tribe())
+			nce = CastawayEpisode(castaway = c, episode = newepisode, tribe = c.get_tribe())
 			nce.save()
+			viablepicks.append(c)
+		else:
+			c.out_episode_number = lastepisode.number
 	for p in Player.objects.all():
-		npe = PlayerEpisode(player = p, episode = ne)
+		npe = PlayerEpisode(player = p, episode = newepisode)
 		npe.save()
-		if "random" in request.POST:
-			teampicks = ne.castawayepisode_set.order_by('?')[:ne.team_size]
-			votepicks = ne.castawayepisode_set.order_by('?')[:2]
-			for ce in teampicks:
-				pick = Pick(player_episode = npe, castaway_episode = ce, type = "TM")
-				pick.save()
-			for ce in votepicks:
-				pick = Pick(player_episode = npe, castaway_episode = ce, type = "VO")
-				pick.save()
-	return HttpResponseRedirect('/season31/episode/%d' % (ne.id))
-
-# def fillskippedmoves
+	rolloverteamifempty(newepisode)
+	return HttpResponseRedirect('/season31/episode/%d' % (newepisode.id))
 
 def updateceactions(request, e_id):
 	action = Action.objects.get(id = int(request.POST['action']))
@@ -352,38 +370,36 @@ def deleteaction(request):
 		a.delete()
 	return HttpResponseRedirect('/season31/actions/')
 
-# TODO: merge with below.  much is the same.
 def pickteams(request, pe_id):
-	pe = get_object_or_404(PlayerEpisode, pk=pe_id)
+	playerepisode = get_object_or_404(PlayerEpisode, pk=pe_id)
 	picks = request.POST.getlist('picks')
-	if len(picks) != pe.episode.team_size:
-		return render(request, 'season31/player.html', {'player': pe.player, 'team_error_message': "You must select %i castaways" % int(pe.episode.team_size),})
+	if len(picks) != playerepisode.episode.team_size:
+		return render(request, 'season31/player.html', {'player': playerepisode.player, 'team_error_message': "You must select %i castaways" % int(pe.episode.team_size),})
 	else:
-		pe.clear_team_picks()
-		for castawayname in picks:
-			c = Castaway.objects.get(name = castawayname)
-			ce = CastawayEpisode.objects.get(castaway = c, episode = pe.episode)
-			pick = Pick(player_episode = pe, castaway_episode = ce, type = "TM")
-			pick.save()
-		pe.score_has_changed = True
-		pe.save()
-		pe.update_score()
-		return HttpResponseRedirect('/season31/player/%d' % (pe.player.id))
+		playerepisode.clear_team_picks()
+		makepick(playerepisode, picks, "TEAM")
+		return HttpResponseRedirect('/season31/player/%d' % (playerepisode.player.id))
 
 def pickvotes(request, pe_id):
-	pe = get_object_or_404(PlayerEpisode, pk=pe_id)
+	playerepisode = get_object_or_404(PlayerEpisode, pk=pe_id)
 	picks = request.POST.getlist('picks')
 	if len(picks) != 2:
-		return render(request, 'season31/player.html', {'player': pe.player, 'vote_error_message': "You must select 2 castaways",})
+		return render(request, 'season31/player.html', {'player': playerepisode.player, 'vote_error_message': "You must select 2 castaways",})
 	else:
-		pe.clear_vote_picks()
-		for castawayname in picks:
-			print castawayname
-			c = Castaway.objects.get(name = castawayname)
-			ce = CastawayEpisode.objects.get(castaway = c, episode = pe.episode)
-			p = Pick(player_episode = pe, castaway_episode = ce, type = "VO")
-			p.save()
-		pe.score_has_changed = True
-		pe.save()
-		pe.update_score()
-		return HttpResponseRedirect('/season31/player/%d' % (pe.player.id))
+		playerepisode.clear_vote_picks()
+		makepick(playerepisode, picks, "VOTE")
+		return HttpResponseRedirect('/season31/player/%d' % (playerepisode.player.id))
+
+def makepick(playerepisode, picks, type):
+	for castawayname in picks:
+		castaway = Castaway.objects.get(name = castawayname)
+		if type == "TEAM":
+			pick = TeamPick(player = playerepisode.player, episode = playerepisode.episode, castaway = castaway)
+			pick.save()
+		if type == "VOTE":
+			pick = VotePick(player = playerepisode.player, episode = playerepisode.episode, castaway = castaway)
+			pick.save()
+		playerepisode.score_has_changed = True
+		playerepisode.save()
+		playerepisode.update_score()
+			

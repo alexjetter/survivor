@@ -24,8 +24,8 @@
 			<td class="columnheader"></td>
 			<td class="pad0 marg0">			
 				{% for pick in playerepisode.get_team_picks %}
-				<div class="bgtribe{{ pick.castaway_episode.tribe.color }} floatleft padlr2 padtb1 marg0 pickwidthsm" title="{{ pick.castaway_episode.castaway }}">
-					<a href="{% url 'season31:castaway' pick.castaway_episode.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway_episode.castaway.get_first_initial }}
+				<div class="bgtribe{{ pick.castaway_episode.tribe.color }} floatleft padlr2 padtb1 marg0 pickwidthsm" title="{{ pick.castaway }}">
+					<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway.get_first_initial }}
 					</a>
 				</div>
 				{% endfor %}
@@ -37,25 +37,28 @@
 	{% if user.is_superuser  %}
 	<div class="spacer"></div>
 
-	<div class="marg0 pad4 border">
-		<form action="{% url 'season31:updatescores' %}" method="post">
-			{% csrf_token %}
-			<input type="submit" value="Update Scores" />
-		</form>
-	</div>
-
-	<div class="marg0 pad4 border">
+	<div class="bgdarkgrey fgwhite pad4 textcenter">
 		<form action="{% url 'season31:addepisode' %}" method="post">
 			{% csrf_token %}
-			<div>
-				<input type="checkbox" name="random" id="random" checked />
-				<label for="random">Random Picks</label>
-			</div>
 			<div>
 				<input type="number" name="teamsize" id="teamsize" min="2" max="5" value="{{ user.player.get_latest_episode.team_size }}" />
 				<label for="teamsize">Team Size</label>
 			</div>
-			<input type="submit" value="Add Episode" />
+			<input type="submit" class="width100" value="Add Episode" />
+		</form>
+	</div>
+	
+	<div class="bgdarkgrey pad4 textcenter">
+		<form action="{% url 'season31:backfillteams' %}" method="post">
+			{% csrf_token %}
+			<input type="submit" class="width100" value="Backfill Teams" />
+		</form>
+	</div>
+	
+	<div class="bgdarkgrey pad4 textcenter">
+		<form action="{% url 'season31:updatescores' %}" method="post">
+			{% csrf_token %}
+			<input type="submit" class="width100" value="Recalculate All Scores" />
 		</form>
 	</div>
 	{% endif %}

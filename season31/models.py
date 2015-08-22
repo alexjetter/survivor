@@ -11,6 +11,8 @@ class Castaway(models.Model):
 	full_name = models.CharField(max_length = 32)
 	age = models.PositiveIntegerField(default = 0)
 	occupation = models.CharField(max_length = 32)
+	place = models.PositiveIntegerField(default = 0)
+	out_episode_number = models.PositiveIntegerField(default = 0)
 	def __unicode__(self):
 		return self.name
 	def get_tribe(self):
@@ -141,9 +143,9 @@ class PlayerEpisode(models.Model):
 	def __unicode__(self):
 		return "%s | %s" % (self.player.user.username, self.episode)
 	def get_team_picks(self):
-		return self.pick_set.filter(type = 'TM').all()
+		return TeamPick.objects.filter(episode = self.episode, player = self.player)
 	def get_vote_picks(self):
-		return self.pick_set.filter(type = 'VO').all()
+		return VotePick.objects.filter(episode = self.episode, player = self.player)
 	def clear_team_picks(self):
 		for pick in self.get_team_picks():
 			pick.delete()
@@ -152,6 +154,9 @@ class PlayerEpisode(models.Model):
 			pick.delete()
 	def get_pick_options(self):
 		return CastawayEpisode.objects.filter(episode = Episode.objects.latest())
+	def replicate_picks(self):
+		for pick in get_team_picks():
+			print pick
 	def update_score(self):
 		if self.score_has_changed:
 			try:
@@ -170,14 +175,15 @@ class PlayerEpisode(models.Model):
 			if lastplayerepisode:
 				for pick in self.get_team_picks():
 					for last_pick in lastplayerepisode.get_team_picks():
-						if pick.castaway_episode.castaway == last_pick.castaway_episode.castaway:
+						if pick.castaway == last_pick.castaway:
 							self.loyalty_bonus += 1
 			for pick in self.get_team_picks():
-				ce = pick.castaway_episode
-				self.action_score += ce.score
+				ce = pick.castaway_episode()
+				if ce:
+					self.action_score += ce.score
 			for pick in self.get_vote_picks():
 				try:
-					vo_action = pick.castaway_episode.actions.filter(name = "Out") # TODO: dont hardcode this name
+					vo_action = pick.castaway_episode().actions.filter(name = "Out") # TODO: dont hardcode this name
 				except:
 					vo_action = None
 				if vo_action:
@@ -211,18 +217,47 @@ class CastawayEpisode(models.Model):
 		ordering = ('episode', 'tribe', 'castaway')
 		get_latest_by = 'episode'
 
-class Pick(models.Model):
-	player_episode = models.ForeignKey(PlayerEpisode)
-	castaway_episode = models.ForeignKey(CastawayEpisode)
-	TYPES = (
-		('TM', 'Team Member'),
-		('VO', 'Vote Off')
-	)
-	type = models.CharField(max_length = 2, choices = TYPES, default = "TM")
+class TeamPick(models.Model):
+	episode = models.ForeignKey(Episode)
+	player = models.ForeignKey(Player)
+	castaway = models.ForeignKey(Castaway)
 	def __unicode__(self):
-		return "%s | %s picked %s for %s" % (self.player_episode.episode, self.player_episode.player.user.username, self.castaway_episode.castaway.name, self.type)
+		return "%s | %s | %s | Team Pick" % (self.episode.short(), self.player.user.username, self.castaway.name)
+	def castaway_episode(self):
+		try:
+			castawayepisode = CastawayEpisode.objects.get(castaway = self.castaway, episode = self.episode)
+		except:
+			castawayepisode = None
+		return castawayepisode
+	def player_episode(self):
+		try:
+			playerepisode = PlayerEpisode.objects.get(player = self.player, episode = self.episode)
+		except:
+			playerepisode = None
+		return playerepisode
 	class Meta:
-		ordering = ('castaway_episode', 'type', 'player_episode')
+		ordering = ('episode', 'player', 'castaway')
+		
+class VotePick(models.Model):
+	episode = models.ForeignKey(Episode)
+	player = models.ForeignKey(Player)
+	castaway = models.ForeignKey(Castaway)
+	def __unicode__(self):
+		return "%s | %s | %s | Team Pick" % (self.episode.short(), self.player.user.username, self.castaway.name)
+	def castaway_episode(self):
+		try:
+			castawayepisode = CastawayEpisode.objects.get(castaway = self.castaway, episode = self.episode)
+		except:
+			castawayepisode = None
+		return castawayepisode
+	def player_episode(self):
+		try:
+			playerepisode = PlayerEpisode.objects.get(player = self.player, episode = self.episode)
+		except:
+			playerepisode = None
+		return playerepisode
+	class Meta:
+		ordering = ('episode', 'player', 'castaway')
 
 class Vote(models.Model):
 	castaway_episode = models.ForeignKey(CastawayEpisode)

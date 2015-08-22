@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Player,Castaway,Pick,Episode,PlayerEpisode,CastawayEpisode,Tribe,Vote,Action
+from .models import Player,Castaway,TeamPick,VotePick,Episode,PlayerEpisode,CastawayEpisode,Tribe,Vote,Action
 
 # Inlines
 class CastawayEpisodeInline(admin.TabularInline):
@@ -15,10 +15,6 @@ class CastawayEpisodeEpisodeInline(admin.TabularInline):
 
 class PlayerEpisodeInline(admin.TabularInline):
 	model = PlayerEpisode
-	extra = 1
-
-class PickInline(admin.TabularInline):
-	model = Pick
 	extra = 1
 
 class VoteInline(admin.TabularInline):
@@ -67,16 +63,22 @@ class PlayerEpisodeAdmin(admin.ModelAdmin):
 		('Score Breakdown',{'fields': ['loyalty_bonus','action_score','vote_off_score','jsp_score','score_has_changed']}),
 		('Leaderboard',{'fields': ['movement','place']}),
 	]
-	inlines = [PickInline]
 	list_filter = ['episode']
 	list_display = ('player','episode','week_score','total_score','loyalty_bonus','action_score','vote_off_score','jsp_score','score_has_changed')
 
-class PickAdmin(admin.ModelAdmin):
+class TeamPickAdmin(admin.ModelAdmin):
 	fieldsets = [
-		('General',{'fields': ['player_episode','type','castaway_episode']}),
+		('General',{'fields': ['episode','player','castaway']}),
 	]
-	list_filter = ['castaway_episode']
-	list_display = ('castaway_episode','type','player_episode')
+	list_filter = ['player']
+	list_display = ('episode','player','castaway')
+
+class VotePickAdmin(admin.ModelAdmin):
+	fieldsets = [
+		('General',{'fields': ['episode','player','castaway']}),
+	]
+	list_filter = ['player']
+	list_display = ('episode','player','castaway')
 
 class VoteAdmin(admin.ModelAdmin):
 	fieldsets = [
@@ -95,7 +97,8 @@ class ActionAdmin(admin.ModelAdmin):
 admin.site.register(Episode,EpisodeAdmin)
 admin.site.register(Player,PlayerAdmin)
 admin.site.register(Castaway,CastawayAdmin)
-admin.site.register(Pick,PickAdmin)
+admin.site.register(TeamPick,TeamPickAdmin)
+admin.site.register(VotePick,VotePickAdmin)
 admin.site.register(PlayerEpisode,PlayerEpisodeAdmin)
 admin.site.register(CastawayEpisode,CastawayEpisodeAdmin)
 admin.site.register(Tribe)
