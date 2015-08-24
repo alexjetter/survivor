@@ -22,130 +22,6 @@
 
 <div class="spacer"></div>
 
-{% if user.is_superuser %}
-<table class="floatright marg4">
-	<tr>
-		<td colspan=3 class="bgblack textright">
-			<form action="{% url 'season31:deleteepisode' episode.id %}" method="post">
-				{% csrf_token %}
-				<input type="submit" value="Delete This Episode" />
-			</form>
-		</td>
-	</tr>
-	<tr>
-		<td colspan=3 class="bgblack textright">
-			<form action="{% url 'season31:updateepisodetitle' episode.id %}" method="post">
-				{% csrf_token %}
-				<input type="text" name="title" />
-				<input type="submit" value="Update Episode Title" />
-			</form>
-		</td>
-	</tr>
-	<tr>
-		<td colspan=3 class="bgblack textright">
-			<form action="{% url 'season31:updateepisodedatetime' episode.id %}" method="post">
-				{% csrf_token %}
-				<input type="text" name="airdatetime" value="YYYYmmdd HH"/>
-				<input type="submit" value="Update Air Date / Time" />
-			</form>
-		</td>
-	</tr>
-	<tr>
-		<td colspan=3 class="bgblack textright">
-			<form action="{% url 'season31:updateepisodeteamsize' episode.id %}" method="post">
-				{% csrf_token %}
-				<input type="number" name="teamsize" id="teamsize" min="2" max="5" value="{{ episode.team_size }}" />
-				<input type="submit" value="Update Team Size" />
-			</form>
-		</td>
-	</tr>
-	<tr>
-		<td colspan=3 class="bgblack textright">
-			<form action="{% url 'season31:updateepisodescore' episode.id %}" method="post">
-				{% csrf_token %}
-				<input type="submit" value="Update Episode Score" />
-			</form>
-		</td>
-	</tr>
-	{% if episode.is_locked %}
-	<tr>
-		<td class="columnheader fgwhite textleft">Actions</td>
-		<td class="columnheader fgwhite textleft">Votes</td>
-		<td class="columnheader fgwhite textleft">Tribes</td>
-	</tr>
-	<tr>
-		<td class="textleft">
-			<form action="{% url 'season31:updateceactions' episode.id %}" method="post">
-				{% csrf_token %}
-				<div class="fglightgrey marg0 pad0">
-					<input type="checkbox" name="delete" id="delete" />
-					<label for="delete">Delete:</label>
-				</div>
-				<div class="marg0 pad0">
-					<select name="action">
-						{% for action in actions %}
-						<option value="{{ action.id }}">{{ action.name }}</option>
-						{% endfor %}
-					</select>
-				</div>
-				{% for castawayepisode in episode.castawayepisode_set.all %}
-				<div class="marg0 pad0 fgtribe{{ castawayepisode.color }}">
-					<input type="checkbox" name="castaways" id="{{ castawayepisode.id }}" value="{{ castawayepisode.id }}" />
-					<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
-				</div>
-				{% endfor %}
-				<input type="submit" value="Update Actions" />
-			</form>
-		</td>
-		<td class="textleft">
-			<form action="{% url 'season31:updatecevotes' episode.id %}" method="post">
-				{% csrf_token %}
-				Votee:
-				<div class="marg0 pad0">
-					<select name="votee">
-						{% for castawayepisode in episode.castawayepisode_set.all %}
-						<option value="{{ castawayepisode.castaway.id }}">{{ castawayepisode.castaway }}</option>
-						{% endfor %}
-					</select>
-				</div>
-				{% for castawayepisode in episode.castawayepisode_set.all %}
-				<div class="marg0 pad0 fgtribe{{ castawayepisode.color }}">
-					<input type="checkbox" name="voters" id="{{ castawayepisode.id }}" value="{{ castawayepisode.id }}" />
-					<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
-				</div>
-				{% endfor %}
-				<div>
-					<input type="submit" value="Update Votes" />
-				</div>
-			</form>
-		</td>
-		<td class="textleft">
-			<form action="{% url 'season31:updatecetribes' episode.id %}" method="post">
-				{% csrf_token %}
-				New Tribe:
-				<div class="marg0 pad0">
-					<select name="tribe">
-						{% for tribe in tribes %}
-						<option value="{{ tribe.id }}">{{ tribe }}</option>
-						{% endfor %}
-					</select>
-				</div>
-				{% for castawayepisode in episode.castawayepisode_set.all %}
-				<div class="marg0 pad0 fgtribe{{ castawayepisode.color }}">
-					<input type="checkbox" name="castaways" id="{{ castawayepisode.id }}" value="{{ castawayepisode.id }}" />
-					<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
-				</div>
-				{% endfor %}
-				<div>
-					<input type="submit" value="Update Tribes" />
-				</div>
-			</form>
-		</td>
-	</tr>
-	{% endif %}
-</table>
-{% endif %}
-
 <!-- Castaway Table -->
 
 <table>
@@ -166,7 +42,9 @@
 		<td class="columnheader fgwhite"></td>
 		<td>
 		{% for action in castawayepisode.actions.all %}
-			<img src="{% static 'season31/images/'%}{{ action.icon_filename }}.png" title="{{ action.name }}: {{ action.score }} Point(s)" />
+			<img src="{% static 'season31/images/'%}{{ action.icon_filename }}.png" title="{{ action.name }}:
+{{ action.score }} Point(s)
+{{ action.description }}" />
 		{% endfor %}
 		</td>
 		<td class="columnheader fgwhite"></td>
@@ -246,5 +124,140 @@
 </table>
 
 </div>
+
+{% if user.is_superuser %}
+
+<div class="floatleft marg0 pad0 bgwhite">
+	<table>
+		<tr>
+			<td colspan=3 class="bgblack textright">
+				<form action="{% url 'season31:deleteepisode' episode.id %}" method="post">
+					{% csrf_token %}
+					<input type="submit" value="Delete This Episode" />
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td colspan=3 class="bgblack textright">
+				<form action="{% url 'season31:updateepisodetitle' episode.id %}" method="post">
+					{% csrf_token %}
+					<input type="text" name="title" />
+					<input type="submit" value="Update Episode Title" />
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td colspan=3 class="bgblack textright">
+				<form action="{% url 'season31:updateepisodedatetime' episode.id %}" method="post">
+					{% csrf_token %}
+					<input type="text" name="airdatetime" value="YYYYmmdd HH"/>
+					<input type="submit" value="Update Air Date / Time" />
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td colspan=3 class="bgblack textright">
+				<form action="{% url 'season31:updateepisodeteamsize' episode.id %}" method="post">
+					{% csrf_token %}
+					<input type="number" name="teamsize" id="teamsize" min="2" max="5" value="{{ episode.team_size }}" />
+					<input type="submit" value="Update Team Size" />
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td colspan=3 class="bgblack textright">
+				<form action="{% url 'season31:updateepisodescore' episode.id %}" method="post">
+					{% csrf_token %}
+					<input type="submit" value="Update Episode Score" />
+				</form>
+			</td>
+		</tr>
+		{% if episode.is_locked %}
+		<tr>
+			<td colspan=3 class="bgblack textright">
+				<form action="{% url 'season31:updateepisodescore' episode.id %}" method="post">
+					{% csrf_token %}
+					<input type="submit" value="Update Episode Score" />
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td class="columnheader fgwhite textleft">Actions</td>
+			<td class="columnheader fgwhite textleft">Votes</td>
+			<td class="columnheader fgwhite textleft">Tribes</td>
+		</tr>
+		<tr>
+			<td class="textleft">
+				<form action="{% url 'season31:updateceactions' episode.id %}" method="post">
+					{% csrf_token %}
+					<div class="fglightgrey marg0 pad0">
+						<input type="checkbox" name="delete" id="delete" />
+						<label for="delete">Delete:</label>
+					</div>
+					<div class="marg0 pad0">
+						<select name="action">
+							{% for action in actions %}
+							<option value="{{ action.id }}">{{ action.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					{% for castawayepisode in episode.castawayepisode_set.all %}
+					<div class="marg0 pad0 fgtribe{{ castawayepisode.color }}">
+						<input type="checkbox" name="castaways" id="{{ castawayepisode.id }}" value="{{ castawayepisode.id }}" />
+						<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
+					</div>
+					{% endfor %}
+					<input type="submit" value="Update Actions" />
+				</form>
+			</td>
+			<td class="textleft">
+				<form action="{% url 'season31:updatecevotes' episode.id %}" method="post">
+					{% csrf_token %}
+					Votee:
+					<div class="marg0 pad0">
+						<select name="votee">
+							{% for castawayepisode in episode.castawayepisode_set.all %}
+							<option value="{{ castawayepisode.castaway.id }}">{{ castawayepisode.castaway }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					{% for castawayepisode in episode.castawayepisode_set.all %}
+					<div class="marg0 pad0 fgtribe{{ castawayepisode.color }}">
+						<input type="checkbox" name="voters" id="{{ castawayepisode.id }}" value="{{ castawayepisode.id }}" />
+						<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
+					</div>
+					{% endfor %}
+					<div>
+						<input type="submit" value="Update Votes" />
+					</div>
+				</form>
+			</td>
+			<td class="textleft">
+				<form action="{% url 'season31:updatecetribes' episode.id %}" method="post">
+					{% csrf_token %}
+					New Tribe:
+					<div class="marg0 pad0">
+						<select name="tribe">
+							{% for tribe in tribes %}
+							<option value="{{ tribe.id }}">{{ tribe }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					{% for castawayepisode in episode.castawayepisode_set.all %}
+					<div class="marg0 pad0 fgtribe{{ castawayepisode.color }}">
+						<input type="checkbox" name="castaways" id="{{ castawayepisode.id }}" value="{{ castawayepisode.id }}" />
+						<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
+					</div>
+					{% endfor %}
+					<div>
+						<input type="submit" value="Update Tribes" />
+					</div>
+				</form>
+			</td>
+		</tr>
+		{% endif %}
+	</table>
+</div>
+{% endif %}
 
 </div>

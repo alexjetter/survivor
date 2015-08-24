@@ -42,6 +42,9 @@ form {margin-bottom: 0;}
 	font-size: 2em;
 	font-weight: bold;
 }
+.halftitle {
+	font-size: 1.5em;
+}
 .subtitle {
 	font-size: 1.25em;
 }
@@ -68,6 +71,7 @@ form {margin-bottom: 0;}
 .bgred3 {background-color: #ffaa66; color: #222222;}
 .bgred4 {background-color: #ff8866; color: #222222;}
 .bgred5 {background-color: #ff6666; color: #222222;}
+.bgdarkred {background-color: #CC2222;}
 
 .fgwhite {color: #FFFFFF;}
 .fglightgrey {color: #c8c8c8;}
@@ -87,6 +91,7 @@ form {margin-bottom: 0;}
 .fgred3 {color: #ffaa66;}
 .fgred4 {color: #ff8866;}
 .fgred5 {color: #ff6666;}
+.fgdarkred {color: #CC2222;}
 
 .castawayimgsmall {height: 48;}
 .pickwidth {width: 72;}
@@ -156,12 +161,14 @@ table, th, td{
 .width55{width: 55%}
 .width60{width: 60%}
 .width100{width: 100%}
+.maxwidth720{max-width: 720px}
 
 .columnheader {
 	background-color: #222222;
 }
 
 .textbold {font-weight: bold;}
+.textitalic {font-style: italic;}
 
 a {
 	text-decoration: none;
@@ -172,3 +179,5 @@ a {
 a:hover {
 	text-decoration: underline;
 }
+
+img {white-space:pre}

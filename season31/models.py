@@ -69,6 +69,7 @@ class Action(models.Model):
 	name = models.CharField(max_length = 32)
 	score = models.IntegerField(default = 1)
 	icon_filename = models.CharField(max_length = 32)
+	description = models.CharField(max_length = 64)
 	def __unicode__(self):
 		return self.name
 	class Meta:

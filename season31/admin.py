@@ -90,9 +90,9 @@ class VoteAdmin(admin.ModelAdmin):
 
 class ActionAdmin(admin.ModelAdmin):
 	fieldsets = [
-		('General',{'fields': ['name','score','icon_filename']}),
+		('General',{'fields': ['name','description','score','icon_filename']}),
 	]
-	list_display = ('name','score','icon_filename')
+	list_display = ('name','score','icon_filename','description')
 
 # Registrations
 admin.site.register(Episode,EpisodeAdmin)

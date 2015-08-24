@@ -1,0 +1,60 @@
+﻿{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
+
+<div class="marg0 pad0 thecontainer">
+
+	<div class="menu floatleft marg0">
+		{% include "season31/menu.html" %}
+		{% include "season31/leaderboard.html" %}
+	</div>
+	<div class="content floatleft marg0">
+
+		<div class="title textcenter">Rules</div>
+		<div class="subtitle textcenter">How to play Fantasy Survivor</div>
+
+		<div class="spacer"></div>
+
+		<div class="halftitle textcenter">Overview</div>
+		<div class="maxwidth720 padlr8 marg8">
+			Fantasy Survivor is made up of 3 systems: Team Actions, Jury Survivor Points, and Vote-Off Predictions.
+		</div>
+		<div class="maxwidth720 padlr8 marg8">
+			Each week you'll pick a team of Castaways.  Your team's actions during an episode will score you points.  By picking them you're also puting long term confidence in them, and starting halfway through the season the ones who survive week to week will pay off in Jury Survivor Points.  You'll also pick 2 Castaways you think are going home.  You score points if they're voted out.
+		</div>
+		<div class="spacer"></div>
+
+		<div class="halftitle textcenter">Your Team</div>
+		<div class="textitalic  textcenter">Aggregate score of your weekly chosen Castaways</div>
+		<div class="maxwidth720 padlr8 marg8">
+			You'll pick your whole team each week.  We start with 5 Castaways and will drop to fewer as the season goes on and the field narrows.  These people will score points for you based on <a href="{% url 'season31:actions' %}" class="textbold">these Actions</a>.
+		</div>
+		<div class="maxwidth720 padlr8 marg8">
+			Additionally, each team member you keep from one week to the next will score you a<span class="textbold">Loyalty Bonus (LB)</span>point.  Sometimes if you're not sure who to pick, these little points can be helpful, but don't let them sway you too much, since each pick also influences your JSPs.
+		</div>
+		<div class="spacer"></div>
+
+		<div class="halftitle textcenter">Jury Survivor Points (JSPs)</div>
+		<div class="textitalic textcenter">1 point for each time you picked a Castaway (ever), scored</div>
+		<div class="textitalic textcenter">after each tribal for survivng castaways, jury members only</div>
+		<div class="maxwidth720 padlr8 marg8">
+			Each week with your team picks, you're also putting confidence in those people.  We'll keep track of each time you picked a Castaway and you'll score points every week for jury members once they start selecting the Jury (usually just after merge).  The winning Castaway will also score double at final tribal council.
+		</div>
+		<div class="maxwidth720 padlr8 marg8">
+			<span class="textbold padlr0">Example:</span> Let's say last season you put Hali, Jenn, Joe, and Mike on your team every week for the first 5 weeks, then decide you don't want any of them anymore.  You'd score 20 points (5 for each of them) because they all made it to the jury.  Hali gets voted out and becomes the first Jury member (she doesn't score anymore), the others score you 5 points each for surviving tribal council.  Now let's say you pick Joe back up (6 times picked now).  Jenn gets voted out next, Joe (6 points this time) and Mike (5) score for surviving.  Joe is out next, and Mike wins it all (surviving 10 tribal councils).  So in the end you'd have scored the following for these Castaways: Hali (5), Jenn (10), Joe (16), Mike (55).
+		</div>
+		<div class="maxwidth720 padlr8 marg8 fgdarkred">	
+			<span class="textbold padlr0">Note:</span> You don't have to have someone on your team to score points for them here, all that matters is how many times you<span class="textbold">ever</span>put them on your team.
+		</div>
+		<div class="spacer"></div>
+
+		<div class="halftitle textcenter">Vote-Off Predictions</div>
+		<div class="textitalic textcenter">10 points per correct prediction</div>
+		<div class="maxwidth720 padlr8 marg8">
+			This is the simplest of our 3 systems.  Each week you'll pick 2 people you think are going home.Most of the time this is by being voted out at tribal council, but predicting someone will quit, or get evacuated, etc also gets you these points
+		</div>
+		<div class="spacer"></div>
+
+	</div>
+
+</div>

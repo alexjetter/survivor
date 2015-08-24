@@ -25,13 +25,13 @@
 
 <table>
 	<tr>
-		<td></td>
+		<td class="columnheader"></td>
 		<td class="columnheader fgwhite">Tribe</td>
-		<td class="columnheader fgwhite"></td>
+		<td class="columnheader"></td>
 		<td class="columnheader fgwhite">Actions</td>
-		<td class="columnheader fgwhite"></td>
+		<td class="columnheader"></td>
 		<td class="columnheader fgwhite">Voted For</td>
-		<td class="columnheader fgwhite"></td>
+		<td class="columnheader"></td>
 		<td class="columnheader fgwhite">Score</td>
 	</tr>
 	{% for castawayepisode in castaway.castawayepisode_set.all %}
@@ -41,7 +41,9 @@
 		<td class="columnheader fgwhite"></td>
 		<td>
 		{% for action in castawayepisode.actions.all %}
-			<img src="{% static 'season31/images/'%}{{ action.icon_filename }}.png" title="{{ action.name }}" />
+			<img src="{% static 'season31/images/'%}{{ action.icon_filename }}.png" title="{{ action.name }}
+{{ action.score }} Point(s)
+{{ action.description }}" />
 		{% endfor %}
 		</td>
 		<td class="columnheader fgwhite"></td>

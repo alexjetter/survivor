@@ -10,7 +10,7 @@
 </div>
 <div class="content floatleft marg0">
 
-<span class="title">actions</span>
+<span class="title">Actions</span>
 
 <div class="spacer"></div>
 
@@ -24,6 +24,10 @@
 					<div>
 						<label for="name">Name</label>
 						<input type="text" name="name" id="name" />
+					</div>
+					<div>
+						<label for="description">Description</label>
+						<input type="text" name="description" id="description" />
 					</div>
 					<div>
 						<label for="icon_filename">Icon Filename</label>
@@ -60,17 +64,19 @@
 
 <table>
 	<tr>
-		<td class="columnheader fglightgrey">Action</td>
+		<td class="columnheader fglightgrey textright">Action</td>
 		<td class="columnheader fglightgrey">Score</td>
 		<td class="columnheader fglightgrey">Icon</td>
+		<td class="columnheader fglightgrey">Description</td>
 	</tr>
 	{% for action in actions %}
 	<tr>
-		<td class="columnheader fgwhite">{{ action }}</td>
+		<td class="columnheader fgwhite textright">{{ action }}</td>
 		<td>{{ action.score }}</td>
 		<td>
 			<img src="{% static 'season31/images/'%}{{ action.icon_filename }}.png" title="{{ action.name }}" />
-			</td>
+		</td>
+		<td class="textleft">{{ action.description }}</td>
 	</tr>
 	{% endfor %}
 </table>

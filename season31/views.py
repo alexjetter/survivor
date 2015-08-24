@@ -399,7 +399,8 @@ def addaction(request):
 	name = request.POST['name']
 	score = request.POST['score']
 	icon_filename = request.POST['icon_filename']
-	a = Action(name = name, score = score, icon_filename = icon_filename)
+	description = request.POST['description']
+	a = Action(name = name, score = score, icon_filename = icon_filename, description = description)
 	a.save()
 	return HttpResponseRedirect('/season31/actions/')
 
