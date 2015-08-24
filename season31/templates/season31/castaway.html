@@ -15,7 +15,7 @@
 </div>
 <div>
 	<span class="title">{{ castaway.full_name }}</span>
-	<span class="subtitle"><a href="{% url 'season31:tribe' castaway.get_tribe.id %}" class="fg{{ castaway.get_tribe }}">{{ castaway.get_tribe }}</a></span>
+	<span class="subtitle fg{{ castaway.get_tribe }}">{{ castaway.get_tribe }}</span>
 	<div class="subtitle">{{ castaway.occupation }}, Age {{ castaway.age }}</div>
 </div>
 
@@ -37,7 +37,7 @@
 	{% for castawayepisode in castaway.castawayepisode_set.all %}
 	<tr>
 		<td class="columnheader fgwhite"><a href="{% url 'season31:episode' castawayepisode.episode.id %}" class="fgwhite">{{ castawayepisode.episode }}</a></td>
-		<td class="bgtribe{{ castawayepisode.tribe.color }}"><a href="{% url 'season31:tribe' castawayepisode.tribe.id %}" class="fgblack">{{ castawayepisode.tribe }}</a></td>
+		<td class="bgtribe{{ castawayepisode.tribe.color }}">{{ castawayepisode.tribe }}</td>
 		<td class="columnheader fgwhite"></td>
 		<td>
 		{% for action in castawayepisode.actions.all %}

@@ -7,7 +7,6 @@ urlpatterns = [
 	url(r'^castaways/$', views.CastawaysView.as_view(), name='castaways'),
 	url(r'^players/$', views.PlayersView.as_view(), name='players'),
 	url(r'^episodes/$', views.EpisodesView.as_view(), name='episodes'),
-	url(r'^tribes/$', views.TribesView.as_view(), name='tribes'),
 	url(r'^actions/$', views.ActionsView.as_view(), name='actions'),
 	url(r'^player/(?P<pk>[0-9]+)/$', views.PlayerView.as_view(), name='player'),
 	url(r'^castaway/(?P<pk>[0-9]+)/$', views.CastawayView.as_view(), name='castaway'),

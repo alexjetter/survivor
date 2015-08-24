@@ -24,6 +24,7 @@ class CastawaysView(generic.ListView):
 	def get_context_data(self, **kwargs):
 		context = super(CastawaysView, self).get_context_data(**kwargs)
 		context['episodes'] = Episode.objects.all()
+		context['tribes'] = Tribe.objects.all()
 		return context
 
 class PlayersView(generic.ListView):
@@ -35,12 +36,6 @@ class EpisodesView(generic.ListView):
 	context_object_name = 'episodes'
 	template_name = 'season31/episodes.html'
 	queryset = Episode.objects.all()
-
-class TribesView(generic.ListView):
-	template_name = 'season31/tribes.html'
-	context_object_name = 'tribes'
-	def get_queryset(self):
-		return Tribe.objects.all()
 
 class ActionsView(generic.ListView):
 	template_name = 'season31/actions.html'
@@ -114,22 +109,63 @@ def rolloverteamifempty(episode):
 	if not lastepisode:
 		return
 	for player in Player.objects.all():
+		# Bring over still valid picks
+		print "-----------------------"
+		print "%s rollover" % (player)
 		if not TeamPick.objects.filter(episode = episode, player = player):
 			lastepisodeteampicks = TeamPick.objects.filter(player = player, episode = lastepisode)
 			for pick in lastepisodeteampicks:
 				if pick.castaway.out_episode_number == 0:
 					newpick = TeamPick(episode = episode, player = player, castaway = pick.castaway)
 					newpick.save()
-				else:
-					print "select random pick here"
 		if not VotePick.objects.filter(episode = episode, player = player):
 			lastepisodevotepicks = VotePick.objects.filter(player = player, episode = lastepisode)
 			for pick in lastepisodevotepicks:
 				if pick.castaway.out_episode_number == 0:
 					newpick = VotePick(episode = episode, player = player, castaway = pick.castaway)
 					newpick.save()
-				else:
-					print "select random pick here"
+		# Drop random if necessary
+		teampicks = TeamPick.objects.filter(episode = episode, player = player).order_by('?')
+		votepicks = VotePick.objects.filter(episode = episode, player = player).order_by('?')
+		currentteamsize = len(teampicks)
+		currentvotesize = len(votepicks)
+		while currentteamsize > int(episode.team_size):
+			print "t(%i) v(%i) ets(%s) | dropping someone from team" % (currentteamsize, currentvotesize, episode.team_size)
+			TeamPick.objects.filter(episode = episode, player = player).order_by('?').first().delete()
+			currentteamsize -= 1
+		while currentvotesize > 2:
+			print "t(%i) v(%i) ets(%s) | dropping someone from votes" % (currentteamsize, currentvotesize, episode.team_size)
+			VotePick.objects.filter(episode = episode, player = player).order_by('?').first().delete()
+			currentvotesize -= 1
+		# Pick up random if necessary
+		if currentteamsize < int(episode.team_size):
+			randomteampicks = Castaway.objects.filter(out_episode_number = 0).order_by('?')[:episode.team_size]
+			for castaway in randomteampicks:
+				try:
+					existingpick = TeamPick.objects.get(player = player, episode = episode, castaway = castaway)
+				except:
+					existingpick = None
+				if not existingpick:
+					print "t(%i) v(%i) ets(%s) | adding %s to team" % (currentteamsize, currentvotesize, episode.team_size, castaway)
+					randpick = TeamPick(player = player, episode = episode, castaway = castaway)
+					randpick.save()
+					currentteamsize += 1
+					if currentteamsize >= int(episode.team_size):
+						break
+		if currentvotesize < 2:
+			randomvotepicks = Castaway.objects.filter(out_episode_number = 0).order_by('?')[:2]
+			for castaway in randomvotepicks:
+				try:
+					existingpick = VotePick.objects.get(player = player, episode = episode, castaway = castaway)
+				except:
+					existingpick = None
+				if not existingpick:
+					print "t(%i) v(%i) ets(%s) | adding %s to votes" % (currentteamsize, currentvotesize, episode.team_size, castaway)
+					randpick = VotePick(player = player, episode = episode, castaway = castaway)
+					randpick.save()
+					currentvotesize += 1
+					if currentvotesize >= 2:
+						break
 				
 def user_login(request):
 	context = RequestContext(request)
@@ -224,12 +260,18 @@ def updateceactions(request, e_id):
 				ce.actions.remove(badaction)
 				ce.score_has_changed = True
 				ce.save()
+				if badaction.name == "Out":
+					ce.castaway.out_episode_number = 0
+					ce.castaway.save()
 				for pe in PlayerEpisode.objects.all():
 					pe.score_has_changed = True
 		else:
 			ce.actions.add(action)
 			ce.score_has_changed = True
 			ce.save()
+			if action.name == "Out":
+				ce.castaway.out_episode_number = ce.episode.number
+				ce.castaway.save()
 			for pe in PlayerEpisode.objects.all():
 				pe.score_has_changed = True
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))

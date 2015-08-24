@@ -20,12 +20,10 @@ class Castaway(models.Model):
 	def get_first_initial(self):
 		return self.name[0]
 	def voted_out(self):
-		voted_out = False
-		for ce in self.castawayepisode_set.all():
-			for action in ce.actions.all():
-				if action == Action.objects.get(name = "Out"):
-					return True
-		return False
+		if self.out_episode_number > 0:
+			return True
+		else:
+			return False
 	class Meta:
 		ordering = ('name',)
 

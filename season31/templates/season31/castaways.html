@@ -64,6 +64,17 @@
 
 <table>
 	<tr>
+		<td class="columnheader fgwhite pickwidth">Tribes</td>
+		{% for tribe in tribes%}
+		<td class="bgtribe{{ tribe.color }} pickwidth">{{ tribe }}</td>
+		{% endfor %}
+	</tr>
+</table>
+
+<div class="spacer"></div>
+
+<table>
+	<tr>
 		<td class="columnheader"></td>
 		{% for episode in episodes%}
 		<td class="columnheader"><a href="{% url 'season31:episode' episode.id %}" class="fgwhite">{{ episode.short }}</a></td>

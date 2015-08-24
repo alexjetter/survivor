@@ -38,9 +38,10 @@ class CastawayAdmin(admin.ModelAdmin):
 	fieldsets = [
 		('General',{'fields': ['name','age','occupation']}),
 		('Full Name',{'fields': ['full_name']}),
+		('Game Info',{'fields': ['place','out_episode_number']}),
 	]
 	inlines = [CastawayEpisodeInline]
-	list_display = ('name','age','occupation')
+	list_display = ('name','age','occupation','place','out_episode_number')
 
 class PlayerAdmin(admin.ModelAdmin):
 	fieldsets = [
