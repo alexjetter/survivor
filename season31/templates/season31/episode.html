@@ -12,11 +12,11 @@
 
 <span class="title">"{{ episode.title }}"</span>
 {% if episode.get_prev_episode %}
-<span><a href="{% url 'season31:episode' episode.get_prev_episode.id %}" class="fglightgrey">{{ episode.get_prev_episode.short}}</a></span>
+<span><a href="{% url 'season31:episode' episode.get_prev_episode.id %}" class="fggrey">{{ episode.get_prev_episode.short }}</a></span>
 {% endif %}
 <span class="subtitle">{{ episode.short }}</span>
 {% if episode.get_next_episode %}
-<span><a href="{% url 'season31:episode' episode.get_next_episode.id %}" class="fglightgrey">{{ episode.get_next_episode.short }}</a></span>
+<span><a href="{% url 'season31:episode' episode.get_next_episode.id %}" class="fggrey">{{ episode.get_next_episode.short }}</a></span>
 {% endif %}
 <div class="subtitle">{{ episode.air_day}}, {{ episode.air_date}} ET</div>
 
@@ -27,13 +27,13 @@
 <table>
 	<tr>
 		<td class="columnheader fgwhite textright"><a href="{% url 'season31:castaways' %}" class="fgwhite">Castaways</a></td>
-		<td class="columnheader fgwhite">Tribes</td>
-		<td class="columnheader fgwhite"></td>
+		<td class="columnheader fglightgrey">Tribes</td>
+		<td class="columnheader"></td>
 		<td class="columnheader fgwhite"><a href="{% url 'season31:actions' %}" class="fgwhite">Actions</a></td>
-		<td class="columnheader fgwhite"></td>
-		<td class="columnheader fgwhite">Voted For</td>
-		<td class="columnheader fgwhite"></td>
-		<td class="columnheader fgwhite">Score</td>
+		<td class="columnheader"></td>
+		<td class="columnheader fglightgrey">Voted For</td>
+		<td class="columnheader"></td>
+		<td class="columnheader fglightgrey">Score</td>
 	</tr>
 	{% for castawayepisode in episode.castawayepisode_set.all %}
 	<tr>
@@ -42,7 +42,7 @@
 		<td class="columnheader fgwhite"></td>
 		<td>
 		{% for action in castawayepisode.actions.all %}
-			<img src="{% static 'season31/images/'%}{{ action.icon_filename }}.png" title="{{ action.name }}:
+			<img src="{% static 'season31/images/icons/'%}{{ action.icon_filename }}.png" title="{{ action.name }}:
 {{ action.score }} Point(s)
 {{ action.description }}" />
 		{% endfor %}
@@ -65,19 +65,19 @@
 <table>
 	<tr>
 		<td class="columnheader fgwhite textright"><a href="{% url 'season31:players' %}" class="fgwhite">Players</a></td>
-		<td class="columnheader fgwhite">Team Members</td>
-		<td class="columnheader fgwhite"></td>
-		<td class="columnheader fgwhite">Vote Off Picks</td>
-		<td class="columnheader fgwhite"></td>
-		<td class="columnheader fgwhite">LB</td>
-		<td class="columnheader fgwhite"></td>
-		<td class="columnheader fgwhite">Action</td>
-		<td class="columnheader fgwhite">Vote Off</td>
-		<td class="columnheader fgwhite">JSP</td>
-		<td class="columnheader fgwhite"></td>
-		<td class="columnheader fgwhite">Week</td>
-		<td class="columnheader fgwhite"></td>
-		<td class="columnheader fgwhite">Total</td>
+		<td class="columnheader fglightgrey">Team Members</td>
+		<td class="columnheader"></td>
+		<td class="columnheader fglightgrey">Vote Off Picks</td>
+		<td class="columnheader"></td>
+		<td class="columnheader fglightgrey">LB</td>
+		<td class="columnheader"></td>
+		<td class="columnheader fglightgrey">Action</td>
+		<td class="columnheader fglightgrey">Vote Off</td>
+		<td class="columnheader fglightgrey">JSP</td>
+		<td class="columnheader"></td>
+		<td class="columnheader fglightgrey">Week</td>
+		<td class="columnheader"></td>
+		<td class="columnheader fglightgrey">Total</td>
 	</tr>
 	{% if not episode.is_locked %}
 	<tr>

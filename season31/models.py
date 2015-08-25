@@ -107,7 +107,8 @@ class Episode(models.Model):
 	def short(self):
 		return "E%s" % ("{0:02d}".format(self.number))
 	def air_day(self):
-		return self.air_date.strftime("%A")
+		weekdays = {0: "Sunday",1: "Monday",2: "Tuesday",3: "Wednesday",4: "Thursday",5: "Friday",6: "Saturday",}
+		return weekdays.get(self.air_date.weekday(),"ERROR")
 	def check_lock(self):
 		if self.is_locked:
 			return True

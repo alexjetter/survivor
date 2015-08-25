@@ -431,7 +431,7 @@ def pickteams(request, pe_id):
 	playerepisode = get_object_or_404(PlayerEpisode, pk=pe_id)
 	picks = request.POST.getlist('picks')
 	if len(picks) != playerepisode.episode.team_size:
-		return render(request, 'season31/player.html', {'player': playerepisode.player, 'team_error_message': "You must select %i castaways" % int(pe.episode.team_size),})
+		return render(request, 'season31/player.html', {'player': playerepisode.player, 'team_error_message': "You must select %i castaways" % int(playerepisode.episode.team_size),})
 	else:
 		playerepisode.clear_team_picks()
 		makepick(playerepisode, picks, "TEAM")

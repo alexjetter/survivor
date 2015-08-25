@@ -76,8 +76,8 @@
 <table>
 	<tr>
 		<td class="columnheader"></td>
-		<td class="columnheader fgwhite">Age</td>
-		<td class="columnheader fgwhite">Occupation</td>
+		<td class="columnheader fglightgrey">Age</td>
+		<td class="columnheader fglightgrey">Occupation</td>
 		{% for episode in episodes%}
 		<td class="columnheader"><a href="{% url 'season31:episode' episode.id %}" class="fgwhite">{{ episode.short }}</a></td>
 		{% endfor %}
