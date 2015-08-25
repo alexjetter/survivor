@@ -175,9 +175,9 @@
 		{% if episode.is_locked %}
 		<tr>
 			<td colspan=3 class="bgblack textright">
-				<form action="{% url 'season31:updateepisodescore' episode.id %}" method="post">
+				<form action="{% url 'season31:unlockepisode' episode.id %}" method="post">
 					{% csrf_token %}
-					<input type="submit" value="Update Episode Score" />
+					<input type="submit" value="Unlock Episode" />
 				</form>
 			</td>
 		</tr>

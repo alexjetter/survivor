@@ -21,6 +21,7 @@ urlpatterns = [
 	url(r'^updateceactions/(?P<e_id>[0-9]+)/$', views.updateceactions, name='updateceactions'),
 	url(r'^updatecevotes/(?P<e_id>[0-9]+)/$', views.updatecevotes, name='updatecevotes'),
 	url(r'^updateepisodescore/(?P<e_id>[0-9]+)/$', views.updateepisodescore, name='updateepisodescore'),
+	url(r'^unlockepisode/(?P<e_id>[0-9]+)/$', views.unlockepisode, name='unlockepisode'),
 	url(r'^updatecetribes/(?P<e_id>[0-9]+)/$', views.updatecetribes, name='updatecetribes'),
 	url(r'^addcastaway/$', views.addcastaway, name='addcastaway'),
 	url(r'^deletecastaway/$', views.deletecastaway, name='deletecastaway'),

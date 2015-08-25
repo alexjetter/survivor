@@ -11,12 +11,17 @@ class Castaway(models.Model):
 	full_name = models.CharField(max_length = 32)
 	age = models.PositiveIntegerField(default = 0)
 	occupation = models.CharField(max_length = 32)
+	tribe_name = models.CharField(max_length = 16)
 	place = models.PositiveIntegerField(default = 0)
 	out_episode_number = models.PositiveIntegerField(default = 0)
 	def __unicode__(self):
 		return self.name
 	def get_tribe(self):
-		return self.castawayepisode_set.latest().tribe
+		tribe = self.castawayepisode_set.latest().tribe
+		if tribe.name != self.tribe_name:
+			self.tribe_name = tribe.name
+			self.save()
+		return tribe
 	def get_first_initial(self):
 		return self.name[0]
 	def voted_out(self):
@@ -25,7 +30,7 @@ class Castaway(models.Model):
 		else:
 			return False
 	class Meta:
-		ordering = ('name',)
+		ordering = ('place','tribe_name','name',)
 
 class Player(models.Model):
 	user = models.OneToOneField(User)
@@ -56,8 +61,8 @@ class Player(models.Model):
 		ordering = ('user',)
 
 class Tribe(models.Model):
-	name = models.CharField(max_length = 32)
-	color = models.CharField(max_length = 32)
+	name = models.CharField(max_length = 16)
+	color = models.CharField(max_length = 16)
 	def __unicode__(self):
 		return self.name
 	def get_all_episodes(self):
@@ -105,7 +110,7 @@ class Episode(models.Model):
 		return self.air_date.strftime("%A")
 	def check_lock(self):
 		if self.is_locked:
-			return
+			return True
 		est = timezone('US/Eastern')
 		if datetime.now(est) > self.air_date:
 			self.is_locked = True

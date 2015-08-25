@@ -73,8 +73,15 @@ def register(request):
 			player = Player()
 			player.user = user
 			player.save()
-			for episode in Episode.objects.filter(is_locked = True):
-				pickrandomifempty(episode)
+			for episode in Episode.objects.all():
+				playerepisode = PlayerEpisode(player = player, episode = episode)
+				playerepisode.save()
+			firstepisode = Episode.objects.order_by('air_date').first()
+			if firstepisode.check_lock():
+				pickrandomifempty(firstepisode)
+			for episode in Episode.objects.all():
+				if episode.check_lock():
+					rolloverteamifempty(episode)
 			registered = True 
 			user = authenticate(username = request.POST['username'], password = request.POST['password'])
 			login(request, user)
@@ -110,8 +117,8 @@ def rolloverteamifempty(episode):
 		return
 	for player in Player.objects.all():
 		# Bring over still valid picks
-		print "-----------------------"
-		print "%s rollover" % (player)
+		#print "-----------------------"
+		#print "%s rollover" % (player)
 		if not TeamPick.objects.filter(episode = episode, player = player):
 			lastepisodeteampicks = TeamPick.objects.filter(player = player, episode = lastepisode)
 			for pick in lastepisodeteampicks:
@@ -130,11 +137,11 @@ def rolloverteamifempty(episode):
 		currentteamsize = len(teampicks)
 		currentvotesize = len(votepicks)
 		while currentteamsize > int(episode.team_size):
-			print "t(%i) v(%i) ets(%s) | dropping someone from team" % (currentteamsize, currentvotesize, episode.team_size)
+			#print "t(%i) v(%i) ets(%s) | dropping someone from team" % (currentteamsize, currentvotesize, episode.team_size)
 			TeamPick.objects.filter(episode = episode, player = player).order_by('?').first().delete()
 			currentteamsize -= 1
 		while currentvotesize > 2:
-			print "t(%i) v(%i) ets(%s) | dropping someone from votes" % (currentteamsize, currentvotesize, episode.team_size)
+			#print "t(%i) v(%i) ets(%s) | dropping someone from votes" % (currentteamsize, currentvotesize, episode.team_size)
 			VotePick.objects.filter(episode = episode, player = player).order_by('?').first().delete()
 			currentvotesize -= 1
 		# Pick up random if necessary
@@ -146,7 +153,7 @@ def rolloverteamifempty(episode):
 				except:
 					existingpick = None
 				if not existingpick:
-					print "t(%i) v(%i) ets(%s) | adding %s to team" % (currentteamsize, currentvotesize, episode.team_size, castaway)
+					#print "t(%i) v(%i) ets(%s) | adding %s to team" % (currentteamsize, currentvotesize, episode.team_size, castaway)
 					randpick = TeamPick(player = player, episode = episode, castaway = castaway)
 					randpick.save()
 					currentteamsize += 1
@@ -160,7 +167,7 @@ def rolloverteamifempty(episode):
 				except:
 					existingpick = None
 				if not existingpick:
-					print "t(%i) v(%i) ets(%s) | adding %s to votes" % (currentteamsize, currentvotesize, episode.team_size, castaway)
+					#print "t(%i) v(%i) ets(%s) | adding %s to votes" % (currentteamsize, currentvotesize, episode.team_size, castaway)
 					randpick = VotePick(player = player, episode = episode, castaway = castaway)
 					randpick.save()
 					currentvotesize += 1
@@ -296,6 +303,13 @@ def updateepisodescore(request, e_id):
 	e = Episode.objects.get(id = e_id)
 	if e:
 		update_episode_score(e)
+	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
+
+def unlockepisode(request, e_id):
+	e = Episode.objects.get(id = e_id)
+	if e:
+		e.is_locked = False
+		e.save()
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
 
 def updatecetribes(request, e_id):
