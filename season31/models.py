@@ -78,7 +78,7 @@ class Action(models.Model):
 	def __unicode__(self):
 		return self.name
 	class Meta:
-		ordering = ('name',)
+		ordering = ('-score','name',)
 
 class Episode(models.Model):
 	title = models.CharField(max_length = 64)
@@ -219,7 +219,7 @@ class CastawayEpisode(models.Model):
 			self.score_has_changed = False
 			self.save()
 	class Meta:
-		ordering = ('episode', 'tribe', 'castaway')
+		ordering = ('episode', 'tribe', 'score', 'castaway')
 		get_latest_by = 'episode'
 
 class TeamPick(models.Model):

@@ -1,4 +1,5 @@
 ﻿<div class="pad0 marg0">
+	{% load staticfiles%}
 	<div class="subtitle textcenter">Leaderboard</div>
 	
 	{% if user.player and user.player.get_latest_episode %}
@@ -22,10 +23,11 @@
 			<td class="columnheader fgwhite"><a href="{% url 'season31:player' playerepisode.player.id %}" class="fgwhite">{{ playerepisode.player }}</a></td>
 			<td>{{ playerepisode.total_score }}</td>
 			<td class="columnheader"></td>
-			<td class="pad0 marg0">			
+			<td class="pad0 marg0 noborder">			
 				{% for pick in playerepisode.get_team_picks %}
-				<div class="bgtribe{{ pick.castaway_episode.tribe.color }} floatleft padlr2 padtb1 marg0 pickwidthsm" title="{{ pick.castaway }}">
-					<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway.get_first_initial }}
+				<div class="bgtribe{{ pick.castaway_episode.tribe.color }} floatleft pad0 marg0" title="{{ pick.castaway }}">
+					<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack pad0 marg0 ">
+						<img src="{% static 'season31/images/photos/'%}{{ pick.castaway.name }}.png" title="{{ pick.castaway.name }}" class="castawayimgsmall" />
 					</a>
 				</div>
 				{% endfor %}
