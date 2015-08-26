@@ -24,6 +24,9 @@
 
 <table class="noborder">
 	<tr>
+		<td class="columnheader textleft fggrey halftitle pad4" colspan=17>Past Episodes</td>
+	</tr>
+	<tr>
 		<td class="columnheader"></td>
 		<td class="columnheader fggreen4">Team</td>
 		<td class="columnheader"></td>
@@ -53,7 +56,7 @@
 	</tr>
 	{% endif %}
 	<tr>
-		<td class="bgblack textleft padtb8" colspan=17><span class="fgred2">{{ playerepisode.episode.time_to_lock }} left</span><span class="fglightgrey">to make changes to your picks</span></td>
+		<td class="columnheader textleft pad4" colspan=17><span class="fggrey halftitle">Next Episode</span><span class="fgred2">{{ playerepisode.episode.time_to_lock }} left</span><span class="fglightgrey">to make changes to your picks</span></td>
 	</tr>
 	<tr>
 		<td class="columnheader"></td>
@@ -113,6 +116,9 @@
 		<td>{{ playerepisode.total_score }}</td>
 		<td class="columnheader"></td>
 	</tr>
+	<tr>
+		<td class="columnheader padtb4" colspan=17></td>
+	</tr>
 	{% else %}
 	<tr>
 		<td class="columnheader"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode }}</a></td>
@@ -136,7 +142,7 @@
 				{% csrf_token %}
 				<div class="bgtribe{{ castawayepisode.tribe.color }} pad2 marg0">
 					{% if player.playerepisode_set.latest.get_team_picks %}
-					Pick New Team:
+					Pick New Team?
 					{% else %}
 					Pick {{ player.get_next_episode.team_size }} Team Members:
 					{% endif %}
@@ -153,8 +159,8 @@
 					</tr>
 				{% endfor %}
 				</table>
-				<div>
-					<input type="submit" value="Update Team" />
+				<div class="padtb2 padlr0">
+					<input type="submit" value="Update Team" class="width100" />
 				</div>
 			</form>
 			{% if team_error_message %}
@@ -171,7 +177,7 @@
 				{% csrf_token %}
 				<div class="bgtribe{{ castawayepisode.tribe.color }} pad2 marg0">
 					{% if player.playerepisode_set.latest.get_vote_picks %}
-					Pick New Votes:
+					Pick New Votes?
 					{% else %}
 					Pick 2 Votes:
 					{% endif %}
@@ -188,8 +194,8 @@
 					</tr>
 				{% endfor %}
 				</table>
-				<div>
-					<input type="submit" value="Update Votes" />
+				<div class="padtb2 padlr0">
+					<input type="submit" value="Update Votes" class="width100" />
 				</div>
 			</form>
 			{% if vote_error_message %}

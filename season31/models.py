@@ -219,7 +219,7 @@ class CastawayEpisode(models.Model):
 			self.score_has_changed = False
 			self.save()
 	class Meta:
-		ordering = ('episode', 'tribe', 'score', 'castaway')
+		ordering = ('episode', 'tribe', '-score', 'castaway')
 		get_latest_by = 'episode'
 
 class TeamPick(models.Model):
