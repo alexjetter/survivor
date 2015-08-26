@@ -22,6 +22,12 @@
 	background-color: #c8c8c8;
 	padding: 8;
 }
+.menuitem:hover {
+	background-color: #ffffff;
+}
+
+.spoiler {background-color: #c8c8c8; color: #c8c8c8;}
+.spoiler:hover {background-color: #ffffff; color: #222222;}
 
 div {
 	padding-top: 0;
@@ -60,6 +66,7 @@ form {margin-bottom: 0;}
 .bgblack {background-color: #222222;}
 .bgtribeGreen {background-color: #64e4b8; color: #222222;}
 .bgtribeMagenta {background-color: #ff5cad; color: #222222;}
+.bgtribeYellow{background-color: #ffd81a; color: #222222;}
 .bgmerge {background-color: #B4A7D6; color: #222222;}
 .bggreen5 {background-color: #66ff66; color: #222222;}
 .bggreen4 {background-color: #88ff66; color: #222222;}
@@ -80,6 +87,7 @@ form {margin-bottom: 0;}
 .fgblack {color: #222222;}
 .fgtribeGreen {color: #46b58f;}
 .fgtribeMagenta {color: #e62e8a;}
+.fgtribeYellow{color: #e6bf00;}
 .fgmerge {color: #B4A7D6;}
 .fggreen5 {color: #66ff66;;}
 .fggreen4 {color: #88ff66;;}
