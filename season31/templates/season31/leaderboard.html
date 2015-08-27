@@ -27,7 +27,7 @@
 				{% for pick in playerepisode.get_team_picks %}
 				<div class="bgtribe{{ pick.castaway_episode.tribe.color }} floatleft pad0 marg0" title="{{ pick.castaway }}">
 					<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack pad0 marg0 ">
-						<img src="{% static 'season31/images/photos/'%}{{ pick.castaway.name }}.png" title="{{ pick.castaway.name }}" class="castawayimgsmall" />
+						<img src="{% static 'season31/images/photos/'%}{{ pick.castaway.name }}.png" title="{{ pick.castaway.name }}" class="castawayimgsmall pad0 marg0" />
 					</a>
 				</div>
 				{% endfor %}

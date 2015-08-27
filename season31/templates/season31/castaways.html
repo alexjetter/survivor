@@ -86,7 +86,7 @@
 	{% for castaway in castaways %}
 	<tr>
 		<td class="columnheader fgwhite textright"><a href="{% url 'season31:castaway' castaway.id %}" class="fgwhite">{{ castaway }}</a></td>
-		<td class="columnheader fgwhite textright pad0"><img src="{% static 'season31/images/photos/'%}{{ castaway.name }}.png" title="{{ castaway.name }}" class="castawayimgsmall" /></td>
+		<td class="bgtribe{{ castaway.get_tribe.color }} fgwhite textright pad0"><img src="{% static 'season31/images/photos/'%}{{ castaway.name }}.png" title="{{ castaway.name }}" class="castawayimgsmall" /></td>
 		<td>{{ castaway.age }}</td>
 		<td>{{ castaway.occupation }}</td>
 		{% for ce in castaway.castawayepisode_set.all %}

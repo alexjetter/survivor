@@ -47,36 +47,36 @@
 	</tr>
 	{% for playerepisode in player.playerepisode_set.all %}
 	{% if not playerepisode.episode.is_locked and player == user.player and playerepisode.episode = player.get_next_episode %}
-	<tr>
-		<td class="noborder padtb4" colspan=17></td>
-	</tr>
-	{% if player.show_help_text %}
-	<tr>
-		<td class="fgblack textleft pad8 noborder" colspan=17>Below are your picks for the next episode.  Your<span class="textbold">Team</span>is on the left and your<span class="textbold">Vote Off Predictions</span>are on the right.<br>You have until<span class="textbold">8:00 PM EST / 5:00 PST</span>to make your picks each week.<br>This form will automatically lock if you refresh after that.</td>
-	</tr>
-	{% endif %}
-	<tr>
-		<td class="columnheader textleft pad4" colspan=17><span class="fggrey halftitle">Next Episode</span><span class="fgred2">{{ playerepisode.episode.time_to_lock }} left</span><span class="fglightgrey">to make changes to your picks</span></td>
-	</tr>
-	<tr>
-		<td class="columnheader"></td>
-		<td class="columnheader fggreen4">Team</td>
-		<td class="columnheader"></td>
-		<td class="columnheader fgred4">Vote Off Picks</td>
-		<td class="columnheader"></td>
-		<td class="columnheader fglightgrey">LB</td>
-		<td class="columnheader"></td>
-		<td class="columnheader fglightgrey">Action</td>
-		<td class="columnheader fglightgrey">Vote Off</td>
-		<td class="columnheader fglightgrey">JSP</td>
-		<td class="columnheader"></td>
-		<td class="columnheader fglightgrey">Week</td>
-		<td class="columnheader"></td>
-		<td class="columnheader fglightgrey">±</td>
-		<td class="columnheader fglightgrey">Plc</td>
-		<td class="columnheader fglightgrey">Score</td>
-		<td class="columnheader"></td>
-	</tr>
+		<tr>
+			<td class="noborder padtb4" colspan=17></td>
+		</tr>
+		{% if player.show_help_text %}
+			<tr>
+				<td class="fgblack textleft pad8 noborder" colspan=17>Below are your picks for the next episode.  Your<span class="textbold">Team</span>is on the left and your<span class="textbold">Vote Off Predictions</span>are on the right.<br>You have until<span class="textbold">8:00 PM EST / 5:00 PST</span>to make your picks each week.<br>This form will automatically lock if you refresh after that.</td>
+			</tr>
+			<tr>
+				<td class="columnheader textleft pad4" colspan=17><span class="fggrey halftitle">Next Episode</span><span class="fgred2">{{ playerepisode.episode.time_to_lock }} left</span><span class="fglightgrey">to make changes to your picks</span></td>
+			</tr>
+		{% endif %}
+		<tr>
+			<td class="columnheader"></td>
+			<td class="columnheader fggreen4">Team</td>
+			<td class="columnheader"></td>
+			<td class="columnheader fgred4">Vote Off Picks</td>
+			<td class="columnheader"></td>
+			<td class="columnheader fglightgrey">LB</td>
+			<td class="columnheader"></td>
+			<td class="columnheader fglightgrey">Action</td>
+			<td class="columnheader fglightgrey">Vote Off</td>
+			<td class="columnheader fglightgrey">JSP</td>
+			<td class="columnheader"></td>
+			<td class="columnheader fglightgrey">Week</td>
+			<td class="columnheader"></td>
+			<td class="columnheader fglightgrey">±</td>
+			<td class="columnheader fglightgrey">Plc</td>
+			<td class="columnheader fglightgrey">Score</td>
+			<td class="columnheader"></td>
+		</tr>
 	{% endif %}
 	{% if playerepisode.episode.is_locked or player == user.player%}
 	<tr>

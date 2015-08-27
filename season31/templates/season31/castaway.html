@@ -10,12 +10,11 @@
 </div>
 <div class="content floatleft marg0">
 
-<div class="floatleft">
+<div class="floatleft pad0 bgtribe{{ castaway.get_tribe.color }}">
 	<img src="{% static 'season31/images/photos/'%}{{ castaway.name }}.png" title="{{ castaway.name }}" class="border" />
 </div>
 <div>
 	<span class="title">{{ castaway.full_name }}</span>
-	<span class="subtitle fg{{ castaway.get_tribe }}">{{ castaway.get_tribe }}</span>
 	<div class="subtitle">{{ castaway.occupation }}, Age {{ castaway.age }}</div>
 </div>
 
