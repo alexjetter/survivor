@@ -30,7 +30,7 @@ class CastawaysView(generic.ListView):
 class PlayersView(generic.ListView):
 	context_object_name = 'players'
 	template_name = 'season31/players.html'
-	queryset = Player.objects.all()
+	queryset = Player.objects.filter(hidden = False)
 
 class EpisodesView(generic.ListView):
 	context_object_name = 'episodes'
@@ -218,9 +218,10 @@ def update_episode_score(episode):
 		lastepisode = Episode.objects.get(number = episode.number - 1)
 	except:
 		lastepisode = None
-	for counter, playerepisode in enumerate(episode.playerepisode_set.order_by('-total_score').all()):
+	counter = 1
+	for playerepisode in episode.playerepisode_set.order_by('-total_score').all():
 		player = playerepisode.player
-		playerepisode.place = counter + 1
+		playerepisode.place = counter
 		if playerepisode.total_score == lastscore:
 			playerepisode.place = lastplace
 		if lastepisode:
@@ -229,6 +230,8 @@ def update_episode_score(episode):
 		playerepisode.save()
 		lastplace = playerepisode.place
 		lastscore = playerepisode.total_score
+		if not player.hidden:
+			counter += 1
 
 def addepisode(request): # TODO: Add random toggle
 	lastepisode = Episode.objects.all().latest()

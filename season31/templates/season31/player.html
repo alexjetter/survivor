@@ -116,14 +116,14 @@
 		<td>{{ playerepisode.total_score }}</td>
 		<td class="columnheader"></td>
 	</tr>
-	<tr>
-		<td class="columnheader padtb4" colspan=17></td>
-	</tr>
 	{% else %}
 	<tr>
 		<td class="columnheader"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode }}</a></td>
 		<td class="textleft" colspan=15>Picks will be revealed in {{ playerepisode.episode.time_to_lock }}</td>
 		<td class="columnheader"></td>
+	</tr>
+	<tr>
+		<td class="columnheader padtb4" colspan=17></td>
 	</tr>
 	{% endif %}
 	{% endfor %}

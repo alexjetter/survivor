@@ -84,7 +84,7 @@
 		<td colspan=14>Picks will be revealed in {{ episode.time_to_lock }}</td>
 	</tr>
 	{% else %}
-	{% for playerepisode in episode.playerepisode_set.all %}
+	{% for playerepisode in episode.get_playerepisodes %}
 	<tr>
 		<td class="columnheader fgwhite textright"><a href="{% url 'season31:player' playerepisode.player.id %}" class="fgwhite">{{ playerepisode.player }}</a></td>
 
