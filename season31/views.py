@@ -72,6 +72,7 @@ def register(request):
 			user.save()
 			player = Player()
 			player.user = user
+			player.username = user.username.lower()
 			player.save()
 			for episode in Episode.objects.all():
 				playerepisode = PlayerEpisode(player = player, episode = episode)

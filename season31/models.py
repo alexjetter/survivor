@@ -34,6 +34,7 @@ class Castaway(models.Model):
 
 class Player(models.Model):
 	user = models.OneToOneField(User)
+	username = models.CharField(max_length = 32, default = "")
 	paid = models.BooleanField(default = False)
 	hidden = models.BooleanField(default = False)
 	show_help_text = models.BooleanField(default = True)
@@ -60,7 +61,7 @@ class Player(models.Model):
 		playerepisodes = PlayerEpisode.objects.filter(player__in = players)
 		return playerepisodes.filter(episode = self.get_latest_episode()).order_by('-total_score')
 	class Meta:
-		ordering = ('user',)
+		ordering = ('username',)
 
 class Tribe(models.Model):
 	name = models.CharField(max_length = 16)
