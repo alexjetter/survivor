@@ -20,6 +20,7 @@
 		{% if user.is_superuser  %}
 		<td class="columnheader fglightgrey">Full Name</td>
 		{% endif %}
+		<td class="columnheader fglightgrey">$</td>
 	</tr>
 	{% for player in players %}
 	<tr>
@@ -27,8 +28,10 @@
 		{% if user.is_superuser  %}
 		<td>{{ player.get_full_name }}</td>
 		{% endif %}
-		{% if  not player.paid %}
-		<td class="bgred5">Not Paid</td>
+		{% if  player.paid %}
+		<td class="bggreen5"></td>
+		{% else %}
+		<td class="bgred5"></td>
 		{% endif %}
 	</tr>
 	{% endfor %}

@@ -72,7 +72,7 @@
 		<td class="columnheader fglightgrey">LB</td>
 		<td class="columnheader"></td>
 		<td class="columnheader fglightgrey">Action</td>
-		<td class="columnheader fglightgrey">Vote Off</td>
+		<td class="columnheader fglightgrey">Vote</td>
 		<td class="columnheader fglightgrey">JSP</td>
 		<td class="columnheader"></td>
 		<td class="columnheader fglightgrey">Week</td>
@@ -159,7 +159,7 @@
 			<td colspan=3 class="bgblack textright">
 				<form action="{% url 'season31:updateepisodeteamsize' episode.id %}" method="post">
 					{% csrf_token %}
-					<input type="number" name="teamsize" id="teamsize" min="2" max="5" value="{{ episode.team_size }}" />
+					<input type="number" name="teamsize" id="teamsize" min="2" max="10" value="{{ episode.team_size }}" />
 					<input type="submit" value="Update Team Size" />
 				</form>
 			</td>

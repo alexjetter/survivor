@@ -43,7 +43,7 @@
 		<form action="{% url 'season31:addepisode' %}" method="post">
 			{% csrf_token %}
 			<div>
-				<input type="number" name="teamsize" id="teamsize" min="2" max="5" value="{{ user.player.get_latest_episode.team_size }}" />
+				<input type="number" name="teamsize" id="teamsize" min="2" max="10" value="{{ user.player.get_latest_episode.team_size }}" />
 				<label for="teamsize">Team Size</label>
 			</div>
 			<input type="submit" class="width100" value="Add Episode" />

@@ -13,10 +13,6 @@ from random import randint
 from .forms import UserForm
 from .models import Player, Castaway, TeamPick, VotePick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action
 
-def index(request):
-	template = loader.get_template('season31/index.html')
-	return HttpResponseRedirect('/season31/episode/%d' % Episode.objects.all().latest().id)
-
 class CastawaysView(generic.ListView):
 	context_object_name = 'castaways'
 	template_name = 'season31/castaways.html'
@@ -82,7 +78,7 @@ def register(request):
 				pickrandomifempty(firstepisode)
 			for episode in Episode.objects.all():
 				if episode.check_lock():
-					rolloverteamifempty(episode)
+					rolloverteam(episode)
 			registered = True 
 			user = authenticate(username = request.POST['username'], password = request.POST['password'])
 			login(request, user)
@@ -96,7 +92,7 @@ def register(request):
 def backfillteams(request):
 	pickrandomifempty(Episode.objects.order_by('air_date').first())
 	for episode in Episode.objects.filter(is_locked = True):
-		rolloverteamifempty(episode)
+		rolloverteam(episode)
 	return HttpResponseRedirect('/season31/episode/%d' % (Episode.objects.latest().id))
 	
 def pickrandomifempty(episode):
@@ -112,26 +108,25 @@ def pickrandomifempty(episode):
 				pick = VotePick(episode = episode, player = player, castaway = ce.castaway)
 				pick.save()
 
-def rolloverteamifempty(episode):
+def rolloverteam(episode):
 	lastepisode = episode.get_prev_episode()
-	if not lastepisode:
-		return
 	for player in Player.objects.all():
 		# Bring over still valid picks
 		#print "-----------------------"
 		#print "%s rollover" % (player)
-		if not TeamPick.objects.filter(episode = episode, player = player):
-			lastepisodeteampicks = TeamPick.objects.filter(player = player, episode = lastepisode)
-			for pick in lastepisodeteampicks:
-				if pick.castaway.out_episode_number == 0:
-					newpick = TeamPick(episode = episode, player = player, castaway = pick.castaway)
-					newpick.save()
-		if not VotePick.objects.filter(episode = episode, player = player):
-			lastepisodevotepicks = VotePick.objects.filter(player = player, episode = lastepisode)
-			for pick in lastepisodevotepicks:
-				if pick.castaway.out_episode_number == 0:
-					newpick = VotePick(episode = episode, player = player, castaway = pick.castaway)
-					newpick.save()
+		if lastepisode:
+			if not TeamPick.objects.filter(episode = episode, player = player):
+				lastepisodeteampicks = TeamPick.objects.filter(player = player, episode = lastepisode)
+				for pick in lastepisodeteampicks:
+					if pick.castaway.out_episode_number == 0:
+						newpick = TeamPick(episode = episode, player = player, castaway = pick.castaway)
+						newpick.save()
+			if not VotePick.objects.filter(episode = episode, player = player):
+				lastepisodevotepicks = VotePick.objects.filter(player = player, episode = lastepisode)
+				for pick in lastepisodevotepicks:
+					if pick.castaway.out_episode_number == 0:
+						newpick = VotePick(episode = episode, player = player, castaway = pick.castaway)
+						newpick.save()
 		# Drop random if necessary
 		teampicks = TeamPick.objects.filter(episode = episode, player = player).order_by('?')
 		votepicks = VotePick.objects.filter(episode = episode, player = player).order_by('?')
@@ -254,7 +249,7 @@ def addepisode(request): # TODO: Add random toggle
 	for p in Player.objects.all():
 		npe = PlayerEpisode(player = p, episode = newepisode)
 		npe.save()
-	rolloverteamifempty(newepisode)
+	rolloverteam(newepisode)
 	return HttpResponseRedirect('/season31/episode/%d' % (newepisode.id))
 
 def updateceactions(request, e_id):
