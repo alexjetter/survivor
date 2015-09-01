@@ -19,6 +19,7 @@
 		<td class="columnheader fglightgrey textright">Username</td>
 		{% if user.is_superuser  %}
 		<td class="columnheader fglightgrey">Full Name</td>
+		<td class="columnheader fglightgrey">Forgot Password</td>
 		{% endif %}
 		<td class="columnheader fglightgrey">$</td>
 	</tr>
@@ -27,6 +28,11 @@
 		<td class="columnheader fgwhite textright"><a href="{% url 'season31:player' player.id %}" class="fgwhite">{{ player }}</a></td>
 		{% if user.is_superuser  %}
 		<td>{{ player.get_full_name }}</td>
+			{% if  player.forgot_password %}
+			<td class="bgred5"></td>
+			{% else %}
+			<td></td>
+			{% endif %}
 		{% endif %}
 		{% if  player.paid %}
 		<td class="bggreen5"></td>

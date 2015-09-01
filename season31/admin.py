@@ -45,10 +45,10 @@ class CastawayAdmin(admin.ModelAdmin):
 
 class PlayerAdmin(admin.ModelAdmin):
 	fieldsets = [
-		('General',{'fields': ['user','username','paid','hidden']}),
+		('General',{'fields': ['user','username','paid','hidden','show_help_text','forgot_password']}),
 	]
 	inlines = [PlayerEpisodeInline]
-	list_display = ('user','username','paid','hidden')
+	list_display = ('user','username','paid','hidden','show_help_text','forgot_password')
 
 class CastawayEpisodeAdmin(admin.ModelAdmin):
 	fieldsets = [

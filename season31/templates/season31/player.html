@@ -14,14 +14,37 @@
 
 {% if user.is_superuser  %}
 <div class="halftitle">{{ player.user.get_full_name }}</div>
+	{% if player.forgot_password %}
+	<div class="bgred4 pad8">Player forgot their password.  Set a new one for them and then tell them what it is.
+		<form action="{% url 'season31:resetpassword' player.id %}" method="post">
+			{% csrf_token %}
+			New Password: <input type="text" name="password" value="" size="30"/>
+			<input type="submit" value="Reset Password" />
+		</form>
+	</div>
+	{% endif %}
 {% endif %}
 
 {% if player == user.player%}
-<div>
-	<form action="{% url 'season31:togglehelptext' player.id %}" method="post">
-		{% csrf_token %}
-		<input class="padtb0 padlr4" type="submit" value="{% if player.show_help_text %}Hide Help Text{% else %}Show Help Text{% endif %}" />
-	</form>
+<div class="pad4 bglightgrey">
+	<table>
+		<tr>
+			<td class="bgdarkgrey fgwhite padlr4">Settings</td>
+			<td class="padlr8">
+				<form action="{% url 'season31:togglehelptext' player.id %}" method="post">
+					{% csrf_token %}
+					<input class="padtb0 padlr4" type="submit" value="{% if player.show_help_text %}Hide Help Text{% else %}Show Help Text{% endif %}" />
+				</form>
+			</td>
+			<td class="padlr8">
+				<form action="{% url 'season31:resetpassword' player.id %}" method="post">
+					{% csrf_token %}
+					Change Password? <input type="password" name="password" value="" size="30"/>
+					<input type="submit" value="Change Password" />
+				</form>
+			</td>
+		</tr>
+	</table>
 </div>
 {% endif %}
 

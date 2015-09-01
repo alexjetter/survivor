@@ -11,6 +11,7 @@ from django.views import generic
 from random import randint
 
 from .forms import UserForm
+from django.contrib.auth.models import User
 from .models import Player, Castaway, TeamPick, VotePick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action
 
 class CastawaysView(generic.ListView):
@@ -188,6 +189,21 @@ def user_login(request):
 	else:
 		return render_to_response('season31/login.html', {}, context)
 
+def user_forgotpassword(request):
+	context = RequestContext(request)
+	if request.method == 'POST':
+		username = request.POST['username']
+		user = User.objects.get(username = username)
+		player = Player.objects.get(user = user)
+		if player:
+			player.forgot_password = True
+			player.save()
+			return HttpResponseRedirect('/')
+		else:
+			return HttpResponse("Cant find a player with username: %s" % (username))
+	else:
+		return render_to_response('season31/login.html', {}, context)
+		
 def user_logout(request):
 	logout(request)
 	return HttpResponseRedirect('/season31/')
@@ -365,11 +381,23 @@ def deleteepisode(request, e_id):
 	return HttpResponseRedirect('/season31/')
 
 def togglehelptext(request, p_id):
-	p = Player.objects.get(id = p_id)
-	if p:
-		p.show_help_text = not p.show_help_text
-		p.save()
+	player = Player.objects.get(id = p_id)
+	if player:
+		player.show_help_text = not player.show_help_text
+		player.save()
 	return HttpResponseRedirect('/season31/player/%d' % int(p_id))
+
+def resetpassword(request, p_id):
+	context = RequestContext(request)
+	player = Player.objects.get(id = p_id)
+	if request.method == 'POST' and player:
+		user = player.user
+		user.set_password(request.POST['password'])
+		user.save()
+		player.forgot_password = False
+		player.save()
+	return HttpResponseRedirect('/season31/player/%d' % int(p_id))
+		
 
 def addcastaway(request):
 	name = request.POST['name']

@@ -38,6 +38,7 @@ class Player(models.Model):
 	paid = models.BooleanField(default = False)
 	hidden = models.BooleanField(default = False)
 	show_help_text = models.BooleanField(default = True)
+	forgot_password = models.BooleanField(default = False)
 	def __unicode__(self):
 		return self.user.username
 	def get_full_name(self):

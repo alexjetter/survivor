@@ -38,4 +38,6 @@ urlpatterns = [
 	url(r'^register/$', views.register, name='register'),
 	url(r'^login/$', views.user_login, name='login'),
 	url(r'^logout/$', views.user_logout, name='logout'),
+	url(r'^forgotpassword/$', views.user_forgotpassword, name='forgotpassword'),
+	url(r'^resetpassword/(?P<p_id>[0-9]+)/$', views.resetpassword, name='resetpassword'),
 ]
