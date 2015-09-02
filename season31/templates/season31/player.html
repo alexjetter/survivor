@@ -26,17 +26,21 @@
 {% endif %}
 
 {% if player == user.player%}
-<div class="pad4 bglightgrey">
-	<table>
+<div class="pad4">
+	<table class="noborder">
 		<tr>
-			<td class="bgdarkgrey fgwhite padlr4">Settings</td>
-			<td class="padlr8">
+			<td class="bgdarkgrey fgwhite pad4 noborder">Settings</td>
+			<td class="noborder">
+			</td>
+			<td class="bggrey pad4 noborder">
 				<form action="{% url 'season31:togglehelptext' player.id %}" method="post">
 					{% csrf_token %}
 					<input class="padtb0 padlr4" type="submit" value="{% if player.show_help_text %}Hide Help Text{% else %}Show Help Text{% endif %}" />
 				</form>
 			</td>
-			<td class="padlr8">
+			<td class="noborder">
+			</td>
+			<td class="bggrey fgwhite pad4 noborder">
 				<form action="{% url 'season31:resetpassword' player.id %}" method="post">
 					{% csrf_token %}
 					Change Password? <input type="password" name="password" value="" size="30"/>
@@ -110,9 +114,9 @@
 	<tr>
 		<td class="columnheader"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode }}</a></td>
 
-		<td class="pad0 marg0">
+		<td class="pad0 marg0 bgblack">
 			{% for pick in playerepisode.get_team_picks %}
-			<div class="bgtribe{{ pick.castaway_episode.tribe.color }} floatleft pad2 marg0 pickwidth">
+			<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
 				<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway.name }}
 				</a>
 			</div>
@@ -123,7 +127,7 @@
 
 		<td class="pad0 marg0">
 			{% for pick in playerepisode.get_vote_picks %}
-			<div class="bgtribe{{ pick.castaway_episode.tribe.color }} floatleft pad2 marg0 pickwidth">
+			<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
 				<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway.name }}
 				</a>
 			</div>

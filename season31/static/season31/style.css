@@ -177,6 +177,12 @@ table, th, td{
 
 .textbold {font-weight: bold;}
 .textitalic {font-style: italic;}
+.textstrike {text-decoration: line-through;}
+
+.out {
+	text-decoration: line-through;
+	background-color: #909090;
+}
 
 a {
 	text-decoration: none;

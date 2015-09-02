@@ -226,6 +226,10 @@ class CastawayEpisode(models.Model):
 				self.score += action.score
 			self.score_has_changed = False
 			self.save()
+	def out_this_episode(self):
+		if self.castaway.out_episode_number == self.episode.number:
+			return True
+		return False
 	class Meta:
 		ordering = ('episode', 'tribe', '-score', 'castaway')
 		get_latest_by = 'episode'
@@ -248,6 +252,14 @@ class TeamPick(models.Model):
 		except:
 			playerepisode = None
 		return playerepisode
+	def out_this_episode(self):
+		if self.castaway.out_episode_number == self.episode.number:
+			return True
+		return False
+	def out_ever(self):
+		if self.castaway.out_episode_number > 0:
+			return True
+		return False
 	class Meta:
 		ordering = ('episode', 'player', 'castaway')
 		
@@ -269,6 +281,14 @@ class VotePick(models.Model):
 		except:
 			playerepisode = None
 		return playerepisode
+	def out_this_episode(self):
+		if self.castaway.out_episode_number == self.episode.number:
+			return True
+		return False
+	def out_ever(self):
+		if self.castaway.out_episode_number > 0:
+			return True
+		return False
 	class Meta:
 		ordering = ('episode', 'player', 'castaway')
 
