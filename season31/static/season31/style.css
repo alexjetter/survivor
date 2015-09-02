@@ -184,6 +184,14 @@ table, th, td{
 	background-color: #909090;
 }
 
+.outimg {
+    filter: none;
+    -webkit-filter: grayscale(100%);
+    -moz-filter:    grayscale(100%);
+    -ms-filter:     grayscale(100%);
+    -o-filter:      grayscale(100%);
+}
+
 a {
 	text-decoration: none;
 	padding: 0;
