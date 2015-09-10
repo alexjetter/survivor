@@ -12,7 +12,7 @@
 		<div class="halftitle textcenter">Leaderboard</div>
 		
 		{% if latestepisode %}
-		<div class="text14 textcenter">after {{ latestepisode }}</div>
+		<div class="text14 textcenter">{% if latestepisode.is_locked %}After{% else %}Before{% endif %} {{ latestepisode }}</div>
 		{% endif %}
 
 		<table>

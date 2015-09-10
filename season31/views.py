@@ -21,6 +21,7 @@ class LeaderboardView(generic.ListView):
 		lastepisode = Episode.objects.filter(is_locked = True).latest()
 	except:
 		lastepisode = Episode.objects.latest()
+	print lastepisode
 	queryset = lastepisode
 	def get_context_data(self, **kwargs):
 		context = super(LeaderboardView, self).get_context_data(**kwargs)
@@ -231,7 +232,7 @@ def updatescores(request):
 		pe.save()
 	for episode in Episode.objects.all():
 		update_episode_score(episode)
-	return HttpResponseRedirect('/season31/')
+	return HttpResponseRedirect('/season31/leaderboard/')
 
 def update_episode_score(episode):
 	for castawayepisode in episode.castawayepisode_set.all():
@@ -329,16 +330,19 @@ def updatecevotes(request, e_id):
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
 
 def updateepisodescore(request, e_id):
-	e = Episode.objects.get(id = e_id)
-	if e:
-		update_episode_score(e)
+	episode = Episode.objects.get(id = e_id)
+	if episode:
+		for pe in PlayerEpisode.objects.filter(episode = episode):
+			pe.score_has_changed = True
+			pe.save()
+		update_episode_score(episode)
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
 
 def unlockepisode(request, e_id):
-	e = Episode.objects.get(id = e_id)
-	if e:
-		e.is_locked = False
-		e.save()
+	episode = Episode.objects.get(id = e_id)
+	if episode:
+		episode.is_locked = False
+		episode.save()
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
 
 def updatecetribes(request, e_id):
