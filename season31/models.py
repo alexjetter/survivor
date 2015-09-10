@@ -238,6 +238,7 @@ class TeamPick(models.Model):
 	episode = models.ForeignKey(Episode)
 	player = models.ForeignKey(Player)
 	castaway = models.ForeignKey(Castaway)
+	jsp_score = models.PositiveIntegerField(default = 0)
 	def __unicode__(self):
 		return "%s | %s | %s | Team Pick" % (self.episode.short(), self.player.user.username, self.castaway.name)
 	def castaway_episode(self):

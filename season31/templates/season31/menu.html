@@ -11,33 +11,38 @@
 		<a href="{% url 'season31:register' %}" class="fgblack floatright">Register</a>
 	</div>
 	<div class="padtb2"></div>
-	{% endif %}	
+	{% endif %}
+	
+	<div class="padtb1 bggrey marg0"></div>
+	<div class="textcenter textbold bggreen3 menuitem marg0"><a href="{% url 'season31:leaderboard' %}" class="fgblack">Leaderboard</a></div>
+	<div class="padtb1 bggrey marg0"></div>
+	<div class="padtb2"></div>
 	
 	{% if player.get_next_episode.check_lock %}
 	{% endif %}
 	<div class="bggrey textcenter padtb1 padlr4 marg0">Recent Episodes</div>
 	{% if user.player and user.player.get_latest_episode %}
-	<div class="textcenter textbold menuitem pad1 marg0"><a href="{% url 'season31:episode' user.player.get_latest_episode.id %}" class="fgblack">{{ user.player.get_latest_episode }} (Last Ep.)</a></div>
+	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:episode' user.player.get_latest_episode.id %}" class="fgblack">{{ user.player.get_latest_episode }} (Last Ep.)</a></div>
 	{% endif %}
 	{% if user.player and user.player.get_next_episode %}
-	<div class="textcenter textbold menuitem pad1 marg0"><a href="{% url 'season31:episode' user.player.get_next_episode.id %}" class="fgblack">{{ user.player.get_next_episode }} (Next Ep.)</a></div>
+	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:episode' user.player.get_next_episode.id %}" class="fgblack">{{ user.player.get_next_episode }} (Next Ep.)</a></div>
 	{% endif %}
 	<div class="padtb2"></div>
 	
 	<div class="bggrey textcenter padtb1 padlr4 marg0">Fantasy League Data</div>
-	<div class="textcenter textbold menuitem pad1 marg0"><a href="{% url 'season31:episodes' %}" class="fgblack">Episodes</a></div>
-	<div class="textcenter textbold menuitem pad1 marg0"><a href="{% url 'season31:castaways' %}" class="fgblack">Castaways</a></div>
-	<div class="textcenter textbold menuitem pad1 marg0"><a href="{% url 'season31:actions' %}" class="fgblack">Actions</a></div>
-	<div class="textcenter textbold menuitem pad1 marg0"><a href="{% url 'season31:players' %}" class="fgblack">Players</a></div>
+	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:episodes' %}" class="fgblack">Episodes</a></div>
+	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:castaways' %}" class="fgblack">Castaways</a></div>
+	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:actions' %}" class="fgblack">Actions</a></div>
+	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:players' %}" class="fgblack">Players</a></div>
 	<div class="padtb2"></div>
 	
 	<div class="bggrey textcenter padtb1 padlr4 marg0">Information</div>
-	<div class="textcenter textbold menuitem pad1 marg0"><a href="{% url 'season31:index' %}" class="fgblack">Site Overview</a></div>
-	<div class="textcenter textbold menuitem pad1 marg0"><a href="{% url 'season31:rules' %}" class="fgblack">Rules</a></div>
-	<div class="textcenter textbold menuitem pad1 marg0"><a href="{% url 'season31:info' %}" class="fgblack">About This Season</a></div>
+	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:index' %}" class="fgblack">Site Overview</a></div>
+	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:rules' %}" class="fgblack">Rules</a></div>
+	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:info' %}" class="fgblack">About This Season</a></div>
 	<div class="padtb2"></div>
 	
 	<div class="bggrey textcenter padtb1 padlr4 marg0">Make Fantasy Survivor Better</div>
-	<div class="textcenter textbold bggreen2 menuitem pad1 marg0"><a href="https://docs.google.com/forms/d/1gJMYR88BStB_gxHaowpYHmOzfkO8o7JHDWUT9y80JVo/viewform" class="fgblack">Report Bug / Suggest Feature</a></div>
+	<div class="textcenter textbold bgred1 menuitem marg0"><a href="https://docs.google.com/forms/d/1gJMYR88BStB_gxHaowpYHmOzfkO8o7JHDWUT9y80JVo/viewform" class="fgblack">Report Bug / Suggest Feature</a></div>
 	<div class="padtb1 bggrey marg0"></div>
 </div>

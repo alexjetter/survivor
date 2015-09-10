@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
 	url(r'^$', TemplateView.as_view(template_name="season31/index.html"), name='index'),
+	url(r'^leaderboard/$', views.LeaderboardView.as_view(), name='leaderboard'),
 	url(r'^castaways/$', views.CastawaysView.as_view(), name='castaways'),
 	url(r'^players/$', views.PlayersView.as_view(), name='players'),
 	url(r'^episodes/$', views.EpisodesView.as_view(), name='episodes'),

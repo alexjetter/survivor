@@ -14,6 +14,18 @@ from .forms import UserForm
 from django.contrib.auth.models import User
 from .models import Player, Castaway, TeamPick, VotePick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action
 
+class LeaderboardView(generic.ListView):
+	context_object_name = 'latestepisode'
+	template_name = 'season31/leaderboard.html'
+	latestepisode = Episode.objects.filter(is_locked = True).latest()
+	queryset = latestepisode
+	def get_context_data(self, **kwargs):
+		context = super(LeaderboardView, self).get_context_data(**kwargs)
+		players = Player.objects.filter(hidden = False)
+		playerepisodes = PlayerEpisode.objects.filter(player__in = players)
+		context['playerepisodes'] = playerepisodes.filter(episode = self.latestepisode).order_by('-total_score')
+		return context
+
 class CastawaysView(generic.ListView):
 	context_object_name = 'castaways'
 	template_name = 'season31/castaways.html'

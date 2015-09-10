@@ -1,69 +1,82 @@
-﻿<div class="pad0 marg0">
-	{% load staticfiles%}
-	<div class="subtitle textcenter">Leaderboard</div>
-	
-	{% if user.player and user.player.get_latest_episode %}
-	<div class="text14 textcenter">after {{user.player.get_latest_episode}}</div>
-	{% endif %}
+﻿{% load staticfiles %}
 
-	<table>
+<link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
 
-		<tr>
-			<td class="columnheader fglightgrey">±</td>
-			<td class="columnheader fglightgrey">Plc</td>
-			<td class="columnheader fglightgrey">Player</td>
-			<td class="columnheader fglightgrey">Pts</td>
-			<td class="columnheader"></td>
-			<td class="columnheader fglightgrey">Team</td>
-		</tr>
-		{% for playerepisode in user.player.get_leaderboard_player_episodes %}
-		<tr>
-			<td class="columnheader fggreen5">{{ playerepisode.movement }}</td>
-			<td>{{ playerepisode.place }}</td>
-			<td class="columnheader fgwhite"><a href="{% url 'season31:player' playerepisode.player.id %}" class="fgwhite">{{ playerepisode.player }}</a></td>
-			<td>{{ playerepisode.total_score }}</td>
-			<td class="columnheader"></td>
-			<td class="pad0 marg0">			
-				{% for pick in playerepisode.get_team_picks %}
-				<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft padtb1 marg0 pickwidthsm" title="{{ pick.castaway }}">
-					<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0">
-						<!--<img src="{% static 'season31/images/photos/'%}{{ pick.castaway.name }}.png" title="{{ pick.castaway.name }}" class="castawayimgsmall pad0 marg0{% if pick.out_this_episode %} outimg{% endif %}" />-->
-						{{ pick.castaway.get_first_initial }}
-					</a>
+<div class="marg0 pad0 thecontainer">
+
+	<div class="menu floatleft marg0">
+		{% include "season31/menu.html" %}
+	</div>
+	<div class="content floatleft marg0">
+
+		<div class="subtitle textcenter">Leaderboard</div>
+		
+		{% if latestepisode %}
+		<div class="text14 textcenter">after {{ latestepisode }}</div>
+		{% endif %}
+
+		<table>
+			<tr>
+				<td class="columnheader fglightgrey">±</td>
+				<td class="columnheader fglightgrey">Plc</td>
+				<td class="columnheader fglightgrey">Player</td>
+				<td class="columnheader fglightgrey">Pts</td>
+				<td class="columnheader"></td>
+				<td class="columnheader fglightgrey">{{ latestepisode.short }}</td>
+				<td class="columnheader"></td>
+				<td class="columnheader fglightgrey">Team</td>
+			</tr>
+			{% for playerepisode in playerepisodes %}
+			<tr>
+				<td class="columnheader fggreen5">{{ playerepisode.movement }}</td>
+				<td>{{ playerepisode.place }}</td>
+				<td class="columnheader fgwhite"><a href="{% url 'season31:player' playerepisode.player.id %}" class="fgwhite">{{ playerepisode.player }}</a></td>
+				<td>{{ playerepisode.total_score }}</td>
+				<td class="columnheader"></td>
+				<td>{{ playerepisode.week_score }}</td>
+				<td class="columnheader"></td>
+				<td class="pad0 marg0">
+					{% for pick in playerepisode.get_team_picks %}
+					<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft padtb1 marg0 pickwidth" title="{{ pick.castaway }}">
+						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0">
+							{{ pick.castaway }}
+						</a>
+					</div>
+					{% endfor %}
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+
+		{% if user.is_superuser  %}
+		<div class="spacer"></div>
+
+		<div class="bgdarkgrey fgwhite pad4 textcenter">
+			<form action="{% url 'season31:addepisode' %}" method="post">
+				{% csrf_token %}
+				<div>
+					<input type="number" name="teamsize" id="teamsize" min="2" max="10" value="{{ user.player.get_latest_episode.team_size }}" />
+					<label for="teamsize">Team Size</label>
 				</div>
-				{% endfor %}
-			</td>
-		</tr>
-		{% endfor %}
-	</table>
+				<input type="submit" class="width100" value="Add Episode" />
+			</form>
+		</div>
+		
+		<div class="bgdarkgrey pad4 textcenter">
+			<form action="{% url 'season31:backfillteams' %}" method="post">
+				{% csrf_token %}
+				<input type="submit" class="width100" value="Backfill Teams" />
+			</form>
+		</div>
+		
+		<div class="bgdarkgrey pad4 textcenter">
+			<form action="{% url 'season31:updatescores' %}" method="post">
+				{% csrf_token %}
+				<input type="submit" class="width100" value="Recalculate All Scores" />
+			</form>
+		</div>
+		{% endif %}
 
-	{% if user.is_superuser  %}
-	<div class="spacer"></div>
-
-	<div class="bgdarkgrey fgwhite pad4 textcenter">
-		<form action="{% url 'season31:addepisode' %}" method="post">
-			{% csrf_token %}
-			<div>
-				<input type="number" name="teamsize" id="teamsize" min="2" max="10" value="{{ user.player.get_latest_episode.team_size }}" />
-				<label for="teamsize">Team Size</label>
-			</div>
-			<input type="submit" class="width100" value="Add Episode" />
-		</form>
 	</div>
-	
-	<div class="bgdarkgrey pad4 textcenter">
-		<form action="{% url 'season31:backfillteams' %}" method="post">
-			{% csrf_token %}
-			<input type="submit" class="width100" value="Backfill Teams" />
-		</form>
-	</div>
-	
-	<div class="bgdarkgrey pad4 textcenter">
-		<form action="{% url 'season31:updatescores' %}" method="post">
-			{% csrf_token %}
-			<input type="submit" class="width100" value="Recalculate All Scores" />
-		</form>
-	</div>
-	{% endif %}
 
 </div>
