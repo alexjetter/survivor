@@ -9,8 +9,8 @@
 </div>
 <div class="content floatleft marg0">
 
-<div class="floatleft pad0{% if castaway.out_episode_number > 0 %} bgblack{% else %} bgtribe{{ castaway.get_tribe.color }}{% endif %}">
-	<img src="{% static 'season31/images/photos/'%}{{ castaway.name }}.png" title="{{ castaway.name }}" class="border{% if castaway.out_episode_number > 0 %} outimg{% endif %}" />
+<div class="floatleft pad0">
+	<img src="{% static 'season31/images/photos/'%}{{ castaway.name }}.jpg" title="{{ castaway.name }}" class="border{% if castaway.out_episode_number > 0 %} outimg{% endif %}" />
 </div>
 <div>
 	<span class="title">{{ castaway.full_name }}</span>
