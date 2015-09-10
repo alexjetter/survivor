@@ -17,13 +17,16 @@ from .models import Player, Castaway, TeamPick, VotePick, Episode, PlayerEpisode
 class LeaderboardView(generic.ListView):
 	context_object_name = 'latestepisode'
 	template_name = 'season31/leaderboard.html'
-	latestepisode = Episode.objects.filter(is_locked = True).latest()
-	queryset = latestepisode
+	try:
+		lastepisode = Episode.objects.filter(is_locked = True).latest()
+	except:
+		lastepisode = Episode.objects.latest()
+	queryset = lastepisode
 	def get_context_data(self, **kwargs):
 		context = super(LeaderboardView, self).get_context_data(**kwargs)
 		players = Player.objects.filter(hidden = False)
 		playerepisodes = PlayerEpisode.objects.filter(player__in = players)
-		context['playerepisodes'] = playerepisodes.filter(episode = self.latestepisode).order_by('-total_score')
+		context['playerepisodes'] = playerepisodes.filter(episode = self.lastepisode).order_by('-total_score')
 		return context
 
 class CastawaysView(generic.ListView):
@@ -90,8 +93,7 @@ def register(request):
 			if firstepisode.check_lock():
 				pickrandomifempty(firstepisode)
 			for episode in Episode.objects.all():
-				if episode.check_lock():
-					rolloverteam(episode)
+				rolloverteam(episode)
 			registered = True 
 			user = authenticate(username = request.POST['username'], password = request.POST['password'])
 			login(request, user)

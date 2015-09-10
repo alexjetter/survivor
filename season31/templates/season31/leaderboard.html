@@ -9,7 +9,7 @@
 	</div>
 	<div class="content floatleft marg0">
 
-		<div class="subtitle textcenter">Leaderboard</div>
+		<div class="halftitle textcenter">Leaderboard</div>
 		
 		{% if latestepisode %}
 		<div class="text14 textcenter">after {{ latestepisode }}</div>
@@ -28,7 +28,7 @@
 			</tr>
 			{% for playerepisode in playerepisodes %}
 			<tr>
-				<td class="columnheader fggreen5">{{ playerepisode.movement }}</td>
+				<td class="columnheader{% if playerepisode.movement > 0 %} fggreen5{% elif playerepisode.movement < 0 %} fgred5{% endif%}">{{ playerepisode.movement }}</td>
 				<td>{{ playerepisode.place }}</td>
 				<td class="columnheader fgwhite"><a href="{% url 'season31:player' playerepisode.player.id %}" class="fgwhite">{{ playerepisode.player }}</a></td>
 				<td>{{ playerepisode.total_score }}</td>
@@ -36,6 +36,7 @@
 				<td>{{ playerepisode.week_score }}</td>
 				<td class="columnheader"></td>
 				<td class="pad0 marg0">
+					{% if playerepisode.episode.is_locked %}
 					{% for pick in playerepisode.get_team_picks %}
 					<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft padtb1 marg0 pickwidth" title="{{ pick.castaway }}">
 						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0">
@@ -43,6 +44,7 @@
 						</a>
 					</div>
 					{% endfor %}
+					{% endif %}
 				</td>
 			</tr>
 			{% endfor %}
