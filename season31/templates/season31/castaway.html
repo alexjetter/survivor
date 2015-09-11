@@ -9,12 +9,16 @@
 	</td>
 	<td class="content noborder texttop textleft">
 
-		<div class="floatleft pad0">
+		<div class="floatright pad0 textright">
 			<img src="{% static 'season31/images/photos/'%}{{ castaway.name }}.jpg" title="{{ castaway.name }}" class="border{% if castaway.out_episode_number > 0 %} outimg{% endif %}" />
+			{% if castaway.place > 0 %}
+			<div>{{ castaway.place }}{% if castaway.place == 1 %}st{% elif castaway.place == 2 %}nd{% elif castaway.place == 3 %}rd{% else %}th{% endif %} Place</div>
+			{% endif %}
 		</div>
 		<div>
-			<span class="title">{{ castaway.full_name }}</span>
-			<div class="subtitle">{{ castaway.occupation }}, Age {{ castaway.age }}</div>
+			<div class="title">{{castaway.name}}</div>
+			<div class="font18 textbold">{{ castaway.full_name }}</div>
+			<div>{{ castaway.occupation }}, Age {{ castaway.age }}</div>
 		</div>
 
 
@@ -57,5 +61,25 @@
 		</table>
 
 	</td>
+	{% if user.is_superuser  %}
+	<td class="bgadmin marg0 pad0 noborder texttop">
+	
+		<div class="bgwhite pad4 marg4">
+			<form action="{% url 'season31:updatecastawayname' castaway.id %}" method="post">
+				{% csrf_token %}
+				<input type="text" name="name" value="{{ castaway.name }}" />
+				<input type="submit" value="Update Name" />
+			</form>
+		</div>
+		<div class="bgwhite pad4 marg4">
+			<form action="{% url 'season31:updatecastawayplace' castaway.id %}" method="post">
+				{% csrf_token %}
+				<input type="number" name="place" id="place" min="0" max="20" value="{{ castaway.place }}" />
+				<input type="submit" value="Update Place" />
+			</form>
+		</div>
+
+	</td>
+	{% endif %}
 	
 </tr></table>

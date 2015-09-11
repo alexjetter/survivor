@@ -385,9 +385,32 @@ def updateepisodeteamsize(request, e_id):
 
 def deleteepisode(request, e_id):
 	e = Episode.objects.get(id = e_id)
-	if e:
+	if "check1" in request.POST and "check2" in request.POST and e:
 		e.delete()
-	return HttpResponseRedirect('/season31/')
+		return HttpResponseRedirect('/season31/episodes')
+	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
+
+def updatecastawayplace(request, c_id):
+	castaway = Castaway.objects.get(id = c_id)
+	try:
+		place = request.POST['place']
+	except:
+		place = None
+	if place:
+		castaway.place = place
+		castaway.save()
+	return HttpResponseRedirect('/season31/castaway/%d' % int(c_id))
+
+def updatecastawayname(request, c_id):
+	castaway = Castaway.objects.get(id = c_id)
+	try:
+		name = request.POST['name']
+	except:
+		name = None
+	if name:
+		castaway.name = name
+		castaway.save()
+	return HttpResponseRedirect('/season31/castaway/%d' % int(c_id))
 
 def togglehelptext(request, p_id):
 	player = Player.objects.get(id = p_id)
