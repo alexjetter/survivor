@@ -2,12 +2,12 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
 
-<div class="marg0 pad0 thecontainer">
+<table class="marg0 pad0 noborder"><tr>
 
-	<div class="menu floatleft marg0">
+	<td class="menu noborder texttop">
 		{% include "season31/menu.html" %}
-	</div>
-	<div class="content floatleft marg0">
+	</td>
+	<td class="content noborder texttop textleft">
 
 		<div class="halftitle textcenter">Leaderboard</div>
 		
@@ -49,29 +49,29 @@
 			</tr>
 			{% endfor %}
 		</table>
+	</td>
+	{% if user.is_superuser  %}
+	<td class="bgadmin marg0 pad0 noborder texttop">
 
-		{% if user.is_superuser  %}
-		<div class="spacer"></div>
-
-		<div class="bgdarkgrey fgwhite pad4 textcenter">
+		<div class="bggrey pad4 marg4">
 			<form action="{% url 'season31:addepisode' %}" method="post">
 				{% csrf_token %}
 				<div>
-					<input type="number" name="teamsize" id="teamsize" min="2" max="10" value="{{ user.player.get_latest_episode.team_size }}" />
+					<input type="number" name="teamsize" id="teamsize" min="2" max="10" value="{{ latestepisode.team_size }}" />
 					<label for="teamsize">Team Size</label>
 				</div>
 				<input type="submit" class="width100" value="Add Episode" />
 			</form>
 		</div>
 		
-		<div class="bgdarkgrey pad4 textcenter">
+		<div class="bggrey pad4 marg4">
 			<form action="{% url 'season31:backfillteams' %}" method="post">
 				{% csrf_token %}
 				<input type="submit" class="width100" value="Backfill Teams" />
 			</form>
 		</div>
 		
-		<div class="bgdarkgrey pad4 textcenter">
+		<div class="bggrey pad4 marg4">
 			<form action="{% url 'season31:updatescores' %}" method="post">
 				{% csrf_token %}
 				<input type="submit" class="width100" value="Recalculate All Scores" />
@@ -79,6 +79,6 @@
 		</div>
 		{% endif %}
 
-	</div>
-
-</div>
+	</td>
+	
+</tr></table>

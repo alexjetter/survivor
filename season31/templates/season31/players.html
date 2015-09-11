@@ -2,46 +2,46 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
 
-<div class="marg0 pad0 thecontainer">
+<table class="marg0 pad0 noborder"><tr>
 
-<div class="menu floatleft marg0">
-	{% include "season31/menu.html" %}
-</div>
-<div class="content floatleft marg0">
+	<td class="menu noborder texttop">
+		{% include "season31/menu.html" %}
+	</td>
+	<td class="content noborder texttop textleft">
 
-<span class="title">Players</span>
+		<span class="title">Players</span>
 
-<div class="spacer"></div>
+		<div class="spacer"></div>
 
-<table>
-	<tr>
-		<td class="columnheader fglightgrey textright">Username</td>
-		{% if user.is_superuser  %}
-		<td class="columnheader fglightgrey">Full Name</td>
-		<td class="columnheader fglightgrey">Forgot Password</td>
-		{% endif %}
-		<td class="columnheader fglightgrey">$</td>
-	</tr>
-	{% for player in players %}
-	<tr>
-		<td class="columnheader fgwhite textright"><a href="{% url 'season31:player' player.id %}" class="fgwhite">{{ player }}</a></td>
-		{% if user.is_superuser  %}
-		<td>{{ player.get_full_name }}</td>
-			{% if  player.forgot_password %}
-			<td class="bgred5"></td>
-			{% else %}
-			<td></td>
-			{% endif %}
-		{% endif %}
-		{% if  player.paid %}
-		<td class="bggreen5"></td>
-		{% else %}
-		<td class="bgred5"></td>
-		{% endif %}
-	</tr>
-	{% endfor %}
-</table>
+		<table>
+			<tr>
+				<td class="columnheader fglightgrey textright">Username</td>
+				{% if user.is_superuser  %}
+				<td class="columnheader fglightgrey">Full Name</td>
+				<td class="columnheader fglightgrey">Forgot Password</td>
+				{% endif %}
+				<td class="columnheader fglightgrey">$</td>
+			</tr>
+			{% for player in players %}
+			<tr>
+				<td class="columnheader fgwhite textright"><a href="{% url 'season31:player' player.id %}" class="fgwhite">{{ player }}</a></td>
+				{% if user.is_superuser  %}
+				<td>{{ player.get_full_name }}</td>
+					{% if  player.forgot_password %}
+					<td class="bgred5"></td>
+					{% else %}
+					<td></td>
+					{% endif %}
+				{% endif %}
+				{% if  player.paid %}
+				<td class="bggreen5"></td>
+				{% else %}
+				<td class="bgred5"></td>
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</table>
 
-</div>
-
-</div>
+	</td>
+	
+</tr></table>

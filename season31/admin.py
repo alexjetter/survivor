@@ -52,20 +52,20 @@ class PlayerAdmin(admin.ModelAdmin):
 
 class CastawayEpisodeAdmin(admin.ModelAdmin):
 	fieldsets = [
-		('General',{'fields': ['castaway','episode','tribe','score','score_has_changed']}),
+		('General',{'fields': ['castaway','episode','tribe','score']}),
 	]
 	inlines = [CastawayActionInline,VoteInline]
 	list_filter = ['episode']
-	list_display = ('castaway','episode','tribe','score','score_has_changed')
+	list_display = ('castaway','episode','tribe','score')
 
 class PlayerEpisodeAdmin(admin.ModelAdmin):
 	fieldsets = [
 		('General',{'fields': ['player','episode','correctly_predicted_votes','week_score','total_score']}),
-		('Score Breakdown',{'fields': ['loyalty_bonus','action_score','vote_off_score','jsp_score','score_has_changed']}),
+		('Score Breakdown',{'fields': ['loyalty_bonus','action_score','vote_off_score','jsp_score']}),
 		('Leaderboard',{'fields': ['movement','place']}),
 	]
 	list_filter = ['episode']
-	list_display = ('player','episode','week_score','total_score','loyalty_bonus','action_score','vote_off_score','jsp_score','score_has_changed')
+	list_display = ('player','episode','week_score','total_score','loyalty_bonus','action_score','vote_off_score','jsp_score')
 
 class TeamPickAdmin(admin.ModelAdmin):
 	fieldsets = [

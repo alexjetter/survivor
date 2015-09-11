@@ -69,6 +69,7 @@ class EpisodeView(generic.DetailView):
 	template_name = 'season31/episode.html'
 	def get_context_data(self, **kwargs):
 		context = super(EpisodeView, self).get_context_data(**kwargs)
+		context['episodes'] = Episode.objects.all()
 		context['actions'] = Action.objects.all()
 		context['tribes'] = Tribe.objects.all()
 		return context
@@ -199,8 +200,13 @@ def user_login(request):
 			else:
 				return HttpResponse("Your account is disabled.")
 		else:
-			print "Invalid login details: {0}, {1}".format(username, password)
-			return HttpResponse("Invalid login details supplied.")
+			try:
+				userexists = User.objects.get(username = username)
+			except:
+				userexists = None
+			if userexists:
+				return render(request, 'season31/login.html', {'error_message': "Incorrect password for %s" % (username),})
+			return render(request, 'season31/login.html', {'error_message': "No user found for username %s" % (username),})
 	else:
 		return render_to_response('season31/login.html', {}, context)
 
@@ -224,12 +230,6 @@ def user_logout(request):
 	return HttpResponseRedirect('/season31/')
 
 def updatescores(request):
-	for ce in CastawayEpisode.objects.all():
-		ce.score_has_changed = True
-		ce.save()
-	for pe in PlayerEpisode.objects.all():
-		pe.score_has_changed = True
-		pe.save()
 	for episode in Episode.objects.all():
 		update_episode_score(episode)
 	return HttpResponseRedirect('/season31/leaderboard/')
@@ -295,22 +295,16 @@ def updateceactions(request, e_id):
 				badaction = None
 			if badaction != None:
 				ce.actions.remove(badaction)
-				ce.score_has_changed = True
 				ce.save()
 				if badaction.name == "Out":
 					ce.castaway.out_episode_number = 0
 					ce.castaway.save()
-				for pe in PlayerEpisode.objects.all():
-					pe.score_has_changed = True
 		else:
 			ce.actions.add(action)
-			ce.score_has_changed = True
 			ce.save()
 			if action.name == "Out":
 				ce.castaway.out_episode_number = ce.episode.number
 				ce.castaway.save()
-			for pe in PlayerEpisode.objects.all():
-				pe.score_has_changed = True
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
 
 def updatecevotes(request, e_id):
@@ -332,9 +326,6 @@ def updatecevotes(request, e_id):
 def updateepisodescore(request, e_id):
 	episode = Episode.objects.get(id = e_id)
 	if episode:
-		for pe in PlayerEpisode.objects.filter(episode = episode):
-			pe.score_has_changed = True
-			pe.save()
 		update_episode_score(episode)
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
 
@@ -474,6 +465,9 @@ def deleteaction(request):
 
 def pickteams(request, pe_id):
 	playerepisode = get_object_or_404(PlayerEpisode, pk=pe_id)
+	est = timezone('US/Eastern')
+	if playerepisode.episode.air_date < datetime.now(est):
+		return render(request, 'season31/player.html', {'player': playerepisode.player, 'expired_error_message': "Episode air time has arrived. Your picks are locked",})
 	picks = request.POST.getlist('picks')
 	if len(picks) != playerepisode.episode.team_size:
 		return render(request, 'season31/player.html', {'player': playerepisode.player, 'team_error_message': "You must select %i castaways" % int(playerepisode.episode.team_size),})
@@ -484,6 +478,9 @@ def pickteams(request, pe_id):
 
 def pickvotes(request, pe_id):
 	playerepisode = get_object_or_404(PlayerEpisode, pk=pe_id)
+	est = timezone('US/Eastern')
+	if playerepisode.episode.air_date < datetime.now(est):
+		return render(request, 'season31/player.html', {'player': playerepisode.player, 'expired_error_message': "Episode air time has arrived. Your picks are locked",})
 	picks = request.POST.getlist('picks')
 	if len(picks) != 2:
 		return render(request, 'season31/player.html', {'player': playerepisode.player, 'vote_error_message': "You must select 2 castaways",})
@@ -501,7 +498,5 @@ def makepick(playerepisode, picks, type):
 		if type == "VOTE":
 			pick = VotePick(player = playerepisode.player, episode = playerepisode.episode, castaway = castaway)
 			pick.save()
-		playerepisode.score_has_changed = True
-		playerepisode.save()
 		playerepisode.update_score()
 			

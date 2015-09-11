@@ -2,51 +2,55 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
 
-<div class="marg0 pad0 thecontainer">
+<table class="marg0 pad0 noborder"><tr>
 
-<div class="menu floatleft marg0">
-	{% include "season31/menu.html" %}
-</div>
-<div class="content floatleft marg0">
+	<td class="menu noborder texttop">
+		{% include "season31/menu.html" %}
+	</td>
+	<td class="content noborder texttop textleft">
 
-	<div class="title">Fantasy Survivor</div>
-	<div class="subtitle">Worlds Apart</div>
-	<div class="spacer"></div>
+		<div class="title">Fantasy Survivor</div>
+		<div class="subtitle">Worlds Apart</div>
+		<div class="spacer"></div>
+		
+		{% if error_message %}
+		<div class="bgred4 pad2 textcenter">Error: {{ error_message }}</div>
+		{% endif %}
 
-	<form id="login_form" method="post" action="/season31/login/">
-		{% csrf_token %}
-		<table class="noborder">
-			<tr>
-				<td class="noborder">username: </td>
-				<td class="noborder"><input type="text" name="username" value="" size="30"/></td>
-			</tr>
-			<tr>
-				<td class="noborder">password: </td>
-				<td class="noborder"><input type="password" name="password" value="" size="30"/></td>
-			</tr>
-		</table>
-		<div class="halfspacer"></div>
-		{{ profile_form.as_p }}
-		<input type="submit" name="submit" value="Login" />
-	</form>
-
-	<div class="spacer"></div>
-	<div class="spacer"></div>
-	
-	<div class="maxwidth720 textbold">
-		Forgot your password?
-	</div>
-	<div class="maxwidth720 font14">
-		The Admins can generate a new one for you.  But we'll have to do it manually, so it won't be right away.
-	</div>
-	<div class="pad8">
-		<form action="{% url 'season31:forgotpassword' %}" method="post">
+		<form id="login_form" method="post" action="/season31/login/">
 			{% csrf_token %}
-			Username: <input type="username" name="username" value="" size="30"/>
-			<input type="submit" value="I Forgot My Password!" />
+			<table class="noborder">
+				<tr>
+					<td class="noborder">username: </td>
+					<td class="noborder"><input type="text" name="username" value="" size="30"/></td>
+				</tr>
+				<tr>
+					<td class="noborder">password: </td>
+					<td class="noborder"><input type="password" name="password" value="" size="30"/></td>
+				</tr>
+			</table>
+			<div class="halfspacer"></div>
+			{{ profile_form.as_p }}
+			<input type="submit" name="submit" value="Login" />
 		</form>
-	</div>
 
-</div>
+		<div class="spacer"></div>
+		<div class="spacer"></div>
+		
+		<div class="maxwidth720 textbold">
+			Forgot your password?
+		</div>
+		<div class="maxwidth720 font14">
+			The Admins can generate a new one for you.  But we'll have to do it manually, so it won't be right away.
+		</div>
+		<div class="pad8">
+			<form action="{% url 'season31:forgotpassword' %}" method="post">
+				{% csrf_token %}
+				Username: <input type="username" name="username" value="" size="30"/>
+				<input type="submit" value="I Forgot My Password!" />
+			</form>
+		</div>
 
-</div>
+	</td>
+	
+</tr></table>

@@ -152,7 +152,6 @@ class PlayerEpisode(models.Model):
 	total_score = models.IntegerField(default = 0)
 	movement = models.IntegerField(default = 0)
 	place = models.PositiveIntegerField(default = 0)
-	score_has_changed = models.BooleanField(default = False)
 	def __unicode__(self):
 		return "%s | %s" % (self.player.user.username, self.episode)
 	def get_team_picks(self):
@@ -171,41 +170,39 @@ class PlayerEpisode(models.Model):
 		for pick in get_team_picks():
 			print pick
 	def update_score(self):
-		if self.score_has_changed:
-			try:
-				lastplayerepisode = PlayerEpisode.objects.get(player = self.player, episode = Episode.objects.get(number = self.episode.number - 1))
-			except:
-				lastplayerepisode = None
-			if lastplayerepisode:
-				self.total_score = lastplayerepisode.total_score
-			else:
-				self.total_score = 0
-			self.loyalty_bonus = 0
-			self.week_score = 0
-			self.action_score = 0
-			self.jsp_score = 0
-			self.correctly_predicted_votes = 0
-			if lastplayerepisode:
-				for pick in self.get_team_picks():
-					for last_pick in lastplayerepisode.get_team_picks():
-						if pick.castaway == last_pick.castaway:
-							self.loyalty_bonus += 1
+		try:
+			lastplayerepisode = PlayerEpisode.objects.get(player = self.player, episode = Episode.objects.get(number = self.episode.number - 1))
+		except:
+			lastplayerepisode = None
+		if lastplayerepisode:
+			self.total_score = lastplayerepisode.total_score
+		else:
+			self.total_score = 0
+		self.loyalty_bonus = 0
+		self.week_score = 0
+		self.action_score = 0
+		self.jsp_score = 0
+		self.correctly_predicted_votes = 0
+		if lastplayerepisode:
 			for pick in self.get_team_picks():
-				ce = pick.castaway_episode()
-				if ce:
-					self.action_score += ce.score
-			for pick in self.get_vote_picks():
-				try:
-					vo_action = pick.castaway_episode().actions.filter(name = "Out") # TODO: dont hardcode this name
-				except:
-					vo_action = None
-				if vo_action:
-					self.correctly_predicted_votes += 1
-			self.vote_off_score = self.correctly_predicted_votes * 10 # TODO: dont hardcode this score
-			self.week_score = self.action_score + self.vote_off_score + self.jsp_score + self.loyalty_bonus
-			self.total_score += self.week_score
-			self.score_has_changed = False
-			self.save()
+				for last_pick in lastplayerepisode.get_team_picks():
+					if pick.castaway == last_pick.castaway:
+						self.loyalty_bonus += 1
+		for pick in self.get_team_picks():
+			ce = pick.castaway_episode()
+			if ce:
+				self.action_score += ce.score
+		for pick in self.get_vote_picks():
+			try:
+				vo_action = pick.castaway_episode().actions.filter(name = "Out") # TODO: dont hardcode this name
+			except:
+				vo_action = None
+			if vo_action:
+				self.correctly_predicted_votes += 1
+		self.vote_off_score = self.correctly_predicted_votes * 10 # TODO: dont hardcode this score
+		self.week_score = self.action_score + self.vote_off_score + self.jsp_score + self.loyalty_bonus
+		self.total_score += self.week_score
+		self.save()
 	class Meta:
 		ordering = ('episode', 'player')
 		get_latest_by = 'episode'
@@ -216,16 +213,13 @@ class CastawayEpisode(models.Model):
 	tribe = models.ForeignKey(Tribe)
 	actions = models.ManyToManyField(Action, blank = True)
 	score = models.IntegerField(default = 0)
-	score_has_changed = models.BooleanField(default = False)
 	def __unicode__(self):
 		return "%s | %s" % (self.castaway.name, self.episode)
 	def update_score(self):
-		if self.score_has_changed:
-			self.score = 0
-			for action in self.actions.all():
-				self.score += action.score
-			self.score_has_changed = False
-			self.save()
+		self.score = 0
+		for action in self.actions.all():
+			self.score += action.score
+		self.save()
 	def out_this_episode(self):
 		if self.castaway.out_episode_number == self.episode.number:
 			return True

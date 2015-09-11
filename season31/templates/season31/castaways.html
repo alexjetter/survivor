@@ -2,99 +2,103 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
 
-<div class="marg0 pad0 thecontainer">
+<table class="marg0 pad0 noborder"><tr>
 
-<div class="menu floatleft marg0">
-	{% include "season31/menu.html" %}
-</div>
-<div class="content floatleft marg0">
+	<td class="menu noborder texttop">
+		{% include "season31/menu.html" %}
+	</td>
+	<td class="content noborder texttop textleft">
 
-<span class="title">Castaways</span>
+		<span class="title">Castaways</span>
 
-<div class="spacer"></div>
+		<div class="spacer"></div>
 
-{% if user.is_superuser %}
-<table class="floatright marg4">
-	<tr>
-		<td>
-			<div class="textright">
-				<form action="{% url 'season31:addcastaway' %}" method="post">
-					{% csrf_token %}
-					<div>
-						<label for="name">Name</label>
-						<input type="text" name="name" id="name" />
+
+		<table>
+			<tr>
+				<td class="columnheader fgwhite pickwidth">Tribes</td>
+				{% for tribe in tribes%}
+				<td class="bgtribe{{ tribe.color }} pickwidth">{{ tribe }}</td>
+				{% endfor %}
+			</tr>
+		</table>
+
+		<div class="spacer"></div>
+
+		<table>
+			<tr>
+				<td class="columnheader"></td>
+				<td class="columnheader"></td>
+				<td class="columnheader fglightgrey">Age</td>
+				<td class="columnheader fglightgrey">Occupation</td>
+				{% for episode in episodes%}
+				<td class="columnheader"><a href="{% url 'season31:episode' episode.id %}" class="fgwhite">{{ episode.short }}</a></td>
+				{% endfor %}
+			</tr>
+			{% for castaway in castaways %}
+			<tr>
+				<td class="columnheader fgwhite textright{% if castaway.out_episode_number > 0 %} textstrike{% endif %}"><a href="{% url 'season31:castaway' castaway.id %}" class="fgwhite">{{ castaway }}</a></td>
+				<td class="fgwhite textright pad0"><img src="{% static 'season31/images/photos/'%}{{ castaway.name }}.jpg" title="{{ castaway.name }}" class="castawayimgsmall{% if castaway.out_episode_number > 0 %} outimg{% endif %}" /></td>
+				<td>{{ castaway.age }}</td>
+				<td>{{ castaway.occupation }}</td>
+				{% for ce in castaway.castawayepisode_set.all %}
+				<td class="bgtribe{{ ce.tribe.color }}">{{ ce.score }}</td>
+				{% endfor %}
+			</tr>
+			{% endfor %}
+		</table>
+
+	</td>
+	{% if user.is_superuser  %}
+	<td class="bgadmin marg0 pad0 noborder texttop">
+	
+		<table class="floatright marg4">
+			<tr>
+				<td class="bgwhite">
+					<div class="textright">
+						<form action="{% url 'season31:addcastaway' %}" method="post">
+							{% csrf_token %}
+							<div>
+								<label for="name">Name</label>
+								<input type="text" name="name" id="name" />
+							</div>
+							<div>
+								<label for="fullname">Full Name</label>
+								<input type="text" name="fullname" id="fullname" />
+							</div>
+							<div>
+								<label for="occupation">Occupation</label>
+								<input type="text" name="occupation" id="occupation" />
+							</div>
+							<div>
+								<label for="age">Age</label>
+								<input type="number" name="age" id="age" min=18 max=99 />
+							</div>
+							<div>
+								<input type="submit" value="Add Castaway" />
+							</div>
+						</form>
 					</div>
-					<div>
-						<label for="fullname">Full Name</label>
-						<input type="text" name="fullname" id="fullname" />
+				</td>
+			</tr>
+			<tr>
+				<td class="bgwhite">
+					<div class="textright">
+						<form action="{% url 'season31:deletecastaway' %}" method="post">
+							{% csrf_token %}
+							<select name="id">
+								{% for castaway in castaways %}
+								<option value="{{ castaway.id }}">{{ castaway.name }}</option>
+								{% endfor %}
+							</select>
+							<input type="submit" value="Delete Castaway" />
+						</form>
 					</div>
-					<div>
-						<label for="occupation">Occupation</label>
-						<input type="text" name="occupation" id="occupation" />
-					</div>
-					<div>
-						<label for="age">Age</label>
-						<input type="number" name="age" id="age" min=18 max=99 />
-					</div>
-					<div>
-						<input type="submit" value="Add Castaway" />
-					</div>
-				</form>
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<div class="textright">
-				<form action="{% url 'season31:deletecastaway' %}" method="post">
-					{% csrf_token %}
-					<select name="id">
-						{% for castaway in castaways %}
-						<option value="{{ castaway.id }}">{{ castaway.name }}</option>
-						{% endfor %}
-					</select>
-					<input type="submit" value="Delete Castaway" />
-				</form>
-			</div>
-		</td>
-	</tr>
-</table>
-{% endif %}
+				</td>
+			</tr>
+		</table>
 
-<table>
-	<tr>
-		<td class="columnheader fgwhite pickwidth">Tribes</td>
-		{% for tribe in tribes%}
-		<td class="bgtribe{{ tribe.color }} pickwidth">{{ tribe }}</td>
-		{% endfor %}
-	</tr>
-</table>
-
-<div class="spacer"></div>
-
-<table>
-	<tr>
-		<td class="columnheader"></td>
-		<td class="columnheader"></td>
-		<td class="columnheader fglightgrey">Age</td>
-		<td class="columnheader fglightgrey">Occupation</td>
-		{% for episode in episodes%}
-		<td class="columnheader"><a href="{% url 'season31:episode' episode.id %}" class="fgwhite">{{ episode.short }}</a></td>
-		{% endfor %}
-	</tr>
-	{% for castaway in castaways %}
-	<tr>
-		<td class="columnheader fgwhite textright{% if castaway.out_episode_number > 0 %} textstrike{% endif %}"><a href="{% url 'season31:castaway' castaway.id %}" class="fgwhite">{{ castaway }}</a></td>
-		<td class="fgwhite textright pad0"><img src="{% static 'season31/images/photos/'%}{{ castaway.name }}.jpg" title="{{ castaway.name }}" class="castawayimgsmall{% if castaway.out_episode_number > 0 %} outimg{% endif %}" /></td>
-		<td>{{ castaway.age }}</td>
-		<td>{{ castaway.occupation }}</td>
-		{% for ce in castaway.castawayepisode_set.all %}
-		<td class="bgtribe{{ ce.tribe.color }}">{{ ce.score }}</td>
-		{% endfor %}
-	</tr>
-	{% endfor %}
-</table>
-
-</div>
-
-</div>
+	</td>
+	{% endif %}
+	
+</tr></table>

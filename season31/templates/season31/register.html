@@ -2,29 +2,30 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
 
-<div class="marg0 pad0 thecontainer">
+<table class="marg0 pad0 noborder"><tr>
 
-<div class="menu floatleft marg0">
-	{% include "season31/menu.html" %}
-</div>
-<div class="content floatleft marg0">
+	<td class="menu noborder texttop">
+		{% include "season31/menu.html" %}
+	</td>
+	<td class="content noborder texttop textleft">
 
-<div class="title">Fantasy Survivor</div>
-<div class="subtitle">Worlds Apart</div>
-<div class="spacer"></div>
+		<div class="title">Fantasy Survivor</div>
+		<div class="subtitle">Worlds Apart</div>
+		<div class="spacer"></div>
 
-<div class="subtitle">Registration Page</div>
+		<div class="subtitle">Registration Page</div>
 
-{% if registered %}
-<div class="title">You're already registered!</div>
-{% else %}
-<form id="user_form" method="post" action="/season31/register/" enctype="multipart/form-data">
-	{% csrf_token %}
-	{{ user_form.as_p }}
-	{{ profile_form.as_p }}
-	<input type="submit" name="submit" value="Register" />
-</form>
-{% endif %}
-</div>
-
-</div>
+		{% if registered %}
+		<div class="title">You're already registered!</div>
+		{% else %}
+		<form id="user_form" method="post" action="/season31/register/" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{ user_form.as_p }}
+			{{ profile_form.as_p }}
+			<input type="submit" name="submit" value="Register" />
+		</form>
+		{% endif %}
+		
+	</td>
+	
+</tr></table>

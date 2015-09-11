@@ -1,52 +1,51 @@
 <div class="pad0 marg0">
 	{% if user.is_authenticated %}
 	<!--<div><a href="{% url 'season31:player' user.player.id %}" class="fgblack textbold">{{ user.username }}</a> ( <a href="{% url 'season31:logout' %}" class="fgblack">logout</a>)</div>-->
-	<div class="textleft font14 pad0 marg0"><a href="{% url 'season31:logout' %}" class="fgblack">logout</a></div>
-	<div class="textcenter textbold font24"><a href="{% url 'season31:player' user.player.id %}" class="fgblack">{{ user.username }}</a></div>
-	<div class="textcenter textbold"><a href="{% url 'season31:player' user.player.id %}" class="fgblack">Your Picks</a></div>
+	<div class="textleft font14 pad0 marg0"><a href="{% url 'season31:logout' %}" class="fgwhite">logout</a></div>
+	<div class="textcenter font24"><a href="{% url 'season31:player' user.player.id %}" class="fgwhite">{{ user.username }}</a></div>
+	<div class="textcenter textbold"><a href="{% url 'season31:player' user.player.id %}" class="fgwhite">Your Picks</a></div>
+	
 	<div class="padtb2"></div>
+	
 	{% else %}
 	<div class="textleft textbold">
-		<a href="{% url 'season31:login' %}" class="fgblack">Login</a>
-		<a href="{% url 'season31:register' %}" class="fgblack floatright">Register</a>
+		<a href="{% url 'season31:login' %}" class="fgwhite">Login</a>
+		<a href="{% url 'season31:register' %}" class="fgwhite floatright">Register</a>
 	</div>
 	<div class="padtb2"></div>
 	{% endif %}
 	
-	<div class="padtb1 bggrey marg0"></div>
 	<div class="textcenter font20 textbold bggreen3 menuitem marg0"><a href="{% url 'season31:leaderboard' %}" class="fgblack">Leaderboard</a></div>
-	<div class="padtb1 bggrey marg0"></div>
 	
 	<div class="padtb2"></div>
 	
 	{% if player.get_next_episode.check_lock %}
 	{% endif %}
-	<div class="bggrey textcenter padtb1 padlr4 marg0">Recent Episodes</div>
+	<div class="fglightgrey textcenter padtb1 padlr4 marg0">Recent Episodes</div>
 	{% if user.player and user.player.get_latest_episode %}
 	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:episode' user.player.get_latest_episode.id %}" class="fgblack">{{ user.player.get_latest_episode }} (Last)</a></div>
 	{% endif %}
 	{% if user.player and user.player.get_next_episode %}
 	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:episode' user.player.get_next_episode.id %}" class="fgblack">{{ user.player.get_next_episode }} (Next)</a></div>
 	{% endif %}
-	<div class="padtb1 bggrey marg0"></div>
+	
 	<div class="padtb2"></div>
 	
-	<div class="bggrey textcenter padtb1 padlr4 marg0">Data</div>
+	<div class="fglightgrey textcenter padtb1 padlr4 marg0">Data</div>
 	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:episodes' %}" class="fgblack">All Episodes</a></div>
 	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:castaways' %}" class="fgblack">Castaway List</a></div>
 	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:actions' %}" class="fgblack">Action List</a></div>
 	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:players' %}" class="fgblack">Player List</a></div>
-	<div class="padtb1 bggrey marg0"></div>
+	
 	<div class="padtb2"></div>
 	
-	<div class="bggrey textcenter padtb1 padlr4 marg0">Information</div>
+	<div class="fglightgrey textcenter padtb1 padlr4 marg0">Information</div>
 	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:index' %}" class="fgblack">Site Overview</a></div>
 	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:rules' %}" class="fgblack">Rules</a></div>
 	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:info' %}" class="fgblack">About This Season</a></div>
-	<div class="padtb1 bggrey marg0"></div>
+	
 	<div class="padtb2"></div>
 	
-	<div class="bggrey textcenter padtb1 padlr4 marg0">Make Fantasy Survivor Better</div>
+	<div class="fglightgrey textcenter padtb1 padlr4 marg0">Make Fantasy Survivor Better</div>
 	<div class="textcenter textbold bggreen1 menuitem marg0"><a href="https://docs.google.com/forms/d/1gJMYR88BStB_gxHaowpYHmOzfkO8o7JHDWUT9y80JVo/viewform" class="fgblack">Report Bug / Suggest Feature</a></div>
-	<div class="padtb1 bggrey marg0"></div>
 </div>

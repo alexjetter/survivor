@@ -2,32 +2,32 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
 
-<div class="marg0 pad0 thecontainer">
+<table class="marg0 pad0 noborder"><tr>
 
-<div class="menu floatleft marg0">
-	{% include "season31/menu.html" %}
-</div>
-<div class="content floatleft marg0">
+	<td class="menu noborder texttop">
+		{% include "season31/menu.html" %}
+	</td>
+	<td class="content noborder texttop textleft">
 
-<span class="title">Episodes</span>
+		<span class="title">Episodes</span>
 
-<div class="spacer"></div>
+		<div class="spacer"></div>
 
-<table>
-	<tr>
-		<td class="columnheader fglightgrey">#</td>
-		<td class="columnheader fglightgrey">Name</td>
-		<td class="columnheader fglightgrey">Air Date</td>
-	</tr>
-	{% for episode in episodes %}
-	<tr>
-		<td class="columnheader fgwhite">{{ episode.number }}</td>
-		<td><a href="{% url 'season31:episode' episode.id %}" class="fgblack">{{ episode.title }}</a></td>
-		<td>{{ episode.air_date }}</td>
-	</tr>
-	{% endfor %}
-</table>
+		<table>
+			<tr>
+				<td class="columnheader fglightgrey">#</td>
+				<td class="columnheader fglightgrey">Name</td>
+				<td class="columnheader fglightgrey">Air Date</td>
+			</tr>
+			{% for episode in episodes %}
+			<tr>
+				<td class="columnheader fgwhite">{{ episode.number }}</td>
+				<td><a href="{% url 'season31:episode' episode.id %}" class="fgblack">{{ episode.title }}</a></td>
+				<td>{{ episode.air_date }}</td>
+			</tr>
+			{% endfor %}
+		</table>
 
-</div>
-
-</div>
+	</td>
+	
+</tr></table>
