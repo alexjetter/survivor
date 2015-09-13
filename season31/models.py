@@ -126,6 +126,12 @@ class Episode(models.Model):
 			self.save()
 			return True
 		return False
+	def seconds_to_lock(self):
+		est = timezone('US/Eastern')
+		if self.is_locked:
+			return "Locked"
+		timedelta = self.air_date - datetime.now(est)
+		return (timedelta.days * 86400) + timedelta.seconds;
 	def time_to_lock(self):
 		est = timezone('US/Eastern')
 		if self.is_locked:

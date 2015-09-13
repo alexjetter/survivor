@@ -1,5 +1,7 @@
 ﻿{% load staticfiles %}
 
+<script src="{% static 'season31/helper.js' %}"></script>
+
 <link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
 
 <table class="marg0 pad0 noborder"><tr>
@@ -91,7 +93,7 @@
 						<td class="fgblack textleft pad8 noborder" colspan=17>Below are your picks for the next episode.  Your<span class="textbold">Team</span>is on the left and your<span class="textbold">Vote Off Predictions</span>are on the right.<br>You have until<span class="textbold">8:00 PM EST / 5:00 PST</span>to make your picks each week.<br>This form will automatically lock if you refresh after that.</td>
 					</tr>
 					<tr>
-						<td class="columnheader textleft pad4" colspan=17><span class="fggrey halftitle">Next Episode</span><span class="fgred2">{{ playerepisode.episode.time_to_lock }} left</span><span class="fglightgrey">to make changes to your picks</span></td>
+						<td class="columnheader textleft pad4" colspan=17><span class="fggrey halftitle">Next Episode</span><span class="fgred2">{{ playerepisode.episode.time_to_lock }} left<script>startTimer("{{ playerepisode.episode.seconds_to_lock }}");</script></span><span class="fglightgrey">to make changes to your picks</span></td>
 					</tr>
 				{% endif %}
 				<tr>
