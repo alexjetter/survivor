@@ -132,7 +132,7 @@
 	</td>
 	{% if user.is_superuser  %}
 	<td class="bgadmin marg0 pad0 noborder texttop">
-		<div class="bgred5 pad4 marg4">
+		<div class="bgdelete pad4 marg4">
 			<form action="{% url 'season31:deleteepisode' episode.id %}" method="post">
 				{% csrf_token %}
 				<input type="checkbox" name="check1" id="check1" />
