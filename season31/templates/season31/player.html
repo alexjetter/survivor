@@ -66,7 +66,7 @@
 			</tr>
 			<tr>
 				<td class="columnheader"></td>
-				<td class="columnheader fggreen4">Team Members<span class="font11 textbold textsuper">JSPs</td>
+				<td class="columnheader fggreen4">Team Members<span class="font11 textsuper">JSPs</td>
 				<td class="columnheader"></td>
 				<td class="columnheader fgred4">Vote Off Picks</td>
 				<td class="columnheader"></td>
@@ -98,7 +98,7 @@
 				{% endif %}
 				<tr>
 					<td class="columnheader"></td>
-					<td class="columnheader fggreen4">Team</td>
+					<td class="columnheader fggreen4">Team Members<span class="font11 textsuper">JSPs</td>
 					<td class="columnheader"></td>
 					<td class="columnheader fgred4">Vote Off Picks</td>
 					<td class="columnheader"></td>
@@ -123,7 +123,7 @@
 				<td class="pad0 marg0 bgblack">
 					{% for pick in playerepisode.get_team_picks %}
 					<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
-						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway.name }}<span class="font11 textbold textsuper">{{ pick.jsp_score }}</span></a>
+						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0 ">{{ pick.castaway.name }}<span class="font11 marg0 pad0 textbold textsuper">{{ pick.jsp_score }}</span></a>
 					</div>
 					{% endfor %}
 				</td>
@@ -133,7 +133,7 @@
 				<td class="pad0 marg0 bgblack">
 					{% for pick in playerepisode.get_vote_picks %}
 					<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
-						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway.name }}
+						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0 ">{{ pick.castaway.name }}
 						</a>
 					</div>
 					{% endfor %}
