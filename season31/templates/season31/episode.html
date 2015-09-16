@@ -167,6 +167,12 @@
 				<input type="submit" value="Update Episode Score" />
 			</form>
 		</div>
+		<div class="bgwhite pad4 marg4">
+			<form action="{% url 'season31:togglescorejsps' episode.id %}" method="post">
+				{% csrf_token %}
+				<input type="submit" value="JSPs {% if not episode.score_jsps %}NOT {% endif %}Scoring" />
+			</form>
+		</div>
 		{% if episode.is_locked %}
 		<div class="bgwhite pad4 marg4">
 			<form action="{% url 'season31:unlockepisode' episode.id %}" method="post">

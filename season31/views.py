@@ -186,6 +186,9 @@ def rolloverteam(episode):
 					currentvotesize += 1
 					if currentvotesize >= 2:
 						break
+		playerepisode = PlayerEpisode.objects.get(episode = episode, player = player)
+		playerepisode.score_lbs()
+		playerepisode.save()
 				
 def user_login(request):
 	context = RequestContext(request)
@@ -238,6 +241,9 @@ def update_episode_score(episode):
 	for castawayepisode in episode.castawayepisode_set.all():
 		castawayepisode.update_score()
 	for playerepisode in episode.playerepisode_set.all():
+		playerepisode.score_actions()
+		playerepisode.score_votes()
+		playerepisode.score_jsps()
 		playerepisode.update_score()
 	lastplace = 0
 	lastscore = 0
@@ -329,6 +335,13 @@ def updateepisodescore(request, e_id):
 		update_episode_score(episode)
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
 
+def togglescorejsps(request, e_id):
+	episode = Episode.objects.get(id = e_id)
+	if episode:
+		episode.score_jsps = not episode.score_jsps
+		episode.save()
+	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
+
 def unlockepisode(request, e_id):
 	episode = Episode.objects.get(id = e_id)
 	if episode:
@@ -389,6 +402,13 @@ def deleteepisode(request, e_id):
 		e.delete()
 		return HttpResponseRedirect('/season31/episodes')
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
+
+def toggleplayerpaidstatus(request, p_id):
+	player = Player.objects.get(id = p_id)
+	if "check" in request.POST and player:
+		player.paid = not player.paid
+		player.save()
+	return HttpResponseRedirect('/season31/player/%d' % int(p_id))
 
 def updatecastawayplace(request, c_id):
 	castaway = Castaway.objects.get(id = c_id)
@@ -497,6 +517,9 @@ def pickteams(request, pe_id):
 	else:
 		playerepisode.clear_team_picks()
 		makepick(playerepisode, picks, "TEAM")
+		playerepisode.score_lbs()
+		playerepisode.update_score()
+		playerepisode.save()
 		return HttpResponseRedirect('/season31/player/%d' % (playerepisode.player.id))
 
 def pickvotes(request, pe_id):

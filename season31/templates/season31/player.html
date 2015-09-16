@@ -22,13 +22,13 @@
 		{% endif %}
 					
 		{% if user.is_superuser and player.forgot_password %}
-			<div class="bgred4 pad8">Player forgot their password.  Set a new one for them and then tell them what it is.
-				<form action="{% url 'season31:resetpassword' player.id %}" method="post">
-					{% csrf_token %}
-					New Password: <input type="text" name="password" value="" size="30"/>
-					<input type="submit" value="Reset Password" />
-				</form>
-			</div>
+				<div class="bgred4 pad8">Player forgot their password.  Set a new one for them and then tell them what it is.
+					<form action="{% url 'season31:resetpassword' player.id %}" method="post">
+						{% csrf_token %}
+						New Password: <input type="text" name="password" value="" size="30"/>
+						<input type="submit" value="Reset Password" />
+					</form>
+				</div>
 		{% endif %}
 
 		{% if player == user.player%}
@@ -66,7 +66,7 @@
 			</tr>
 			<tr>
 				<td class="columnheader"></td>
-				<td class="columnheader fggreen4">Team</td>
+				<td class="columnheader fggreen4">Team Members<span class="font11 textbold textsuper">JSPs</td>
 				<td class="columnheader"></td>
 				<td class="columnheader fgred4">Vote Off Picks</td>
 				<td class="columnheader"></td>
@@ -80,7 +80,7 @@
 				<td class="columnheader"></td>
 				<td class="columnheader fglightgrey">±</td>
 				<td class="columnheader fglightgrey">Plc</td>
-				<td class="columnheader fglightgrey">Score</td>
+				<td class="columnheader fglightgrey">Total</td>
 				<td class="columnheader"></td>
 			</tr>
 			{% for playerepisode in player.playerepisode_set.all %}
@@ -112,7 +112,7 @@
 					<td class="columnheader"></td>
 					<td class="columnheader fglightgrey">±</td>
 					<td class="columnheader fglightgrey">Plc</td>
-					<td class="columnheader fglightgrey">Score</td>
+					<td class="columnheader fglightgrey">Total</td>
 					<td class="columnheader"></td>
 				</tr>
 			{% endif %}
@@ -123,15 +123,14 @@
 				<td class="pad0 marg0 bgblack">
 					{% for pick in playerepisode.get_team_picks %}
 					<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
-						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway.name }}
-						</a>
+						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway.name }}<span class="font11 textbold textsuper">{{ pick.jsp_score }}</span></a>
 					</div>
 					{% endfor %}
 				</td>
 
 				<td class="columnheader"></td>
 
-				<td class="pad0 marg0">
+				<td class="pad0 marg0 bgblack">
 					{% for pick in playerepisode.get_vote_picks %}
 					<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
 						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack pad0 marg0 ">{{ pick.castaway.name }}
@@ -249,5 +248,17 @@
 		</table>
 
 	</td>
+	{% if user.is_superuser  %}
+	<td class="bgadmin marg0 pad0 noborder texttop">
+		<div class="{% if player.paid %}bggreen4{% else %}bgred4{% endif %} pad4 marg4">
+			<form action="{% url 'season31:toggleplayerpaidstatus' player.id %}" method="post">
+				{% csrf_token %}
+				{% if player.paid %}Paid!{% else %}Indebted!{% endif %}
+				<input type="checkbox" name="check" id="check" class="marg0"/>
+				<input type="submit" value="Toggle Paid Status" />
+			</form>
+		</div>
+	</td>
+	{% endif %}
 	
 </tr></table>

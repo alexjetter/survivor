@@ -23,10 +23,10 @@
 	{% endif %}
 	<div class="fglightgrey textcenter padtb1 padlr4 marg0">Recent Episodes</div>
 	{% if user.player and user.player.get_latest_episode %}
-	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:episode' user.player.get_latest_episode.id %}" class="fgblack">{{ user.player.get_latest_episode }} (Last)</a></div>
+	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:episode' user.player.get_latest_episode.id %}" class="fgblack">Last Episode - {{ user.player.get_latest_episode.short }}</a></div>
 	{% endif %}
 	{% if user.player and user.player.get_next_episode %}
-	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:episode' user.player.get_next_episode.id %}" class="fgblack">{{ user.player.get_next_episode }} (Next)</a></div>
+	<div class="textcenter textbold menuitem marg0"><a href="{% url 'season31:episode' user.player.get_next_episode.id %}" class="fgblack">Upcoming Episode - {{ user.player.get_next_episode.short }}</a></div>
 	{% endif %}
 	
 	<div class="padtb2"></div>

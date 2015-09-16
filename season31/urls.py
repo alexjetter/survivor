@@ -36,6 +36,7 @@ urlpatterns = [
 	url(r'^updateepisodetitle/(?P<e_id>[0-9]+)/$', views.updateepisodetitle, name='updateepisodetitle'),
 	url(r'^updateepisodedatetime/(?P<e_id>[0-9]+)/$', views.updateepisodedatetime, name='updateepisodedatetime'),
 	url(r'^updateepisodeteamsize/(?P<e_id>[0-9]+)/$', views.updateepisodeteamsize, name='updateepisodeteamsize'),
+	url(r'^togglescorejsps/(?P<e_id>[0-9]+)/$', views.togglescorejsps, name='togglescorejsps'),
 	url(r'^updatecastawayplace/(?P<c_id>[0-9]+)/$', views.updatecastawayplace, name='updatecastawayplace'),
 	url(r'^updatecastawayname/(?P<c_id>[0-9]+)/$', views.updatecastawayname, name='updatecastawayname'),
 	url(r'^register/$', views.register, name='register'),
@@ -43,4 +44,5 @@ urlpatterns = [
 	url(r'^logout/$', views.user_logout, name='logout'),
 	url(r'^forgotpassword/$', views.user_forgotpassword, name='forgotpassword'),
 	url(r'^resetpassword/(?P<p_id>[0-9]+)/$', views.resetpassword, name='resetpassword'),
+	url(r'^toggleplayerpaidstatus/(?P<p_id>[0-9]+)/$', views.toggleplayerpaidstatus, name='toggleplayerpaidstatus'),
 ]

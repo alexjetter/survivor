@@ -164,6 +164,9 @@ table, th, td{
 .floatleft {float: left;}
 
 .font0{font-size: 0em;}
+.font8{font-size: 0.5em;}
+.font10{font-size: 0.625em;}
+.font11{font-size: 0.6875em;}
 .font12{font-size: 0.75em;}
 .font14{font-size: 0.875em;}
 .font16{font-size: 1em;}
@@ -179,15 +182,14 @@ table, th, td{
 .width100{width: 100%}
 .maxwidth720{max-width: 720px}
 
-.columnheader {
-	background-color: #222222;
-}
+.columnheader {background-color: #222222;}
 
 .textbold {font-weight: bold;}
 .textitalic {font-style: italic;}
 .textstrike {text-decoration: line-through;}
 
 .texttop {vertical-align: top;}
+.textsuper {vertical-align: top;}
 	
 .out {
 	text-decoration: line-through;

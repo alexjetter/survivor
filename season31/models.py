@@ -92,6 +92,7 @@ class Episode(models.Model):
 	castaways = models.ManyToManyField(Castaway, through = 'CastawayEpisode', through_fields = ('episode', 'castaway'))
 	team_size = models.PositiveIntegerField(default = 5)
 	is_locked = models.BooleanField(default = False)
+	score_jsps = models.BooleanField(default = False)
 	def __unicode__(self):
 		return "Episode %i" % (self.number)
 	def get_playerepisodes(self):
@@ -175,6 +176,46 @@ class PlayerEpisode(models.Model):
 	def replicate_picks(self):
 		for pick in get_team_picks():
 			print pick
+	def score_lbs(self):
+		try:
+			lastplayerepisode = PlayerEpisode.objects.get(player = self.player, episode = Episode.objects.get(number = self.episode.number - 1))
+		except:
+			lastplayerepisode = None
+		self.loyalty_bonus = 0
+		if lastplayerepisode:
+			for pick in self.get_team_picks():
+				for last_pick in lastplayerepisode.get_team_picks():
+					if pick.castaway == last_pick.castaway:
+						self.loyalty_bonus += 1
+						break
+		self.save()
+	def score_actions(self):
+		self.action_score = 0
+		for pick in self.get_team_picks():
+			castawayepisode = pick.castaway_episode()
+			if castawayepisode:
+				self.action_score += castawayepisode.score
+		self.save()
+	def score_votes(self):
+		self.correctly_predicted_votes = 0
+		for pick in self.get_vote_picks():
+			try:
+				vo_action = pick.castaway_episode().actions.filter(name = "Out") # TODO: dont hardcode this name
+			except:
+				vo_action = None
+			if vo_action:
+				self.correctly_predicted_votes += 1
+		self.vote_off_score = self.correctly_predicted_votes * 10 # TODO: dont hardcode this score
+		self.save()
+	def score_jsps(self):
+		self.jsp_score = 0
+		if not self.episode.score_jsps:
+			return
+		survivingcastaways = Castaway.objects.filter(out_episode_number = 0)
+		pastepisodes = Episode.objects.filter(number__lte = self.episode.number)
+		pastteampicks = TeamPick.objects.filter(castaway__in = survivingcastaways, episode__in = pastepisodes, player = self.player)
+		self.jsp_score = len(pastteampicks)
+		self.save()
 	def update_score(self):
 		try:
 			lastplayerepisode = PlayerEpisode.objects.get(player = self.player, episode = Episode.objects.get(number = self.episode.number - 1))
@@ -184,28 +225,7 @@ class PlayerEpisode(models.Model):
 			self.total_score = lastplayerepisode.total_score
 		else:
 			self.total_score = 0
-		self.loyalty_bonus = 0
 		self.week_score = 0
-		self.action_score = 0
-		self.jsp_score = 0
-		self.correctly_predicted_votes = 0
-		if lastplayerepisode:
-			for pick in self.get_team_picks():
-				for last_pick in lastplayerepisode.get_team_picks():
-					if pick.castaway == last_pick.castaway:
-						self.loyalty_bonus += 1
-		for pick in self.get_team_picks():
-			ce = pick.castaway_episode()
-			if ce:
-				self.action_score += ce.score
-		for pick in self.get_vote_picks():
-			try:
-				vo_action = pick.castaway_episode().actions.filter(name = "Out") # TODO: dont hardcode this name
-			except:
-				vo_action = None
-			if vo_action:
-				self.correctly_predicted_votes += 1
-		self.vote_off_score = self.correctly_predicted_votes * 10 # TODO: dont hardcode this score
 		self.week_score = self.action_score + self.vote_off_score + self.jsp_score + self.loyalty_bonus
 		self.total_score += self.week_score
 		self.save()
