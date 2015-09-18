@@ -189,7 +189,24 @@ def rolloverteam(episode):
 		playerepisode = PlayerEpisode.objects.get(episode = episode, player = player)
 		playerepisode.score_lbs()
 		playerepisode.save()
-				
+
+def calculatejspsforepisode(episode):
+	for player in Player.objects.all():
+		calculatejspsforplayerepisode(player, episode)
+
+def calculatejspsforplayerepisode(player, episode):
+	for castaway in Castaway.objects.all():
+		try:
+			pick = TeamPick.objects.get(castaway = castaway, episode = episode, player = player)
+		except:
+			pick = None
+		if not pick:
+			continue
+		pastepisodes = Episode.objects.filter(number__lte = episode.number)	
+		castawaypicks = TeamPick.objects.filter(castaway = castaway, episode__in = pastepisodes, player = player)
+		pick.jsp_score = len(castawaypicks)
+		pick.save()
+
 def user_login(request):
 	context = RequestContext(request)
 	if request.method == 'POST':
@@ -235,6 +252,11 @@ def user_logout(request):
 def updatescores(request):
 	for episode in Episode.objects.all():
 		update_episode_score(episode)
+	return HttpResponseRedirect('/season31/leaderboard/')
+
+def tallyalljsps(request):
+	for episode in Episode.objects.all():
+		calculatejspsforepisode(episode)
 	return HttpResponseRedirect('/season31/leaderboard/')
 
 def update_episode_score(episode):
@@ -340,6 +362,12 @@ def togglescorejsps(request, e_id):
 	if episode:
 		episode.score_jsps = not episode.score_jsps
 		episode.save()
+	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
+
+def tallyepisodejsps(request, e_id):
+	episode = Episode.objects.get(id = e_id)
+	if episode:
+		calculatejspsforepisode(episode)
 	return HttpResponseRedirect('/season31/episode/%d' % int(e_id))
 
 def unlockepisode(request, e_id):
@@ -520,6 +548,7 @@ def pickteams(request, pe_id):
 		playerepisode.score_lbs()
 		playerepisode.update_score()
 		playerepisode.save()
+		calculatejspsforplayerepisode(playerepisode.player, playerepisode.episode)
 		return HttpResponseRedirect('/season31/player/%d' % (playerepisode.player.id))
 
 def pickvotes(request, pe_id):
@@ -545,4 +574,3 @@ def makepick(playerepisode, picks, type):
 			pick = VotePick(player = playerepisode.player, episode = playerepisode.episode, castaway = castaway)
 			pick.save()
 		playerepisode.update_score()
-			

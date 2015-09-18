@@ -72,8 +72,8 @@
 				<td class="columnheader"></td>
 				<td class="columnheader fglightgrey">LB</td>
 				<td class="columnheader"></td>
-				<td class="columnheader fglightgrey">Action</td>
-				<td class="columnheader fglightgrey">Vote Off</td>
+				<td class="columnheader fggreen4">Action</td>
+				<td class="columnheader fgred4">VO</td>
 				<td class="columnheader fglightgrey">JSP</td>
 				<td class="columnheader"></td>
 				<td class="columnheader fglightgrey">Week</td>
@@ -104,8 +104,8 @@
 					<td class="columnheader"></td>
 					<td class="columnheader fglightgrey">LB</td>
 					<td class="columnheader"></td>
-					<td class="columnheader fglightgrey">Action</td>
-					<td class="columnheader fglightgrey">Vote Off</td>
+					<td class="columnheader fggreen4">Action</td>
+					<td class="columnheader fgred4">VO</td>
 					<td class="columnheader fglightgrey">JSP</td>
 					<td class="columnheader"></td>
 					<td class="columnheader fglightgrey">Week</td>
@@ -118,7 +118,7 @@
 			{% endif %}
 			{% if playerepisode.episode.is_locked or player == user.player%}
 			<tr>
-				<td class="columnheader"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode }}</a></td>
+				<td class="columnheader"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode.short }}</a></td>
 
 				<td class="pad0 marg0 bgblack">
 					{% for pick in playerepisode.get_team_picks %}

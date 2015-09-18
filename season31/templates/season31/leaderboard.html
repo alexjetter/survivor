@@ -53,7 +53,7 @@
 	{% if user.is_superuser  %}
 	<td class="bgadmin marg0 pad0 noborder texttop">
 
-		<div class="bggrey pad4 marg4">
+		<div class="bgwhite pad4 marg4">
 			<form action="{% url 'season31:addepisode' %}" method="post">
 				{% csrf_token %}
 				<div>
@@ -63,22 +63,25 @@
 				<input type="submit" class="width100" value="Add Episode" />
 			</form>
 		</div>
-		
-		<div class="bggrey pad4 marg4">
+		<div class="bgwhite pad4 marg4">
 			<form action="{% url 'season31:backfillteams' %}" method="post">
 				{% csrf_token %}
 				<input type="submit" class="width100" value="Backfill Teams" />
 			</form>
 		</div>
-		
-		<div class="bggrey pad4 marg4">
+		<div class="bgwhite pad4 marg4">
+			<form action="{% url 'season31:tallyalljsps' %}" method="post">
+				{% csrf_token %}
+				<input type="submit" class="width100" value="Tally All JSPs" />
+			</form>
+		</div>
+		<div class="bgwhite pad4 marg4">
 			<form action="{% url 'season31:updatescores' %}" method="post">
 				{% csrf_token %}
 				<input type="submit" class="width100" value="Recalculate All Scores" />
 			</form>
 		</div>
-		{% endif %}
-
 	</td>
+	{% endif %}
 	
 </tr></table>

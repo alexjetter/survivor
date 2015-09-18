@@ -136,48 +136,54 @@
 			<form action="{% url 'season31:deleteepisode' episode.id %}" method="post">
 				{% csrf_token %}
 				<input type="checkbox" name="check1" id="check1" />
-				<input type="submit" value="Delete This Episode" />
+				<input type="submit" class="width60" value="Delete This Episode" />
 				<input type="checkbox" name="check2" id="check2" />
 			</form>
 		</div>
 		<div class="bgwhite pad4 marg4">
 			<form action="{% url 'season31:updateepisodetitle' episode.id %}" method="post">
 				{% csrf_token %}
-				<input type="text" name="title" />
-				<input type="submit" value="Update Episode Title" />
+				<input type="text" class="width50 textcenter" name="title" />
+				<input type="submit" class="width40" value="Update Episode Title" />
 			</form>
 		</div>
 		<div class="bgwhite pad4 marg4">
 			<form action="{% url 'season31:updateepisodedatetime' episode.id %}" method="post">
 				{% csrf_token %}
-				<input type="text" name="airdatetime" value="YYYYmmdd HH"/>
-				<input type="submit" value="Update Air Date / Time" />
+				<input type="text" class="width40 textcenter" name="airdatetime" value="YYYYmmdd HH"/>
+				<input type="submit" class="width50" value="Update Air Date / Time" />
 			</form>
 		</div>
 		<div class="bgwhite pad4 marg4">
 			<form action="{% url 'season31:updateepisodeteamsize' episode.id %}" method="post">
 				{% csrf_token %}
-				<input type="number" name="teamsize" id="teamsize" min="2" max="10" value="{{ episode.team_size }}" />
-				<input type="submit" value="Update Team Size" />
+				<input type="number" class="width30 textcenter" name="teamsize" id="teamsize" min="2" max="10" value="{{ episode.team_size }}" />
+				<input type="submit" class="width60" value="Update Team Size" />
 			</form>
 		</div>
 		<div class="bgwhite pad4 marg4">
 			<form action="{% url 'season31:updateepisodescore' episode.id %}" method="post">
 				{% csrf_token %}
-				<input type="submit" value="Update Episode Score" />
+				<input type="submit" class="width100" value="Update Episode Score" />
 			</form>
 		</div>
 		<div class="bgwhite pad4 marg4">
 			<form action="{% url 'season31:togglescorejsps' episode.id %}" method="post">
 				{% csrf_token %}
-				<input type="submit" value="JSPs {% if not episode.score_jsps %}NOT {% endif %}Scoring" />
+				<input type="submit" class="width100" value="JSPs {% if not episode.score_jsps %}NOT {% endif %}Scoring" />
+			</form>
+		</div>
+		<div class="bgwhite pad4 marg4">
+			<form action="{% url 'season31:tallyepisodejsps' episode.id %}" method="post">
+				{% csrf_token %}
+				<input type="submit" class="width100" value="Tally Episode JSPs" />
 			</form>
 		</div>
 		{% if episode.is_locked %}
 		<div class="bgwhite pad4 marg4">
 			<form action="{% url 'season31:unlockepisode' episode.id %}" method="post">
 				{% csrf_token %}
-				<input type="submit" value="Unlock Episode" />
+				<input type="submit" class="width100" value="Unlock Episode" />
 			</form>
 		</div>
 		<table class="marg4">
