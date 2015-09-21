@@ -138,11 +138,7 @@ class Episode(models.Model):
 		if self.is_locked:
 			return "Locked"
 		timedelta = self.air_date - datetime.now(est)
-		if timedelta.days > 0:
-			return "%i day(s), %i hour(s), %i minute(s)" % (timedelta.days, timedelta.seconds//3600, (timedelta.seconds//60)%60)
-		if timedelta.days == 0 and timedelta.seconds//3600 > 0:
-			return "%i hour(s), %i minute(s)" % (timedelta.seconds//3600, (timedelta.seconds//60)%60)
-		return "%i minute(s)" % ((timedelta.seconds//60)%60)
+		return "%id %ih %im " % (timedelta.days, timedelta.seconds//3600, (timedelta.seconds//60)%60)
 	class Meta:
 		ordering = ('number',)
 		get_latest_by = 'air_date'

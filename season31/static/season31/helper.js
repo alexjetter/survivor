@@ -11,13 +11,21 @@
 		seconds = parseInt((timer % (      60))             , 10);
 
 		if (days > 0)
-			display.innerHTML = days + " day(s), " + hours + " hour(s), " + minutes + " minute(s) left";
-		else if (hours > 0)
-			display.innerHTML = hours + " hour(s), " + minutes + " minute(s) left";
+			if (days > 1)
+				if (hours != 1)
+					display.innerHTML = days + " days, " + hours + " hours";
+				else
+					display.innerHTML = days + " days, " + hours + " hour";
+			else
+				if (hours != 1)
+					display.innerHTML = days + " day, " + hours + " hours";
+				else
+					display.innerHTML = days + " day, " + hours + " hour";
 		else
-			display.innerHTML = minutes + " minute(s) left";
+			display.innerHTML = hours + ":" + minutes + ":" + seconds;
 
 		if (--timer < 0) 
 			timer = 0;
 	}, 1000);
+	// 7 days in seconds = 604800
 }

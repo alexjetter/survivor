@@ -20,16 +20,6 @@
 		{% if expired_error_message %}
 		<div class="bgred4 pad2 textcenter">Error: {{ expired_error_message }}</div>
 		{% endif %}
-					
-		{% if user.is_superuser and player.forgot_password %}
-				<div class="bgred4 pad8">Player forgot their password.  Set a new one for them and then tell them what it is.
-					<form action="{% url 'season31:resetpassword' player.id %}" method="post">
-						{% csrf_token %}
-						New Password: <input type="text" name="password" value="" size="30"/>
-						<input type="submit" value="Reset Password" />
-					</form>
-				</div>
-		{% endif %}
 
 		{% if player == user.player%}
 		<div class="pad4">
@@ -92,10 +82,10 @@
 					<tr>
 						<td class="fgblack textleft pad8 noborder" colspan=17>Below are your picks for the next episode.  Your<span class="textbold">Team</span>is on the left and your<span class="textbold">Vote Off Predictions</span>are on the right.<br>You have until<span class="textbold">8:00 PM EST / 5:00 PST</span>to make your picks each week.<br>This form will automatically lock if you refresh after that.</td>
 					</tr>
-					<tr>
-						<td class="columnheader textleft pad4" colspan=17><span class="fggrey halftitle">Next Episode</span><span class="fgred2">{{ playerepisode.episode.time_to_lock }} left<script>startTimer("{{ playerepisode.episode.seconds_to_lock }}");</script></span><span class="fglightgrey">to make changes to your picks</span></td>
-					</tr>
 				{% endif %}
+				<tr>
+					<td class="columnheader textleft pad4" colspan=17><span class="fggrey halftitle">Next Episode</span><span class="fgred2">{{ playerepisode.episode.time_to_lock }}<script>startTimer("{{ playerepisode.episode.seconds_to_lock }}");</script></span><span class="fggrey">left to make changes to your picks</span></td>
+				</tr>
 				<tr>
 					<td class="columnheader"></td>
 					<td class="columnheader fggreen4">Team Members<span class="font11 textsuper">JSPs</td>
@@ -123,7 +113,9 @@
 				<td class="pad0 marg0 bgblack">
 					{% for pick in playerepisode.get_team_picks %}
 					<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
-						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0 ">{{ pick.castaway.name }}<span class="font11 marg0 pad0 textbold textsuper">{{ pick.jsp_score }}</span></a>
+						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0" title="{{ pick.jsp_score }} JSPs banked at this point">{{ pick.castaway.name }}
+						<span class="font12 marg0 pad0 textbold textsuper">{{ pick.jsp_score }}</span>
+						</a>
 					</div>
 					{% endfor %}
 				</td>
@@ -258,6 +250,19 @@
 				<input type="submit" value="Toggle Paid Status" />
 			</form>
 		</div>
+		{% if player.forgot_password %}
+		<div class="bgred4 pad4 marg4 maxadminwidth textjustify">
+			Player forgot their password.  Set a new one for them and then tell them what it is.
+			<div class="padtb1"></div>
+			<div class="textbold textcenter">New Password:</div>
+			<form action="{% url 'season31:resetpassword' player.id %}" method="post">
+				{% csrf_token %}
+				<input type="text" class="width100" name="password" value="" size="30"/>
+				<div class="padtb1"></div>
+				<input type="submit" class="width100" value="Reset Password" />
+			</form>
+		</div>
+		{% endif %}
 	</td>
 	{% endif %}
 	
