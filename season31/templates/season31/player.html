@@ -50,111 +50,130 @@
 
 		<div class="halfspacer"></div>
 
+		<!-- PAST -->
 		<table class="noborder">
-			<tr>
-				<td class="columnheader textleft fggrey halftitle pad4" colspan=17>Past Episodes</td>
-			</tr>
-			<tr>
-				<td class="columnheader"></td>
-				<td class="columnheader fggreen4">Team Members<span class="font11 textsuper">JSPs</td>
-				<td class="columnheader"></td>
-				<td class="columnheader fgred4">Vote Off Picks</td>
-				<td class="columnheader"></td>
-				<td class="columnheader fglightgrey">LB</td>
-				<td class="columnheader"></td>
-				<td class="columnheader fggreen4">Action</td>
-				<td class="columnheader fgred4">VO</td>
-				<td class="columnheader fglightgrey">JSP</td>
-				<td class="columnheader"></td>
-				<td class="columnheader fglightgrey">Week</td>
-				<td class="columnheader"></td>
-				<td class="columnheader fglightgrey">±</td>
-				<td class="columnheader fglightgrey">Plc</td>
-				<td class="columnheader fglightgrey">Total</td>
-				<td class="columnheader"></td>
-			</tr>
-			{% for playerepisode in player.playerepisode_set.all %}
-			{% if not playerepisode.episode.is_locked and player == user.player and playerepisode.episode = player.get_next_episode %}
-				<tr>
-					<td class="noborder padtb4" colspan=17></td>
-				</tr>
-				{% if player.show_help_text %}
+			{% for playerepisode in pastplayerepisodes %}
+				{% if playerepisode.episode.number == 1 %}
 					<tr>
-						<td class="fgblack textleft pad8 noborder" colspan=17>Below are your picks for the next episode.  Your<span class="textbold">Team</span>is on the left and your<span class="textbold">Vote Off Predictions</span>are on the right.<br>You have until<span class="textbold">8:00 PM EST / 5:00 PST</span>to make your picks each week.<br>This form will automatically lock if you refresh after that.</td>
+						<td class="columnheader textleft fggrey halftitle pad4" colspan=17>Past Episodes</td>
+					</tr>
+					<tr>
+						<td class="columnheader"></td>
+						<td class="columnheader fggreen4">Team Members<span class="font11 textsuper">JSPs</td>
+						<td class="columnheader"></td>
+						<td class="columnheader fgred4">Vote Off Picks</td>
+						<td class="columnheader"></td>
+						<td class="columnheader fglightgrey">LB</td>
+						<td class="columnheader"></td>
+						<td class="columnheader fggreen4">Action</td>
+						<td class="columnheader fgred4">VO</td>
+						<td class="columnheader fglightgrey">JSP</td>
+						<td class="columnheader"></td>
+						<td class="columnheader fglightgrey">Week</td>
+						<td class="columnheader"></td>
+						<td class="columnheader fglightgrey">±</td>
+						<td class="columnheader fglightgrey">Plc</td>
+						<td class="columnheader fglightgrey">Total</td>
+						<td class="columnheader"></td>
 					</tr>
 				{% endif %}
 				<tr>
-					<td class="columnheader textleft pad4" colspan=17><span class="fggrey halftitle">Next Episode</span><span class="fgred2">{{ playerepisode.episode.time_to_lock }}<script>startTimer("{{ playerepisode.episode.seconds_to_lock }}");</script></span><span class="fggrey">left to make changes to your picks</span></td>
+					<td class="columnheader"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode.short }}</a></td>
+
+					<td class="pad0 marg0 bgblack">
+						{% for pick in playerepisode.get_team_picks %}
+						<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
+							<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0" title="{{ pick.jsp_score }} JSPs banked at this point">{{ pick.castaway.name }}
+							<span class="font12 marg0 pad0 textbold textsuper">{{ pick.jsp_score }}</span>
+							</a>
+						</div>
+						{% endfor %}
+					</td>
+
+					<td class="columnheader"></td>
+
+					<td class="pad0 marg0 bgblack">
+						{% for pick in playerepisode.get_vote_picks %}
+						<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
+							<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0 ">{{ pick.castaway.name }}
+							</a>
+						</div>
+						{% endfor %}
+					</td>
+
+					<td class="columnheader"></td>
+					<td>{{ playerepisode.loyalty_bonus }}</td>
+					<td class="columnheader"></td>
+					<td>{{ playerepisode.action_score }}</td>
+					<td>{{ playerepisode.vote_off_score }}</td>
+					<td>{{ playerepisode.jsp_score }}</td>
+					<td class="columnheader"></td>
+					<td>{{ playerepisode.week_score }}</td>
+					<td class="columnheader"></td>
+					<td class="columnheader{% if playerepisode.movement > 0 %} fggreen5{% elif playerepisode.movement < 0 %} fgred5{% endif%}">{{ playerepisode.movement }}</td>
+					<td>{{ playerepisode.place }}</td>
+					<td>{{ playerepisode.total_score }}</td>
+					<td class="columnheader"></td>
 				</tr>
-				<tr>
-					<td class="columnheader"></td>
-					<td class="columnheader fggreen4">Team Members<span class="font11 textsuper">JSPs</td>
-					<td class="columnheader"></td>
-					<td class="columnheader fgred4">Vote Off Picks</td>
-					<td class="columnheader"></td>
-					<td class="columnheader fglightgrey">LB</td>
-					<td class="columnheader"></td>
-					<td class="columnheader fggreen4">Action</td>
-					<td class="columnheader fgred4">VO</td>
-					<td class="columnheader fglightgrey">JSP</td>
-					<td class="columnheader"></td>
-					<td class="columnheader fglightgrey">Week</td>
-					<td class="columnheader"></td>
-					<td class="columnheader fglightgrey">±</td>
-					<td class="columnheader fglightgrey">Plc</td>
-					<td class="columnheader fglightgrey">Total</td>
-					<td class="columnheader"></td>
-				</tr>
-			{% endif %}
-			{% if playerepisode.episode.is_locked or player == user.player%}
-			<tr>
-				<td class="columnheader"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode.short }}</a></td>
+			{% endfor %}
+		</table>
+		
+		<div class="halfspacer"></div>
+		
+		<!-- FUTURE -->
+		<table class="noborder">
+			{% for playerepisode in futureplayerepisodes %}
+				{% if player == user.player %}
+					{% if player.show_help_text %}
+						<tr>
+							<td class="fgblack textleft pad8 noborder" colspan=7>Below are your picks for the next episode.  Your<span class="textbold">Team</span>is on the left and your<span class="textbold">Vote Off Predictions</span>are on the right.<br>You have until<span class="textbold">8:00 PM EST / 5:00 PST</span>to make your picks each week.<br>This form will automatically lock if you refresh after that.</td>
+						</tr>
+					{% endif %}
+					<tr>
+						<td class="columnheader textleft pad4" colspan=7><span class="fggrey halftitle">Upcoming  Episode</span><span class="fgred2">{{ playerepisode.episode.time_to_lock }}<script>startTimer("{{ playerepisode.episode.seconds_to_lock }}");</script></span><span class="fggrey">left to make changes to your picks</span></td>
+					</tr>
+					<tr>
+						<td class="columnheader"></td>
+						<td class="columnheader fggreen4">Team Members<span class="font11 textsuper">JSPs</td>
+						<td class="columnheader"></td>
+						<td class="columnheader fgred4">Vote Off Picks</td>
+						<td class="columnheader"></td>
+						<td class="columnheader fglightgrey">LB</td>
+						<td class="columnheader"></td>
+					</tr>
+					<tr>
+						<td class="columnheader"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode.short }}</a></td>
 
-				<td class="pad0 marg0 bgblack">
-					{% for pick in playerepisode.get_team_picks %}
-					<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
-						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0" title="{{ pick.jsp_score }} JSPs banked at this point">{{ pick.castaway.name }}
-						<span class="font12 marg0 pad0 textbold textsuper">{{ pick.jsp_score }}</span>
-						</a>
-					</div>
-					{% endfor %}
-				</td>
+						<td class="pad0 marg0 bgblack">
+							{% for pick in playerepisode.get_team_picks %}
+							<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
+								<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0" title="{{ pick.jsp_score }} JSPs banked at this point">{{ pick.castaway.name }}
+								<span class="font12 marg0 pad0 textbold textsuper">{{ pick.jsp_score }}</span>
+								</a>
+							</div>
+							{% endfor %}
+						</td>
 
-				<td class="columnheader"></td>
+						<td class="columnheader"></td>
 
-				<td class="pad0 marg0 bgblack">
-					{% for pick in playerepisode.get_vote_picks %}
-					<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
-						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0 ">{{ pick.castaway.name }}
-						</a>
-					</div>
-					{% endfor %}
-				</td>
+						<td class="pad0 marg0 bgblack">
+							{% for pick in playerepisode.get_vote_picks %}
+							<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
+								<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0 ">{{ pick.castaway.name }}
+								</a>
+							</div>
+							{% endfor %}
+						</td>
 
-				<td class="columnheader"></td>
-				<td>{{ playerepisode.loyalty_bonus }}</td>
-				<td class="columnheader"></td>
-				<td>{{ playerepisode.action_score }}</td>
-				<td>{{ playerepisode.vote_off_score }}</td>
-				<td>{{ playerepisode.jsp_score }}</td>
-				<td class="columnheader"></td>
-				<td>{{ playerepisode.week_score }}</td>
-				<td class="columnheader"></td>
-				<td class="columnheader{% if playerepisode.movement > 0 %} fggreen5{% elif playerepisode.movement < 0 %} fgred5{% endif%}">{{ playerepisode.movement }}</td>
-				<td>{{ playerepisode.place }}</td>
-				<td>{{ playerepisode.total_score }}</td>
-				<td class="columnheader"></td>
-			</tr>
-			{% else %}
-			<tr>
-				<td class="columnheader"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode }}</a></td>
-				<td class="textleft" colspan=15>Picks will be revealed in {{ playerepisode.episode.time_to_lock }}</td>
-				<td class="columnheader"></td>
-			</tr>
-			<tr>
-				<td class="columnheader padtb4" colspan=17></td>
-			</tr>
-			{% endif %}
+						<td class="columnheader"></td>
+						<td>{{ playerepisode.loyalty_bonus }}</td>
+						<td class="columnheader"></td>
+					</tr>
+					{% else %}
+					<tr>
+						<td class="noborder"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgblack textbold">{{ playerepisode.episode }}</a> Picks will be revealed in<span>{{ playerepisode.episode.time_to_lock }}<script>startTimer("{{ playerepisode.episode.seconds_to_lock }}");</script></span></td>
+					</tr>
+				{% endif %}
 			{% endfor %}
 			{% if user.player == player and not player.playerepisode_set.latest.episode.is_locked %}
 			<!--

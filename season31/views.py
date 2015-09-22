@@ -59,6 +59,13 @@ class ActionsView(generic.ListView):
 class PlayerView(generic.DetailView):
 	model = Player
 	template_name = 'season31/player.html'
+	def get_context_data(self, **kwargs):
+		context = super(PlayerView, self).get_context_data(**kwargs)
+		pastepisodes = Episode.objects.filter(is_locked = True)
+		context['pastplayerepisodes'] = PlayerEpisode.objects.filter(player = context['player'], episode__in = pastepisodes)
+		futureepisodes = Episode.objects.filter(is_locked = False)
+		context['futureplayerepisodes'] = PlayerEpisode.objects.filter(player = context['player'], episode__in = futureepisodes)
+		return context
 
 class CastawayView(generic.DetailView):
 	model = Castaway
