@@ -36,7 +36,7 @@
 				<td>{{ playerepisode.week_score }}</td>
 				<td class="columnheader"></td>
 				<td class="pad0 marg0">
-					{% if latestepisode.is_locked %}
+					{% if playerepisode.episode.is_locked %}
 					{% for pick in playerepisode.get_team_picks %}
 					<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft padtb1 marg0 pickwidth" title="{{ pick.castaway }}">
 						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0">

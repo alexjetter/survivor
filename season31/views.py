@@ -17,11 +17,14 @@ from .models import Player, Castaway, TeamPick, VotePick, Episode, PlayerEpisode
 class LeaderboardView(generic.ListView):
 	context_object_name = 'playerepisodes'
 	template_name = 'season31/leaderboard.html'
-	latestepisode = Episode.objects.filter(is_locked = True).latest()
+	try:
+		latestepisode = Episode.objects.filter(is_locked = True).latest()
+	except:
+		latestepisode = Episode.objects.latest()
 	queryset = PlayerEpisode.objects.filter(player__hidden = False, episode= latestepisode).order_by('-total_score')
 	def get_context_data(self, **kwargs):
 		context = super(LeaderboardView, self).get_context_data(**kwargs)
-		context['latestepisode'] = Episode.objects.filter(is_locked = True).latest()
+		context['latestepisode'] = self.latestepisode
 		return context
 
 class CastawaysView(generic.ListView):
