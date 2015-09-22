@@ -12,7 +12,7 @@
 		<div class="halftitle textcenter">Leaderboard</div>
 		
 		{% if latestepisode %}
-		<div class="text14 textcenter">{% if latestepisode.is_locked %}After{% else %}Before{% endif %} {{ latestepisode }}</div>
+		<div class="textcenter">{{ latestepisode }}</div>
 		{% endif %}
 
 		<table>
@@ -22,7 +22,7 @@
 				<td class="columnheader fglightgrey">Player</td>
 				<td class="columnheader fglightgrey">Pts</td>
 				<td class="columnheader"></td>
-				<td class="columnheader fglightgrey">{{ latestepisode.short }}</td>
+				<td class="columnheader fglightgrey">{% if latestepisode %}{{ latestepisode.short }}{% else %}Week{% endif %}</td>
 				<td class="columnheader"></td>
 				<td class="columnheader fglightgrey">Team</td>
 			</tr>
@@ -36,7 +36,7 @@
 				<td>{{ playerepisode.week_score }}</td>
 				<td class="columnheader"></td>
 				<td class="pad0 marg0">
-					{% if playerepisode.episode.is_locked %}
+					{% if latestepisode.is_locked %}
 					{% for pick in playerepisode.get_team_picks %}
 					<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft padtb1 marg0 pickwidth" title="{{ pick.castaway }}">
 						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0">

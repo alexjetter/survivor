@@ -57,10 +57,6 @@ class Player(models.Model):
 		except:
 			nextepisode = None;
 		return nextepisode
-	def get_leaderboard_player_episodes(self):
-		players = Player.objects.filter(hidden = False)
-		playerepisodes = PlayerEpisode.objects.filter(player__in = players)
-		return playerepisodes.filter(episode = self.get_latest_episode()).order_by('-total_score')
 	class Meta:
 		ordering = ('username',)
 
@@ -96,9 +92,7 @@ class Episode(models.Model):
 	def __unicode__(self):
 		return "Episode %i" % (self.number)
 	def get_playerepisodes(self):
-		players = Player.objects.filter(hidden = False)
-		playerepisodes = PlayerEpisode.objects.filter(player__in = players)
-		return playerepisodes.filter(episode = self).order_by('-total_score')
+		return PlayerEpisode.objects.filter(player__hidden = False, episode = self).order_by('-total_score')
 	def update_scores(self):
 		return update_scores()
 	def get_prev_episode(self):

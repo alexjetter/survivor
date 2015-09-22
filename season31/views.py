@@ -15,19 +15,13 @@ from django.contrib.auth.models import User
 from .models import Player, Castaway, TeamPick, VotePick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action
 
 class LeaderboardView(generic.ListView):
-	context_object_name = 'latestepisode'
+	context_object_name = 'playerepisodes'
 	template_name = 'season31/leaderboard.html'
-	try:
-		lastepisode = Episode.objects.filter(is_locked = True).latest()
-	except:
-		lastepisode = Episode.objects.latest()
-	print lastepisode
-	queryset = lastepisode
+	latestepisode = Episode.objects.filter(is_locked = True).latest()
+	queryset = PlayerEpisode.objects.filter(player__hidden = False, episode= latestepisode).order_by('-total_score')
 	def get_context_data(self, **kwargs):
 		context = super(LeaderboardView, self).get_context_data(**kwargs)
-		players = Player.objects.filter(hidden = False)
-		playerepisodes = PlayerEpisode.objects.filter(player__in = players)
-		context['playerepisodes'] = playerepisodes.filter(episode = self.lastepisode).order_by('-total_score')
+		context['latestepisode'] = Episode.objects.filter(is_locked = True).latest()
 		return context
 
 class CastawaysView(generic.ListView):
@@ -61,10 +55,8 @@ class PlayerView(generic.DetailView):
 	template_name = 'season31/player.html'
 	def get_context_data(self, **kwargs):
 		context = super(PlayerView, self).get_context_data(**kwargs)
-		pastepisodes = Episode.objects.filter(is_locked = True)
-		context['pastplayerepisodes'] = PlayerEpisode.objects.filter(player = context['player'], episode__in = pastepisodes)
-		futureepisodes = Episode.objects.filter(is_locked = False)
-		context['futureplayerepisodes'] = PlayerEpisode.objects.filter(player = context['player'], episode__in = futureepisodes)
+		context['pastplayerepisodes'] = PlayerEpisode.objects.filter(player = context['player'], episode__is_locked = True)
+		context['futureplayerepisodes'] = PlayerEpisode.objects.filter(player = context['player'], episode__is_locked = False)
 		return context
 
 class CastawayView(generic.DetailView):
@@ -131,6 +123,7 @@ def pickrandomifempty(episode):
 			for ce in votepicks:
 				pick = VotePick(episode = episode, player = player, castaway = ce.castaway)
 				pick.save()
+	calculatejspsforepisode(episode)
 
 def rolloverteam(episode):
 	lastepisode = episode.get_prev_episode()
@@ -196,6 +189,8 @@ def rolloverteam(episode):
 		playerepisode = PlayerEpisode.objects.get(episode = episode, player = player)
 		playerepisode.score_lbs()
 		playerepisode.save()
+		calculatejspsforepisode(episode)
+		
 
 def calculatejspsforepisode(episode):
 	for player in Player.objects.all():
@@ -209,8 +204,7 @@ def calculatejspsforplayerepisode(player, episode):
 			pick = None
 		if not pick:
 			continue
-		pastepisodes = Episode.objects.filter(number__lte = episode.number)	
-		castawaypicks = TeamPick.objects.filter(castaway = castaway, episode__in = pastepisodes, player = player)
+		castawaypicks = TeamPick.objects.filter(castaway = castaway, episode__number__lte = episode.number, player = player)
 		pick.jsp_score = len(castawaypicks)
 		pick.save()
 
