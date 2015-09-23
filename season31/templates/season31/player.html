@@ -12,8 +12,8 @@
 	<td class="content noborder texttop textleft">
 
 		<span class="title">{{ player.user.username }}</span>
+		<span class="font20">{{ player.user.get_full_name }}</span>
 		{% if player == user.player or user.is_superuser%}
-			<span class="font20">{{ player.user.get_full_name }}</span>
 			<span>( {{ player.user.email }} )</span>
 		{% endif %}
 
@@ -39,10 +39,17 @@
 					<td class="bggrey fgwhite pad4 noborder">
 						<form action="{% url 'season31:resetpassword' player.id %}" method="post">
 							{% csrf_token %}
-							Change Password? <input type="password" name="password" value="" size="30"/>
+							Change Password? <input type="text" name="password" value="" size="30"/>
 							<input type="submit" value="Change Password" />
 						</form>
 					</td>
+					{% if reset_password_error_message %}
+					<td class="noborder">
+					</td>
+					<td class="bgred4 pad4 noborder">
+						{{ reset_password_error_message }}
+					</td>
+					{% endif %}
 				</tr>
 			</table>
 		</div>
@@ -189,11 +196,7 @@
 					<form action="{% url 'season31:pickteams' player.playerepisode_set.latest.id %}" method="post">
 						{% csrf_token %}
 						<div class="bgtribe{{ castawayepisode.tribe.color }} pad2 marg0">
-							{% if player.playerepisode_set.latest.get_team_picks %}
-							Pick New Team?
-							{% else %}
-							Pick {{ player.get_next_episode.team_size }} Team Members:
-							{% endif %}
+							Pick Your Team? ({{ player.get_next_episode.team_size }} Castaways)
 						</div>
 						<table class="noborder width100">
 						{% for castawayepisode in player.playerepisode_set.latest.get_pick_options %}
@@ -225,7 +228,7 @@
 						{% csrf_token %}
 						<div class="bgtribe{{ castawayepisode.tribe.color }} pad2 marg0">
 							{% if player.playerepisode_set.latest.get_vote_picks %}
-							Pick New Votes?
+							Pick New Votes? (2)
 							{% else %}
 							Pick 2 Votes:
 							{% endif %}

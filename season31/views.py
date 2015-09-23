@@ -96,12 +96,12 @@ def register(request):
 			firstepisode = Episode.objects.order_by('air_date').first()
 			if firstepisode.check_lock():
 				pickrandomifempty(firstepisode)
-			for episode in Episode.objects.all():
+			for episode in Episode.objects.filter(number__gt = 1):
 				rolloverteam(episode)
 			registered = True 
 			user = authenticate(username = request.POST['username'], password = request.POST['password'])
 			login(request, user)
-			return render(request, 'season31/player.html', {'player': user.player,})
+			return HttpResponseRedirect('/season31/player/%d' % (user.player.id))
 		else:
 			print user_form.errors
 	else:
@@ -220,7 +220,7 @@ def user_login(request):
 		if user:
 			if user.is_active:
 				login(request, user)
-				return render(request, 'season31/player.html', {'player': user.player,})
+				return HttpResponseRedirect('/season31/player/%d' % (user.player.id))
 			else:
 				return HttpResponse("Your account is disabled.")
 		else:
@@ -474,12 +474,17 @@ def togglehelptext(request, p_id):
 def resetpassword(request, p_id):
 	context = RequestContext(request)
 	player = Player.objects.get(id = p_id)
+	if len(request.POST['password']) < 1:
+		return render(request, 'season31/player.html', {'player': player, 'reset_password_error_message': "Password must not be blank",})
 	if request.method == 'POST' and player:
 		user = player.user
 		user.set_password(request.POST['password'])
 		user.save()
 		player.forgot_password = False
 		player.save()
+		user = authenticate(username = user.username, password = request.POST['password'])
+		login(request, user)
+		return HttpResponseRedirect('/season31/player/%d' % (user.player.id))
 	return HttpResponseRedirect('/season31/player/%d' % int(p_id))
 		
 

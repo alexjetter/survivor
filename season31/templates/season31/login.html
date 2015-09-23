@@ -21,17 +21,24 @@
 			{% csrf_token %}
 			<table class="noborder">
 				<tr>
-					<td class="noborder">username: </td>
-					<td class="noborder"><input type="text" name="username" value="" size="30"/></td>
+					<td class="noborder">username:</td>
+					<td class="noborder"><input type="text" name="username" value="" size="30"/></td><td class="noborder fggrey textleft" rowspan=2>Username and password are case sensitive
+					<br/>
+					If you can't remember your username,
+					<br/>
+					check the <a href="{% url 'season31:players' %}" class="fgdarkgrey textbold">Player List</a></td>
 				</tr>
 				<tr>
 					<td class="noborder">password: </td>
 					<td class="noborder"><input type="password" name="password" value="" size="30"/></td>
 				</tr>
+				<tr>
+					<td class="noborder" colspan=2>
+						{{ profile_form.as_p }}
+						<input type="submit" class="width100 pad4" name="submit" value="Login" />
+					</td>
+				</tr>
 			</table>
-			<div class="halfspacer"></div>
-			{{ profile_form.as_p }}
-			<input type="submit" name="submit" value="Login" />
 		</form>
 
 		<div class="spacer"></div>
@@ -41,7 +48,7 @@
 			Forgot your password?
 		</div>
 		<div class="maxwidth720 fgdarkgrey textjustify">
-			Clay (503-351-0779) or Alex (509-391-5997) can reset it for you.  Just fill out your username below, then shoot one of us a text.  We have to do it manually, so it won't be right away.
+			Fill out your username below, then text Clay (503-351-0779) or Alex (509-391-5997) and we can reset it for you.  We have to do it manually, so it won't be right away.
 		</div>
 		<div class="pad8">
 			<form action="{% url 'season31:forgotpassword' %}" method="post">
