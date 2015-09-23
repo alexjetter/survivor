@@ -196,7 +196,7 @@
 					<form action="{% url 'season31:pickteams' player.playerepisode_set.latest.id %}" method="post">
 						{% csrf_token %}
 						<div class="bgtribe{{ castawayepisode.tribe.color }} pad2 marg0">
-							Pick Your Team? ({{ player.get_next_episode.team_size }} Castaways)
+							Pick Your Team! ({{ player.get_next_episode.team_size }} Castaways)
 						</div>
 						<table class="noborder width100">
 						{% for castawayepisode in player.playerepisode_set.latest.get_pick_options %}
@@ -227,11 +227,7 @@
 					<form action="{% url 'season31:pickvotes' player.playerepisode_set.latest.id %}" method="post">
 						{% csrf_token %}
 						<div class="bgtribe{{ castawayepisode.tribe.color }} pad2 marg0">
-							{% if player.playerepisode_set.latest.get_vote_picks %}
-							Pick New Votes? (2)
-							{% else %}
-							Pick 2 Votes:
-							{% endif %}
+							Pick Your Votes! (2)
 						</div>
 						<table class="noborder width100">
 						{% for castawayepisode in player.playerepisode_set.latest.get_pick_options %}
