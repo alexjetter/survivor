@@ -19,6 +19,7 @@ urlpatterns = [
 	url(r'^addepisode/$', views.addepisode, name='addepisode'),
 	url(r'^tallyalljsps/$', views.tallyalljsps, name='tallyalljsps'),
 	url(r'^backfillteams/$', views.backfillteams, name='backfillteams'),
+	url(r'^playerrolloverteam/(?P<pe_id>[0-9]+)/$', views.playerrolloverteam, name='playerrolloverteam'),
 	url(r'^pickteams/(?P<pe_id>[0-9]+)/$', views.pickteams, name='pickteams'),
 	url(r'^pickvotes/(?P<pe_id>[0-9]+)/$', views.pickvotes, name='pickvotes'),
 	url(r'^updateceactions/(?P<e_id>[0-9]+)/$', views.updateceactions, name='updateceactions'),

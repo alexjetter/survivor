@@ -96,8 +96,8 @@ def register(request):
 			firstepisode = Episode.objects.order_by('air_date').first()
 			if firstepisode.check_lock():
 				pickrandomifempty(firstepisode)
-			for episode in Episode.objects.filter(number__gt = 1):
-				rolloverteam(episode)
+			#for episode in Episode.objects.filter(number__gt = 1):
+			#	rolloverteams(episode)
 			registered = True 
 			user = authenticate(username = request.POST['username'], password = request.POST['password'])
 			login(request, user)
@@ -111,7 +111,7 @@ def register(request):
 def backfillteams(request):
 	pickrandomifempty(Episode.objects.order_by('air_date').first())
 	for episode in Episode.objects.filter(is_locked = True):
-		rolloverteam(episode)
+		rolloverteams(episode)
 	return HttpResponseRedirect('/season31/episode/%d' % (Episode.objects.latest().id))
 	
 def pickrandomifempty(episode):
@@ -128,72 +128,74 @@ def pickrandomifempty(episode):
 				pick.save()
 	calculatejspsforepisode(episode)
 
-def rolloverteam(episode):
-	lastepisode = episode.get_prev_episode()
+def rolloverteams(episode):
 	for player in Player.objects.all():
-		# Bring over still valid picks
-		#print "-----------------------"
-		#print "%s rollover" % (player)
-		if lastepisode:
-			if not TeamPick.objects.filter(episode = episode, player = player):
-				lastepisodeteampicks = TeamPick.objects.filter(player = player, episode = lastepisode)
-				for pick in lastepisodeteampicks:
-					if pick.castaway.out_episode_number == 0:
-						newpick = TeamPick(episode = episode, player = player, castaway = pick.castaway)
-						newpick.save()
-			if not VotePick.objects.filter(episode = episode, player = player):
-				lastepisodevotepicks = VotePick.objects.filter(player = player, episode = lastepisode)
-				for pick in lastepisodevotepicks:
-					if pick.castaway.out_episode_number == 0:
-						newpick = VotePick(episode = episode, player = player, castaway = pick.castaway)
-						newpick.save()
-		# Drop random if necessary
-		teampicks = TeamPick.objects.filter(episode = episode, player = player).order_by('?')
-		votepicks = VotePick.objects.filter(episode = episode, player = player).order_by('?')
-		currentteamsize = len(teampicks)
-		currentvotesize = len(votepicks)
-		while currentteamsize > int(episode.team_size):
-			#print "t(%i) v(%i) ets(%s) | dropping someone from team" % (currentteamsize, currentvotesize, episode.team_size)
-			TeamPick.objects.filter(episode = episode, player = player).order_by('?').first().delete()
-			currentteamsize -= 1
-		while currentvotesize > 2:
-			#print "t(%i) v(%i) ets(%s) | dropping someone from votes" % (currentteamsize, currentvotesize, episode.team_size)
-			VotePick.objects.filter(episode = episode, player = player).order_by('?').first().delete()
-			currentvotesize -= 1
-		# Pick up random if necessary
-		if currentteamsize < int(episode.team_size):
-			randomteampicks = Castaway.objects.filter(out_episode_number = 0).order_by('?')[:episode.team_size]
-			for castaway in randomteampicks:
-				try:
-					existingpick = TeamPick.objects.get(player = player, episode = episode, castaway = castaway)
-				except:
-					existingpick = None
-				if not existingpick:
-					#print "t(%i) v(%i) ets(%s) | adding %s to team" % (currentteamsize, currentvotesize, episode.team_size, castaway)
-					randpick = TeamPick(player = player, episode = episode, castaway = castaway)
-					randpick.save()
-					currentteamsize += 1
-					if currentteamsize >= int(episode.team_size):
-						break
-		if currentvotesize < 2:
-			randomvotepicks = Castaway.objects.filter(out_episode_number = 0).order_by('?')[:2]
-			for castaway in randomvotepicks:
-				try:
-					existingpick = VotePick.objects.get(player = player, episode = episode, castaway = castaway)
-				except:
-					existingpick = None
-				if not existingpick:
-					#print "t(%i) v(%i) ets(%s) | adding %s to votes" % (currentteamsize, currentvotesize, episode.team_size, castaway)
-					randpick = VotePick(player = player, episode = episode, castaway = castaway)
-					randpick.save()
-					currentvotesize += 1
-					if currentvotesize >= 2:
-						break
-		playerepisode = PlayerEpisode.objects.get(episode = episode, player = player)
-		playerepisode.score_lbs()
-		playerepisode.save()
-		calculatejspsforepisode(episode)
-		
+		rolloverplayerepisodeteam(episode, player)
+	
+def rolloverplayerepisodeteam(episode, player):
+	lastepisode = episode.get_prev_episode()
+	# Bring over still valid picks
+	#print "-----------------------"
+	#print "%s rollover" % (player)
+	if lastepisode:
+		if not TeamPick.objects.filter(episode = episode, player = player):
+			lastepisodeteampicks = TeamPick.objects.filter(player = player, episode = lastepisode)
+			for pick in lastepisodeteampicks:
+				if pick.castaway.out_episode_number == 0:
+					newpick = TeamPick(episode = episode, player = player, castaway = pick.castaway)
+					newpick.save()
+		if not VotePick.objects.filter(episode = episode, player = player):
+			lastepisodevotepicks = VotePick.objects.filter(player = player, episode = lastepisode)
+			for pick in lastepisodevotepicks:
+				if pick.castaway.out_episode_number == 0:
+					newpick = VotePick(episode = episode, player = player, castaway = pick.castaway)
+					newpick.save()
+	# Drop random if necessary
+	teampicks = TeamPick.objects.filter(episode = episode, player = player).order_by('?')
+	votepicks = VotePick.objects.filter(episode = episode, player = player).order_by('?')
+	currentteamsize = len(teampicks)
+	currentvotesize = len(votepicks)
+	while currentteamsize > int(episode.team_size):
+		#print "t(%i) v(%i) ets(%s) | dropping someone from team" % (currentteamsize, currentvotesize, episode.team_size)
+		TeamPick.objects.filter(episode = episode, player = player).order_by('?').first().delete()
+		currentteamsize -= 1
+	while currentvotesize > 2:
+		#print "t(%i) v(%i) ets(%s) | dropping someone from votes" % (currentteamsize, currentvotesize, episode.team_size)
+		VotePick.objects.filter(episode = episode, player = player).order_by('?').first().delete()
+		currentvotesize -= 1
+	# Pick up random if necessary
+	if currentteamsize < int(episode.team_size):
+		randomteampicks = Castaway.objects.filter(out_episode_number = 0).order_by('?')[:episode.team_size]
+		for castaway in randomteampicks:
+			try:
+				existingpick = TeamPick.objects.get(player = player, episode = episode, castaway = castaway)
+			except:
+				existingpick = None
+			if not existingpick:
+				#print "t(%i) v(%i) ets(%s) | adding %s to team" % (currentteamsize, currentvotesize, episode.team_size, castaway)
+				randpick = TeamPick(player = player, episode = episode, castaway = castaway)
+				randpick.save()
+				currentteamsize += 1
+				if currentteamsize >= int(episode.team_size):
+					break
+	if currentvotesize < 2:
+		randomvotepicks = Castaway.objects.filter(out_episode_number = 0).order_by('?')[:2]
+		for castaway in randomvotepicks:
+			try:
+				existingpick = VotePick.objects.get(player = player, episode = episode, castaway = castaway)
+			except:
+				existingpick = None
+			if not existingpick:
+				#print "t(%i) v(%i) ets(%s) | adding %s to votes" % (currentteamsize, currentvotesize, episode.team_size, castaway)
+				randpick = VotePick(player = player, episode = episode, castaway = castaway)
+				randpick.save()
+				currentvotesize += 1
+				if currentvotesize >= 2:
+					break
+	playerepisode = PlayerEpisode.objects.get(episode = episode, player = player)
+	playerepisode.score_lbs()
+	playerepisode.save()
+	calculatejspsforepisode(episode)
 
 def calculatejspsforepisode(episode):
 	for player in Player.objects.all():
@@ -312,7 +314,7 @@ def addepisode(request): # TODO: Add random toggle
 	for p in Player.objects.all():
 		npe = PlayerEpisode(player = p, episode = newepisode)
 		npe.save()
-	rolloverteam(newepisode)
+	#rolloverteams(newepisode)
 	return HttpResponseRedirect('/season31/episode/%d' % (newepisode.id))
 
 def updateceactions(request, e_id):
@@ -543,6 +545,11 @@ def deleteaction(request):
 		a.delete()
 	return HttpResponseRedirect('/season31/actions/')
 
+def playerrolloverteam(request, pe_id):
+	playerepisode = get_object_or_404(PlayerEpisode, pk=pe_id)
+	rolloverplayerepisodeteam(playerepisode.episode, playerepisode.player)
+	return HttpResponseRedirect('/season31/player/%d' % (playerepisode.player.id))
+	
 def pickteams(request, pe_id):
 	playerepisode = get_object_or_404(PlayerEpisode, pk=pe_id)
 	est = timezone('US/Eastern')

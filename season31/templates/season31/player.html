@@ -152,6 +152,14 @@
 						<td class="columnheader"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode.short }}</a></td>
 
 						<td class="pad0 marg0 bgblack">
+							{% if not playerepisode.get_team_picks %}
+							<form action="{% url 'season31:playerrolloverteam' player.playerepisode_set.latest.id %}" method="post">
+								{% csrf_token %}
+								<div class="padtb2 padlr0">
+									<input type="submit" value="Rollover Last Week's Picks" class="width100" />
+								</div>
+							</form>
+							{% endif %}
 							{% for pick in playerepisode.get_team_picks %}
 							<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
 								<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0" title="{{ pick.jsp_score }} JSPs banked at this point">{{ pick.castaway.name }}
