@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
 
-<table class="marg0 pad0 noborder"><tr>
+<table class="noborder"><tr>
 
 	<td class="menu noborder texttop">
 		{% include "season31/menu.html" %}
@@ -15,14 +15,14 @@
 
 		<table>
 			<tr>
-				<td class="columnheader fglightgrey">#</td>
-				<td class="columnheader fglightgrey">Name</td>
-				<td class="columnheader fglightgrey">Air Date</td>
+				<td class="bgblack fglightgrey">#</td>
+				<td class="bgblack fglightgrey">Name</td>
+				<td class="bgblack fglightgrey">Air Date</td>
 			</tr>
 			{% for episode in episodes %}
 			<tr>
-				<td class="columnheader fgwhite">{{ episode.number }}</td>
-				<td><a href="{% url 'season31:episode' episode.id %}" class="fgblack">{{ episode.title }}</a></td>
+				<td class="bgblack fgwhite">{{ episode.number }}</td>
+				<td><a href="{% url 'season31:episode' episode.id %}">{{ episode.title }}</a></td>
 				<td>{{ episode.air_date }}</td>
 			</tr>
 			{% endfor %}

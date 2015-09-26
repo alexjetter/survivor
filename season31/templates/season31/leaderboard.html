@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
 
-<table class="marg0 pad0 noborder"><tr>
+<table class="noborder"><tr>
 
 	<td class="menu noborder texttop">
 		{% include "season31/menu.html" %}
@@ -17,41 +17,43 @@
 
 		<table>
 			<tr>
-				<td class="columnheader fglightgrey">±</td>
-				<td class="columnheader fglightgrey">Plc</td>
-				<td class="columnheader fglightgrey">Player</td>
-				<td class="columnheader fglightgrey">Pts</td>
-				<td class="columnheader"></td>
-				<td class="columnheader fglightgrey">{% if latestepisode %}{{ latestepisode.short }}{% else %}Week{% endif %}</td>
-				<td class="columnheader"></td>
-				<td class="columnheader fglightgrey">Team</td>
+				<td class="bgblack fglightgrey">±</td>
+				<td class="bgblack fglightgrey">Plc</td>
+				<td class="bgblack fglightgrey">Player</td>
+				<td class="bgblack fglightgrey">Pts</td>
+				<td class="bgblack"></td>
+				<td class="bgblack fglightgrey">{% if latestepisode %}{{ latestepisode.short }}{% else %}Week{% endif %}</td>
+				<td class="bgblack"></td>
+				{% if latestepisode.is_locked %}
+				<td class="bgblack fglightgrey">Team</td>
+				{% endif %}
 			</tr>
-			{% for playerepisode in playerepisodes %}
+			{% for spe in simpleplayerepisodes %}
 			<tr>
-				<td class="columnheader{% if playerepisode.movement > 0 %} fggreen5{% elif playerepisode.movement < 0 %} fgred5{% endif%}">{{ playerepisode.movement }}</td>
-				<td>{{ playerepisode.place }}</td>
-				<td class="columnheader fgwhite"><a href="{% url 'season31:player' playerepisode.player.id %}" class="fgwhite">{{ playerepisode.player }}</a></td>
-				<td>{{ playerepisode.total_score }}</td>
-				<td class="columnheader"></td>
-				<td>{{ playerepisode.week_score }}</td>
-				<td class="columnheader"></td>
-				<td class="pad0 marg0">
-					{% if playerepisode.episode.is_locked %}
-					{% for pick in playerepisode.get_team_picks %}
-					<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft padtb1 marg0 pickwidth" title="{{ pick.castaway }}">
-						<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0">
-							{{ pick.castaway }}
+				<td class="bgblack{% if spe.movement > 0 %} fggreen5{% elif spe.movement < 0 %} fgred5{% endif%}">{{ spe.movement }}</td>
+				<td>{{ spe.place }}</td>
+				<td class="bgblack fgwhite"><a href="{% url 'season31:player' spe.playerid %}" class="fgwhite">{{ spe.playername }}</a></td>
+				<td>{{ spe.total_score }}</td>
+				<td class="bgblack"></td>
+				<td>{{ spe.week_score }}</td>
+				<td class="bgblack"></td>
+				{% if latestepisode.is_locked %}
+				<td class="bgblack">
+					{% for sp in spe.picks %}
+					<div class="{{sp.css}} pick" title="{{ sp.castaway }}">
+						<a href="{% url 'season31:castaway' sp.castawayid %}">
+							{{ sp.castawayname }}
 						</a>
 					</div>
 					{% endfor %}
-					{% endif %}
 				</td>
+				{% endif %}
 			</tr>
 			{% endfor %}
 		</table>
 	</td>
 	{% if user.is_superuser  %}
-	<td class="bgadmin marg0 pad0 noborder texttop">
+	<td class="bgadmin noborder texttop">
 
 		<div class="bgwhite pad4 marg4">
 			<form action="{% url 'season31:addepisode' %}" method="post">

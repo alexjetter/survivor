@@ -4,18 +4,18 @@
 
 <div class="content">
 
-<div class="pad0 marg0 textright floatright">
+<div class="textright floatright">
 	{% if user.is_authenticated %}
 	<div><a href="{% url 'season31:player' user.player.id %}" class="fgblack textbold">{{ user.username }}</a></div>
-	<div><a href="{% url 'season31:logout' %}" class="fgblack">Logout</a></span></div>
+	<div><a href="{% url 'season31:logout' %}">Logout</a></span></div>
 	{% else %}
 	<div>
-		<span><a href="{% url 'season31:login' %}" class="fgblack">Login</a></span>
+		<span><a href="{% url 'season31:login' %}">Login</a></span>
 		|
-		<span><a href="{% url 'season31:register' %}" class="fgblack">Register</a></span>
+		<span><a href="{% url 'season31:register' %}">Register</a></span>
 	</div>
 	{% endif %}
-	<div><a href="{% url 'season31:index' %}" class="fgblack">Home</a></div>
+	<div><a href="{% url 'season31:index' %}">Home</a></div>
 </div>
 
 <span class="title">{{ tribe.name }}</span>
@@ -27,10 +27,10 @@
 <table class="table">
 {% for episode in tribe.get_all_episodes %}
 	<tr>
-		<td class="columnheader fgwhite"><a href="{% url 'season31:episode' episode.id %}" class="fgwhite">{{ episode }}</a></td>
+		<td class="bgblack fgwhite"><a href="{% url 'season31:episode' episode.id %}" class="fgwhite">{{ episode }}</a></td>
 		{% for castawayepisode in tribe.castawayepisode_set.all %}
 		{% if castawayepisode.episode == episode %}
-		<td class="bgtribe{{ castawayepisode.tribe.color }}"><a href="{% url 'season31:castaway' castawayepisode.castaway.id %}" class="fgblack">{{ castawayepisode.castaway }}</a></td>
+		<td class="bgtribe{{ castawayepisode.tribe.color }}"><a href="{% url 'season31:castaway' castawayepisode.castaway.id %}">{{ castawayepisode.castaway }}</a></td>
 		{% endif %}
 		{% endfor %}
 	</tr>

@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
 
-<table class="marg0 pad0 noborder"><tr>
+<table class="noborder"><tr>
 
 	<td class="menu noborder texttop">
 		{% include "season31/menu.html" %}
@@ -20,7 +20,7 @@
 			</tr>
 			<tr>
 			{% endif %}
-			<td class="padlr4 columnheader textright {% if player.paid %}borderpaid{% else %}borderunpaid{% endif %}">
+			<td class="padlr4 bgblack textright {% if player.paid %}borderpaid{% else %}borderunpaid{% endif %}">
 			<a href="{% url 'season31:player' player.id %}" class="fgwhite">{{ player }}</a>
 			</td>
 			<!-- if superuser -->

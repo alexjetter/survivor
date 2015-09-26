@@ -4,7 +4,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
 
-<table class="marg0 pad0 noborder"><tr>
+<table class="noborder"><tr>
 
 	<td class="menu noborder texttop">
 		{% include "season31/menu.html" %}
@@ -62,65 +62,65 @@
 			{% for playerepisode in pastplayerepisodes %}
 				{% if playerepisode.episode.number == 1 %}
 					<tr>
-						<td class="columnheader textleft fggrey halftitle pad4" colspan=17>Past Episodes</td>
+						<td class="bgblack textleft fggrey halftitle pad4" colspan=17>Past Episodes</td>
 					</tr>
 					<tr>
-						<td class="columnheader"></td>
-						<td class="columnheader fggreen4">Team Members<span class="font11 textsuper">JSPs</td>
-						<td class="columnheader"></td>
-						<td class="columnheader fgred4">Vote Off Picks</td>
-						<td class="columnheader"></td>
-						<td class="columnheader fglightgrey">LB</td>
-						<td class="columnheader"></td>
-						<td class="columnheader fggreen4">Action</td>
-						<td class="columnheader fgred4">VO</td>
-						<td class="columnheader fglightgrey">JSP</td>
-						<td class="columnheader"></td>
-						<td class="columnheader fglightgrey">Week</td>
-						<td class="columnheader"></td>
-						<td class="columnheader fglightgrey">±</td>
-						<td class="columnheader fglightgrey">Plc</td>
-						<td class="columnheader fglightgrey">Total</td>
-						<td class="columnheader"></td>
+						<td class="bgblack"></td>
+						<td class="bgblack fggreen4">Team Members<span class="font11 textsuper">JSPs</td>
+						<td class="bgblack"></td>
+						<td class="bgblack fgred4">Vote Off Picks</td>
+						<td class="bgblack"></td>
+						<td class="bgblack fglightgrey">LB</td>
+						<td class="bgblack"></td>
+						<td class="bgblack fggreen4">Action</td>
+						<td class="bgblack fgred4">VO</td>
+						<td class="bgblack fglightgrey">JSP</td>
+						<td class="bgblack"></td>
+						<td class="bgblack fglightgrey">Week</td>
+						<td class="bgblack"></td>
+						<td class="bgblack fglightgrey">±</td>
+						<td class="bgblack fglightgrey">Plc</td>
+						<td class="bgblack fglightgrey">Total</td>
+						<td class="bgblack"></td>
 					</tr>
 				{% endif %}
 				<tr>
-					<td class="columnheader"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode.short }}</a></td>
+					<td class="bgblack"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode.short }}</a></td>
 
-					<td class="pad0 marg0 bgblack">
+					<td class="bgblack">
 						{% for pick in playerepisode.get_team_picks %}
-						<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
-							<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0" title="{{ pick.jsp_score }} JSPs banked at this point">{{ pick.castaway.name }}
-							<span class="font12 marg0 pad0 textbold textsuper">{{ pick.jsp_score }}</span>
+						<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
+							<a href="{% url 'season31:castaway' pick.castaway.id %}" title="{{ pick.jsp_score }} JSPs banked at this point">{{ pick.castaway.name }}
+							<span class="font12 pad0 textbold textsuper">{{ pick.jsp_score }}</span>
 							</a>
 						</div>
 						{% endfor %}
 					</td>
 
-					<td class="columnheader"></td>
+					<td class="bgblack"></td>
 
-					<td class="pad0 marg0 bgblack">
+					<td class="bgblack">
 						{% for pick in playerepisode.get_vote_picks %}
-						<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
-							<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0 ">{{ pick.castaway.name }}
+						<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
+							<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack ">{{ pick.castaway.name }}
 							</a>
 						</div>
 						{% endfor %}
 					</td>
 
-					<td class="columnheader"></td>
+					<td class="bgblack"></td>
 					<td>{{ playerepisode.loyalty_bonus }}</td>
-					<td class="columnheader"></td>
+					<td class="bgblack"></td>
 					<td>{{ playerepisode.action_score }}</td>
 					<td>{{ playerepisode.vote_off_score }}</td>
 					<td>{{ playerepisode.jsp_score }}</td>
-					<td class="columnheader"></td>
+					<td class="bgblack"></td>
 					<td>{{ playerepisode.week_score }}</td>
-					<td class="columnheader"></td>
-					<td class="columnheader{% if playerepisode.movement > 0 %} fggreen5{% elif playerepisode.movement < 0 %} fgred5{% endif%}">{{ playerepisode.movement }}</td>
+					<td class="bgblack"></td>
+					<td class="bgblack{% if playerepisode.movement > 0 %} fggreen5{% elif playerepisode.movement < 0 %} fgred5{% endif%}">{{ playerepisode.movement }}</td>
 					<td>{{ playerepisode.place }}</td>
 					<td>{{ playerepisode.total_score }}</td>
-					<td class="columnheader"></td>
+					<td class="bgblack"></td>
 				</tr>
 			{% endfor %}
 		</table>
@@ -137,21 +137,21 @@
 						</tr>
 					{% endif %}
 					<tr>
-						<td class="columnheader textleft pad4" colspan=7><span class="fggrey halftitle">Upcoming  Episode</span><span class="fgred2">{{ playerepisode.episode.time_to_lock }}<script>startTimer("{{ playerepisode.episode.seconds_to_lock }}");</script></span><span class="fggrey">left to make changes to your picks</span></td>
+						<td class="bgblack textleft pad4" colspan=7><span class="fggrey halftitle">Upcoming  Episode</span><span class="fgred2">{{ playerepisode.episode.time_to_lock }}<script>startTimer("{{ playerepisode.episode.seconds_to_lock }}");</script></span><span class="fggrey">left to make changes to your picks</span></td>
 					</tr>
 					<tr>
-						<td class="columnheader"></td>
-						<td class="columnheader fggreen4">Team Members<span class="font11 textsuper">JSPs</td>
-						<td class="columnheader"></td>
-						<td class="columnheader fgred4">Vote Off Picks</td>
-						<td class="columnheader"></td>
-						<td class="columnheader fglightgrey">LB</td>
-						<td class="columnheader"></td>
+						<td class="bgblack"></td>
+						<td class="bgblack fggreen4">Team Members<span class="font11 textsuper">JSPs</td>
+						<td class="bgblack"></td>
+						<td class="bgblack fgred4">Vote Off Picks</td>
+						<td class="bgblack"></td>
+						<td class="bgblack fglightgrey">LB</td>
+						<td class="bgblack"></td>
 					</tr>
 					<tr>
-						<td class="columnheader"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode.short }}</a></td>
+						<td class="bgblack"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode.short }}</a></td>
 
-						<td class="pad0 marg0 bgblack">
+						<td class="bgblack">
 							{% if not playerepisode.get_team_picks %}
 							<form action="{% url 'season31:playerrolloverteam' player.playerepisode_set.latest.id %}" method="post">
 								{% csrf_token %}
@@ -161,28 +161,28 @@
 							</form>
 							{% endif %}
 							{% for pick in playerepisode.get_team_picks %}
-							<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
-								<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0" title="{{ pick.jsp_score }} JSPs banked at this point">{{ pick.castaway.name }}
-								<span class="font12 marg0 pad0 textbold textsuper">{{ pick.jsp_score }}</span>
+							<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
+								<a href="{% url 'season31:castaway' pick.castaway.id %}" title="{{ pick.jsp_score }} JSPs banked at this point">{{ pick.castaway.name }}
+								<span class="font12 pad0 textbold textsuper">{{ pick.jsp_score }}</span>
 								</a>
 							</div>
 							{% endfor %}
 						</td>
 
-						<td class="columnheader"></td>
+						<td class="bgblack"></td>
 
-						<td class="pad0 marg0 bgblack">
+						<td class="bgblack">
 							{% for pick in playerepisode.get_vote_picks %}
-							<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} floatleft pad2 marg0 pickwidth">
-								<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack marg0 ">{{ pick.castaway.name }}
+							<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
+								<a href="{% url 'season31:castaway' pick.castaway.id %}">{{ pick.castaway.name }}
 								</a>
 							</div>
 							{% endfor %}
 						</td>
 
-						<td class="columnheader"></td>
+						<td class="bgblack"></td>
 						<td>{{ playerepisode.loyalty_bonus }}</td>
-						<td class="columnheader"></td>
+						<td class="bgblack"></td>
 					</tr>
 					{% else %}
 					<tr>
@@ -199,11 +199,11 @@
 			<tr>
 				<td class="bgblack" colspan=1></td>
 
-				<td class="columnheader fggreen4 pad0 marg0">
+				<td class="bgblack fggreen4">
 					{% if player.get_latest_player_episode == player.playerepisode_set.latest %}
 					<form action="{% url 'season31:pickteams' player.playerepisode_set.latest.id %}" method="post">
 						{% csrf_token %}
-						<div class="bgtribe{{ castawayepisode.tribe.color }} pad2 marg0">
+						<div class="bgtribe{{ castawayepisode.tribe.color }}">
 							Pick Your Team! ({{ player.get_next_episode.team_size }} Castaways)
 						</div>
 						<table class="noborder width100">
@@ -228,13 +228,13 @@
 					{% endif %}
 				</td>
 
-				<td class="columnheader"></td>
+				<td class="bgblack"></td>
 
-				<td class="columnheader fgred4 pad0 marg0">
+				<td class="bgblack fgred4">
 					{% if player.get_latest_player_episode == player.playerepisode_set.latest %}
 					<form action="{% url 'season31:pickvotes' player.playerepisode_set.latest.id %}" method="post">
 						{% csrf_token %}
-						<div class="bgtribe{{ castawayepisode.tribe.color }} pad2 marg0">
+						<div class="bgtribe{{ castawayepisode.tribe.color }}">
 							Pick Your Votes! (2)
 						</div>
 						<table class="noborder width100">
@@ -259,7 +259,7 @@
 					{% endif %}
 				</td>
 
-				<td class="columnheader"></td>
+				<td class="bgblack"></td>
 				<td class="bgblack" colspan=12></td>
 			</tr>
 			{% endif %}
@@ -267,12 +267,12 @@
 
 	</td>
 	{% if user.is_superuser  %}
-	<td class="bgadmin marg0 pad0 noborder texttop">
+	<td class="bgadmin noborder texttop">
 		<div class="{% if player.paid %}bggreen4{% else %}bgred4{% endif %} pad4 marg4">
 			<form action="{% url 'season31:toggleplayerpaidstatus' player.id %}" method="post">
 				{% csrf_token %}
 				{% if player.paid %}Paid!{% else %}Indebted!{% endif %}
-				<input type="checkbox" name="check" id="check" class="marg0"/>
+				<input type="checkbox" name="check" id="check"/>
 				<input type="submit" value="Toggle Paid Status" />
 			</form>
 		</div>

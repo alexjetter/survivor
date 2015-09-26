@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'season31/style.css' %}" />
 
-<table class="marg0 pad0 noborder"><tr>
+<table class="noborder"><tr>
 
 	<td class="menu noborder texttop">
 		{% include "season31/menu.html" %}
@@ -16,7 +16,7 @@
 
 		<table>
 			<tr>
-				<td class="columnheader fgwhite pickwidth">Tribes</td>
+				<td class="bgblack fgwhite pickwidth">Tribes</td>
 				{% for tribe in tribes%}
 				<td class="bgtribe{{ tribe.color }} pickwidth">{{ tribe }}</td>
 				{% endfor %}
@@ -27,17 +27,17 @@
 
 		<table>
 			<tr>
-				<td class="columnheader"></td>
-				<td class="columnheader"></td>
-				<td class="columnheader fglightgrey">Age</td>
-				<td class="columnheader fglightgrey">Occupation</td>
+				<td class="bgblack"></td>
+				<td class="bgblack"></td>
+				<td class="bgblack fglightgrey">Age</td>
+				<td class="bgblack fglightgrey">Occupation</td>
 				{% for episode in episodes%}
-				<td class="columnheader"><a href="{% url 'season31:episode' episode.id %}" class="fgwhite">{{ episode.short }}</a></td>
+				<td class="bgblack"><a href="{% url 'season31:episode' episode.id %}" class="fgwhite">{{ episode.short }}</a></td>
 				{% endfor %}
 			</tr>
 			{% for castaway in castaways %}
 			<tr>
-				<td class="columnheader fgwhite textright{% if castaway.out_episode_number > 0 %} textstrike{% endif %}"><a href="{% url 'season31:castaway' castaway.id %}" class="fgwhite">{{ castaway }}</a></td>
+				<td class="bgblack fgwhite textright{% if castaway.out_episode_number > 0 %} textstrike{% endif %}"><a href="{% url 'season31:castaway' castaway.id %}" class="fgwhite">{{ castaway }}</a></td>
 				<td class="fgwhite textright pad0"><img src="{% static 'season31/images/photos/'%}{{ castaway.name }}.jpg" title="{{ castaway.name }}" class="castawayimgsmall{% if castaway.out_episode_number > 0 %} outimg{% endif %}" /></td>
 				<td>{{ castaway.age }}</td>
 				<td>{{ castaway.occupation }}</td>
@@ -50,7 +50,7 @@
 
 	</td>
 	{% if user.is_superuser  %}
-	<td class="bgadmin marg0 pad0 noborder texttop">
+	<td class="bgadmin noborder texttop">
 	
 		<table class="floatright marg4">
 			<tr>

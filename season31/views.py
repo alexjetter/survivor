@@ -14,19 +14,67 @@ from .forms import UserForm
 from django.contrib.auth.models import User
 from .models import Player, Castaway, TeamPick, VotePick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action
 
+class SimplePlayerepisode:
+	playername = ""
+	playerid = 0
+	movement = 0
+	place = 0
+	week_score = 0
+	total_score = 0
+	picks = []
+	
+class SimplePick:
+	castawayname = ""
+	castawayid = ""
+	css = ""
+	
+def buildleaderboardobjects(latestepisode):
+	#build css reference
+	try:
+		castawayepisodes = CastawayEpisode.objects.filter(episode= latestepisode)
+	except:
+		castawayepisodes = None
+	castawaycss = {}
+	if castawayepisodes:
+		for castawayepisode in castawayepisodes:
+			if castawayepisode.castaway.out_episode_number == latestepisode.number:
+				castawaycss[str(castawayepisode.castaway.name)] = "out"
+			else:
+				castawaycss[str(castawayepisode.castaway.name)] = "bgtribe" + str(castawayepisode.tribe.color)
+	#build leaderboardPEs
+	leaderboardplayerepisodes = []
+	for playerepisode in PlayerEpisode.objects.filter(player__hidden = False, episode = latestepisode).order_by('-total_score'):
+		spe = SimplePlayerepisode()
+		spe.playername = playerepisode.player.user.username
+		spe.playerid = playerepisode.player.id
+		spe.movement = playerepisode.movement
+		spe.place = playerepisode.place
+		spe.week_score = playerepisode.week_score
+		spe.total_score = playerepisode.total_score
+		teampicks = TeamPick.objects.filter(episode = playerepisode.episode, player = playerepisode.player)
+		spe.picks = []
+		for pick in teampicks:
+			sp = SimplePick()
+			sp.castawayname = pick.castaway.name
+			sp.castawayid = pick.castaway.id
+			sp.css = castawaycss[str(sp.castawayname)]
+			spe.picks.append(sp)
+		leaderboardplayerepisodes.append(spe)
+	return leaderboardplayerepisodes
+
 class LeaderboardView(generic.ListView):
-	context_object_name = 'playerepisodes'
+	context_object_name = 'simpleplayerepisodes'
 	template_name = 'season31/leaderboard.html'
 	try:
 		latestepisode = Episode.objects.filter(is_locked = True).latest()
 	except:
 		latestepisode = Episode.objects.latest()
-	queryset = PlayerEpisode.objects.filter(player__hidden = False, episode= latestepisode).order_by('-total_score')
+	queryset = buildleaderboardobjects(latestepisode)
 	def get_context_data(self, **kwargs):
 		context = super(LeaderboardView, self).get_context_data(**kwargs)
 		context['latestepisode'] = self.latestepisode
 		return context
-
+		
 class CastawaysView(generic.ListView):
 	context_object_name = 'castaways'
 	template_name = 'season31/castaways.html'
