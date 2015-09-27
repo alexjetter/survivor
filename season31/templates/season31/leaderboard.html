@@ -39,11 +39,9 @@
 				<td class="bgblack"></td>
 				{% if latestepisode.is_locked %}
 				<td class="bgblack">
-					{% for sp in spe.picks %}
-					<div class="{{sp.css}} pick" title="{{ sp.castaway }}">
-						<a href="{% url 'season31:castaway' sp.castawayid %}">
-							{{ sp.castawayname }}
-						</a>
+					{% for sp in spe.tpicks %}
+					<div class="{{sp.css}} pick">
+						<a href="{% url 'season31:castaway' sp.castawayid %}">{{ sp.castawayname }}</a>
 					</div>
 					{% endfor %}
 				</td>

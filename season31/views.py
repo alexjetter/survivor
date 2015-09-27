@@ -13,52 +13,50 @@ from random import randint
 from .forms import UserForm
 from django.contrib.auth.models import User
 from .models import Player, Castaway, TeamPick, VotePick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action
+from .simple import SimplePlayerepisode, SimplePick
 
-class SimplePlayerepisode:
-	playername = ""
-	playerid = 0
-	movement = 0
-	place = 0
-	week_score = 0
-	total_score = 0
-	picks = []
-	
-class SimplePick:
-	castawayname = ""
-	castawayid = ""
-	css = ""
-	
-def buildleaderboardobjects(latestepisode):
+def getsimpleplayerepisodeobjects(episode):
 	#build css reference
 	try:
-		castawayepisodes = CastawayEpisode.objects.filter(episode= latestepisode)
+		castawayepisodes = CastawayEpisode.objects.filter(episode= episode)
 	except:
 		castawayepisodes = None
 	castawaycss = {}
 	if castawayepisodes:
 		for castawayepisode in castawayepisodes:
-			if castawayepisode.castaway.out_episode_number == latestepisode.number:
+			if castawayepisode.castaway.out_episode_number == episode.number:
 				castawaycss[str(castawayepisode.castaway.name)] = "out"
 			else:
 				castawaycss[str(castawayepisode.castaway.name)] = "bgtribe" + str(castawayepisode.tribe.color)
+	print castawaycss
 	#build leaderboardPEs
 	leaderboardplayerepisodes = []
-	for playerepisode in PlayerEpisode.objects.filter(player__hidden = False, episode = latestepisode).order_by('-total_score'):
+	for playerepisode in PlayerEpisode.objects.filter(player__hidden = False, episode = episode).order_by('-total_score'):
 		spe = SimplePlayerepisode()
 		spe.playername = playerepisode.player.user.username
 		spe.playerid = playerepisode.player.id
-		spe.movement = playerepisode.movement
-		spe.place = playerepisode.place
 		spe.week_score = playerepisode.week_score
 		spe.total_score = playerepisode.total_score
-		teampicks = TeamPick.objects.filter(episode = playerepisode.episode, player = playerepisode.player)
-		spe.picks = []
-		for pick in teampicks:
+		spe.movement = playerepisode.movement
+		spe.place = playerepisode.place
+		spe.loyalty_bonus = playerepisode.loyalty_bonus
+		spe.action_score = playerepisode.action_score
+		spe.vote_off_score = playerepisode.vote_off_score
+		spe.jsp_score = playerepisode.jsp_score
+		spe.tpicks = []
+		spe.vpicks = []
+		for pick in TeamPick.objects.filter(episode = episode, player = playerepisode.player):
 			sp = SimplePick()
 			sp.castawayname = pick.castaway.name
 			sp.castawayid = pick.castaway.id
 			sp.css = castawaycss[str(sp.castawayname)]
-			spe.picks.append(sp)
+			spe.tpicks.append(sp)
+		for pick in VotePick.objects.filter(episode = episode, player = playerepisode.player):
+			sp = SimplePick()
+			sp.castawayname = pick.castaway.name
+			sp.castawayid = pick.castaway.id
+			sp.css = castawaycss[str(sp.castawayname)]
+			spe.vpicks.append(sp)
 		leaderboardplayerepisodes.append(spe)
 	return leaderboardplayerepisodes
 
@@ -69,7 +67,7 @@ class LeaderboardView(generic.ListView):
 		latestepisode = Episode.objects.filter(is_locked = True).latest()
 	except:
 		latestepisode = Episode.objects.latest()
-	queryset = buildleaderboardobjects(latestepisode)
+	queryset = getsimpleplayerepisodeobjects(latestepisode)
 	def get_context_data(self, **kwargs):
 		context = super(LeaderboardView, self).get_context_data(**kwargs)
 		context['latestepisode'] = self.latestepisode
@@ -122,6 +120,7 @@ class EpisodeView(generic.DetailView):
 		context['episodes'] = Episode.objects.all()
 		context['actions'] = Action.objects.all()
 		context['tribes'] = Tribe.objects.all()
+		context['simpleplayerepisodes'] = getsimpleplayerepisodeobjects(context['episode'])
 		return context
 
 def register(request):

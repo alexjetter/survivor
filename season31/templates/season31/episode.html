@@ -90,40 +90,38 @@
 				<td colspan=14>Picks will be revealed in {{ episode.time_to_lock }}</td>
 			</tr>
 			{% else %}
-			{% for playerepisode in episode.get_playerepisodes %}
+			{% for spe in simpleplayerepisodes %}
 			<tr>
-				<td class="bgblack fgwhite textright"><a href="{% url 'season31:player' playerepisode.player.id %}" class="fgwhite">{{ playerepisode.player }}</a></td>
+				<td class="bgblack fgwhite textright"><a href="{% url 'season31:player' spe.playerid %}" class="fgwhite">{{ spe.playername }}</a></td>
 
 				<td class="bgblack">
-					{% for pick in playerepisode.get_team_picks %}
-					<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
-						<a href="{% url 'season31:castaway' pick.castaway.id %}">{{ pick.castaway.name }}
-						</a>
+					{% for sp in spe.tpicks %}
+					<div class="{{sp.css}} pick">
+						<a href="{% url 'season31:castaway' sp.castawayid %}">{{ sp.castawayname }}</a>
 					</div>
-				{% endfor %}
+					{% endfor %}
 				</td>
 
 				<td class="bgblack"></td>
 
 				<td class="bgblack">
-					{% for pick in playerepisode.get_vote_picks %}
-					<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
-						<a href="{% url 'season31:castaway' pick.castaway.id %}">{{ pick.castaway.name }}
-						</a>
+					{% for sp in spe.vpicks %}
+					<div class="{{sp.css}} pick">
+						<a href="{% url 'season31:castaway' sp.castawayid %}">{{ sp.castawayname }}</a>
 					</div>
-				{% endfor %}
+					{% endfor %}
 				</td>
 
 				<td class="bgblack"></td>
-				<td>{{ playerepisode.loyalty_bonus }}</td>
+				<td>{{ spe.loyalty_bonus }}</td>
 				<td class="bgblack"></td>
-				<td>{{ playerepisode.action_score }}</td>
-				<td>{{ playerepisode.vote_off_score }}</td>
-				<td>{{ playerepisode.jsp_score }}</td>
+				<td>{{ spe.action_score }}</td>
+				<td>{{ spe.vote_off_score }}</td>
+				<td>{{ spe.jsp_score }}</td>
 				<td class="bgblack"></td>
-				<td>{{ playerepisode.week_score }}</td>
+				<td>{{ spe.week_score }}</td>
 				<td class="bgblack"></td>
-				<td>{{ playerepisode.total_score }}</td>
+				<td>{{ spe.total_score }}</td>
 			</tr>
 			{% endfor %}
 			{% endif %}
