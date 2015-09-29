@@ -1,10 +1,10 @@
+from datetime import datetime
+from pytz import timezone
 import logging
 import pytz
-from pytz import timezone
-from datetime import datetime
 
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 class Castaway(models.Model):
 	name = models.CharField(max_length = 32)
@@ -198,13 +198,13 @@ class PlayerEpisode(models.Model):
 		self.vote_off_score = self.correctly_predicted_votes * 10 # TODO: dont hardcode this score
 		self.save()
 	def score_jsps(self):
-		self.jsp_score = 0
 		if not self.episode.score_jsps:
 			return
+		self.jsp_score = 0
 		survivingcastaways = Castaway.objects.filter(out_episode_number = 0)
 		pastepisodes = Episode.objects.filter(number__lte = self.episode.number)
 		pastteampicks = TeamPick.objects.filter(castaway__in = survivingcastaways, episode__in = pastepisodes, player = self.player)
-		self.jsp_score = len(pastteampicks)
+		self.jsp_score = pastteampicks.count()
 		self.save()
 	def update_score(self):
 		try:
@@ -273,7 +273,7 @@ class TeamPick(models.Model):
 		return False
 	class Meta:
 		ordering = ('episode', 'player', 'castaway')
-		
+
 class VotePick(models.Model):
 	episode = models.ForeignKey(Episode)
 	player = models.ForeignKey(Player)

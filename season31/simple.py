@@ -8,6 +8,7 @@
 	vote = None
 	
 class SimplePlayerEpisode:
+	playerepisodeid = 0
 	playername = ""
 	playerid = 0
 	loyalty_bonus = 0

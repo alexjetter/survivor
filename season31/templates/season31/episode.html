@@ -95,6 +95,14 @@
 				<td class="bgblack fgwhite textright"><a href="{% url 'season31:player' spe.playerid %}" class="fgwhite">{{ spe.playername }}</a></td>
 
 				<td class="bgblack">
+					{% if spe.tpicks|length == 0 and user.is_superuser %}
+					<form action="{% url 'season31:playerrolloverteam' spe.playerepisodeid %}" method="post">
+						{% csrf_token %}
+						<div class="padtb2 padlr0">
+							<input type="submit" value="Rollover Last Week's Picks" class="width100" />
+						</div>
+					</form>
+					{% endif %}
 					{% for sp in spe.tpicks %}
 					<div class="bg{{sp.color}} pick">
 						<a href="{% url 'season31:castaway' sp.castawayid %}">{{ sp.castawayname }}</a>
@@ -157,6 +165,12 @@
 				{% csrf_token %}
 				<input type="number" class="width30 textcenter" name="teamsize" id="teamsize" min="2" max="10" value="{{ episode.team_size }}" />
 				<input type="submit" class="width60" value="Update Team Size" />
+			</form>
+		</div>
+		<div class="bgwhite pad4 marg4">
+			<form action="{% url 'season31:rolloverepisodeteams' episode.id %}" method="post">
+				{% csrf_token %}
+				<input type="submit" class="width100" value="Rollover Episode Teams" />
 			</form>
 		</div>
 		<div class="bgwhite pad4 marg4">
