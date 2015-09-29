@@ -66,9 +66,6 @@ form {margin-bottom: 0;}
 .bggrey {background-color: #909090;}
 .bgdarkgrey {background-color: #595959;}
 .bgblack {background-color: #222222;}
-.bgtribeGreen {background-color: #64e4b8; color: #222222;}
-.bgtribeMagenta {background-color: #ff5cad; color: #222222;}
-.bgtribeYellow{background-color: #ffd81a; color: #222222;}
 .bgmerge {background-color: #B4A7D6; color: #222222;}
 .bggreen5 {background-color: #66ff66; color: #222222;}
 .bggreen4 {background-color: #88ff66; color: #222222;}
@@ -80,6 +77,10 @@ form {margin-bottom: 0;}
 .bgred3 {background-color: #ffaa66; color: #222222;}
 .bgred4 {background-color: #ff8866; color: #222222;}
 .bgred5 {background-color: #ff6666; color: #222222;}
+.bgGreen {background-color: #64e4b8; color: #222222;}
+.bgMagenta {background-color: #ff5cad; color: #222222;}
+.bgYellow{background-color: #ffd81a; color: #222222;}
+.bgout {text-decoration: line-through; background-color: #909090;}
 .bgdarkred {background-color: #CC2222;}
 .bgadmin {background-color: #332222;}
 .bgdelete {background-color: #CC4444;}
@@ -89,9 +90,6 @@ form {margin-bottom: 0;}
 .fggrey {color: #999999;}
 .fgdarkgrey {color: #595959;}
 .fgblack {color: #222222;}
-.fgtribeGreen {color: #46b58f;}
-.fgtribeMagenta {color: #e62e8a;}
-.fgtribeYellow{color: #e6bf00;}
 .fgmerge {color: #B4A7D6;}
 .fggreen5 {color: #66ff66;;}
 .fggreen4 {color: #88ff66;;}
@@ -103,16 +101,18 @@ form {margin-bottom: 0;}
 .fgred3 {color: #ffaa66;}
 .fgred4 {color: #ff8866;}
 .fgred5 {color: #ff6666;}
+.fgGreen {color: #64e4b8;}
+.fgMagenta {color: #ff5cad;}
+.fgYellow{color: #ffd81a;}
+.fgout {text-decoration: line-through; color: #909090;}
 .fgdarkred {color: #CC2222;}
 
 .castawayimgsmall {height: 32;}
-.pickwidthsm {width: 16;}
+.actionsmall {width: 24;}
 .maxadminwidth {width: 256;}
 
-.pick {
-	width: 72;
-	float: left;
-}
+.pick {width: 72; float: left;}
+.picksm {width: 16; float: left;}
 
 .padlr0 {padding-left: 0; padding-right: 0;}
 .padlr1 {padding-left: 1; padding-right: 1;}
@@ -163,7 +163,7 @@ table, th, td{
 
 .borderunpaid {border-right: 4px solid #ff6666;}
 .borderpaid {border-right: 4px solid #66ff66;}
-	
+
 .inline {display: inline-block;}
 .floatright {float: right;}
 .floatleft {float: left;}
@@ -178,9 +178,7 @@ table, th, td{
 .font18{font-size: 1.125em;}
 .font20{font-size: 1.25em;}
 .font24{font-size: 1.5em;}
-
-.opac80 {opacity: 0.5;}
-.opac80 {opacity: 1;}
+.font32{font-size: 2em;}
 
 .width30{width: 30%}
 .width40{width: 40%}
@@ -197,11 +195,7 @@ table, th, td{
 
 .texttop {vertical-align: top;}
 .textsuper {vertical-align: top;}
-	
-.out {
-	text-decoration: line-through;
-	background-color: #909090;
-}
+
 
 .outimg {
     filter: none;

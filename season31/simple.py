@@ -1,4 +1,13 @@
-﻿class SimplePlayerepisode:
+﻿class SimpleCastawayEpisode:
+	castawayname = ""
+	castawayid = 0
+	tribe = ""
+	color = ""
+	score = 0
+	actions = []
+	vote = None
+	
+class SimplePlayerEpisode:
 	playername = ""
 	playerid = 0
 	loyalty_bonus = 0
@@ -14,5 +23,19 @@
 	
 class SimplePick:
 	castawayname = ""
-	castawayid = ""
-	css = ""
+	castawayid = 0
+	color = ""
+	
+class SimpleAction:
+	name = ""
+	score = 0
+	icon_filename = ""
+	description = ""
+	
+class SimpleEpisodeStats:
+	topscore = 0
+	topscorer = ""
+	topmovement = 0
+	topmover = ""
+	correctpredictions = 0
+	

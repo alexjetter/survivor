@@ -9,12 +9,36 @@
 	</td>
 	<td class="content noborder texttop textleft">
 
-		<div class="halftitle textcenter">Leaderboard</div>
+		<div class="font32"><span class="textbold">Leaderboard</span> <span class="fglightgrey">{{ latestepisode }}</span></div>
 		
 		{% if latestepisode %}
-		<div class="textcenter">{{ latestepisode }}</div>
+		
+		<div class="halfspacer"></div>
+		
+		
+		<table class="noborder">
+			<tr>
+				<td class="bgblack fgwhite textright padlr4">Top Score</td>
+				<td class="bgblack fggreen5 padlr4">{{ simpleepisodestats.topscore }}</td>
+				<td class="bglightgrey noborder padlr4 textleft">{{ simpleepisodestats.topscorer }}</td>
+			</tr>
+			{% if simpleepisodestats.topmovement > 0 %}
+			<tr>
+				<td class="bgblack fgwhite textright padlr4">Top Movement</td>
+				<td class="bgblack fggreen5 padlr4">+{{ simpleepisodestats.topmovement }}</td>
+				<td class="bglightgrey noborder padlr4 textleft">{{ simpleepisodestats.topmover  }}</td>
+			</tr>
+			{% endif %}
+			<tr>
+				<td class="bgblack fgwhite textright padlr4">Correct Predictors</td>
+				<td class="bgblack fggreen5 padlr4">{{ simpleepisodestats.correctpredictions }}</td>
+			</tr>
+		</table>
+		
 		{% endif %}
-
+		
+		<div class="halfspacer"></div>
+		
 		<table>
 			<tr>
 				<td class="bgblack fglightgrey">±</td>
@@ -25,12 +49,13 @@
 				<td class="bgblack fglightgrey">{% if latestepisode %}{{ latestepisode.short }}{% else %}Week{% endif %}</td>
 				<td class="bgblack"></td>
 				{% if latestepisode.is_locked %}
-				<td class="bgblack fglightgrey">Team</td>
+				<td class="bgblack fglightgrey">Vote</td>
+				<td class="bgblack fglightgrey">Team Members</td>
 				{% endif %}
 			</tr>
 			{% for spe in simpleplayerepisodes %}
 			<tr>
-				<td class="bgblack{% if spe.movement > 0 %} fggreen5{% elif spe.movement < 0 %} fgred5{% endif%}">{{ spe.movement }}</td>
+				<td class="bgblack{% if spe.movement > 0 %} fggreen5{% elif spe.movement < 0 %} fgred5{% endif%}">{% if spe.movement > 0 %}+{% endif %}{{ spe.movement }}</td>
 				<td>{{ spe.place }}</td>
 				<td class="bgblack fgwhite"><a href="{% url 'season31:player' spe.playerid %}" class="fgwhite">{{ spe.playername }}</a></td>
 				<td>{{ spe.total_score }}</td>
@@ -39,8 +64,13 @@
 				<td class="bgblack"></td>
 				{% if latestepisode.is_locked %}
 				<td class="bgblack">
+					{% if spe.vote_off_score > 0 %}
+					<img src="{% static 'season31/images/icons/' %}CorrectVote.png" title="Correctly Predicted Vote" class="actionsmall" />
+					{% endif %}
+				</td>
+				<td class="bgblack">
 					{% for sp in spe.tpicks %}
-					<div class="{{sp.css}} pick">
+					<div class="bg{{sp.color}} pick">
 						<a href="{% url 'season31:castaway' sp.castawayid %}">{{ sp.castawayname }}</a>
 					</div>
 					{% endfor %}

@@ -39,7 +39,7 @@
 			{% for castawayepisode in castaway.castawayepisode_set.all %}
 			<tr>
 				<td class="bgblack fgwhite"><a href="{% url 'season31:episode' castawayepisode.episode.id %}" class="fgwhite">{{ castawayepisode.episode }}</a></td>
-				<td class="bgtribe{{ castawayepisode.tribe.color }}">{{ castawayepisode.tribe }}</td>
+				<td class="bg{{ castawayepisode.tribe.color }}">{{ castawayepisode.tribe }}</td>
 				<td class="bgblack"></td>
 				<td>
 				{% for action in castawayepisode.actions.all %}
@@ -50,7 +50,7 @@
 				</td>
 				<td class="bgblack"></td>
 				{% if castawayepisode.vote_set.all %}
-				<td class="bgtribe{{ castawayepisode.tribe.color }}"><a href="{% url 'season31:castaway' castawayepisode.vote_set.all.0.castaway.id %}">{{ castawayepisode.vote_set.all.0.castaway }}</a></td>
+				<td class="bg{{ castawayepisode.tribe.color }}"><a href="{% url 'season31:castaway' castawayepisode.vote_set.all.0.castaway.id %}">{{ castawayepisode.vote_set.all.0.castaway }}</a></td>
 				{% else %}
 				<td>-</td>
 				{% endif %}

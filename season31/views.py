@@ -13,26 +13,69 @@ from random import randint
 from .forms import UserForm
 from django.contrib.auth.models import User
 from .models import Player, Castaway, TeamPick, VotePick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action
-from .simple import SimplePlayerepisode, SimplePick
+from .simple import SimplePlayerEpisode, SimplePick, SimpleCastawayEpisode, SimpleAction, SimpleEpisodeStats
 
-def getsimpleplayerepisodeobjects(episode):
+def getcastawaycolordict(episode):
+	try:
+		castawayepisodes = CastawayEpisode.objects.filter(episode= episode)
+	except:
+		castawayepisodes = None
+	castawaycolordict = {}
+	if castawayepisodes:
+		for castawayepisode in castawayepisodes:
+			if castawayepisode.castaway.out_episode_number == episode.number:
+				castawaycolordict[str(castawayepisode.castaway.name)] = "out"
+			else:
+				castawaycolordict[str(castawayepisode.castaway.name)] = str(castawayepisode.tribe.color)
+	return castawaycolordict
+	
+def getsimplecastawayepisodes(episode, castawaycolordict):
+	simplecastawayepisodes = []
+	for castawayepisode in CastawayEpisode.objects.filter(episode = episode).order_by('tribe', '-score', 'castaway'):
+		sce = SimpleCastawayEpisode()
+		sce.castawayname = castawayepisode.castaway.name
+		sce.castawayid = castawayepisode.castaway.id
+		sce.tribe = castawayepisode.tribe.name
+		sce.color = castawaycolordict[str(sce.castawayname)]
+		sce.score = castawayepisode.score
+		sce.actions = []
+		for action in castawayepisode.actions.all():
+			sa = SimpleAction()
+			sa.name = action.name
+			sa.score = action.score
+			sa.icon_filename = action.icon_filename
+			sa.description = action.description
+			sce.actions.append(sa)
+		try:
+			vote = Vote.objects.get(castaway_episode = castawayepisode)
+		except:
+			vote = None
+		print vote
+		if vote:
+			sce.vote = SimplePick()
+			sce.vote.castawayname = vote.castaway.name
+			sce.vote.castawayid = vote.id
+			sce.vote.color = castawaycolordict[str(sce.vote.castawayname)]
+		simplecastawayepisodes.append(sce)
+	return simplecastawayepisodes
+
+def getsimpleplayerepisodes(episode, castawaycolordict):
 	#build css reference
 	try:
 		castawayepisodes = CastawayEpisode.objects.filter(episode= episode)
 	except:
 		castawayepisodes = None
-	castawaycss = {}
+	castawaycolordict = {}
 	if castawayepisodes:
 		for castawayepisode in castawayepisodes:
 			if castawayepisode.castaway.out_episode_number == episode.number:
-				castawaycss[str(castawayepisode.castaway.name)] = "out"
+				castawaycolordict[str(castawayepisode.castaway.name)] = "out"
 			else:
-				castawaycss[str(castawayepisode.castaway.name)] = "bgtribe" + str(castawayepisode.tribe.color)
-	print castawaycss
+				castawaycolordict[str(castawayepisode.castaway.name)] = str(castawayepisode.tribe.color)
 	#build leaderboardPEs
-	leaderboardplayerepisodes = []
+	simpleplayerepisodes = []
 	for playerepisode in PlayerEpisode.objects.filter(player__hidden = False, episode = episode).order_by('-total_score'):
-		spe = SimplePlayerepisode()
+		spe = SimplePlayerEpisode()
 		spe.playername = playerepisode.player.user.username
 		spe.playerid = playerepisode.player.id
 		spe.week_score = playerepisode.week_score
@@ -49,17 +92,34 @@ def getsimpleplayerepisodeobjects(episode):
 			sp = SimplePick()
 			sp.castawayname = pick.castaway.name
 			sp.castawayid = pick.castaway.id
-			sp.css = castawaycss[str(sp.castawayname)]
+			sp.color = castawaycolordict[str(sp.castawayname)]
 			spe.tpicks.append(sp)
 		for pick in VotePick.objects.filter(episode = episode, player = playerepisode.player):
 			sp = SimplePick()
 			sp.castawayname = pick.castaway.name
 			sp.castawayid = pick.castaway.id
-			sp.css = castawaycss[str(sp.castawayname)]
+			sp.color = castawaycolordict[str(sp.castawayname)]
 			spe.vpicks.append(sp)
-		leaderboardplayerepisodes.append(spe)
-	return leaderboardplayerepisodes
-
+		simpleplayerepisodes.append(spe)
+	return simpleplayerepisodes
+	
+def getsimpleepisodestats(episode):
+	simpleepisodestats = SimpleEpisodeStats()
+	for playerepisode in PlayerEpisode.objects.filter(player__hidden = False, episode = episode).order_by('-total_score'):
+		if playerepisode.week_score > simpleepisodestats.topscore:
+			simpleepisodestats.topscore = playerepisode.week_score
+			simpleepisodestats.topscorer = playerepisode.player.user.username
+		elif playerepisode.week_score == simpleepisodestats.topscore:
+			simpleepisodestats.topscorer += ", " + playerepisode.player.user.username
+		if playerepisode.movement > simpleepisodestats.topmovement:
+			simpleepisodestats.topmovement = playerepisode.movement
+			simpleepisodestats.topmover = playerepisode.player.user.username
+		elif playerepisode.movement == simpleepisodestats.topmovement:
+			simpleepisodestats.topmover += ", " + playerepisode.player.user.username
+		if playerepisode.vote_off_score > 0:
+			simpleepisodestats.correctpredictions += 1
+	return simpleepisodestats
+	
 class LeaderboardView(generic.ListView):
 	context_object_name = 'simpleplayerepisodes'
 	template_name = 'season31/leaderboard.html'
@@ -67,10 +127,12 @@ class LeaderboardView(generic.ListView):
 		latestepisode = Episode.objects.filter(is_locked = True).latest()
 	except:
 		latestepisode = Episode.objects.latest()
-	queryset = getsimpleplayerepisodeobjects(latestepisode)
+	castawaycolordict = getcastawaycolordict(latestepisode)
+	queryset = getsimpleplayerepisodes(latestepisode, castawaycolordict)
 	def get_context_data(self, **kwargs):
 		context = super(LeaderboardView, self).get_context_data(**kwargs)
 		context['latestepisode'] = self.latestepisode
+		context['simpleepisodestats'] = getsimpleepisodestats(self.latestepisode)
 		return context
 		
 class CastawaysView(generic.ListView):
@@ -120,7 +182,9 @@ class EpisodeView(generic.DetailView):
 		context['episodes'] = Episode.objects.all()
 		context['actions'] = Action.objects.all()
 		context['tribes'] = Tribe.objects.all()
-		context['simpleplayerepisodes'] = getsimpleplayerepisodeobjects(context['episode'])
+		castawaycolordict = getcastawaycolordict(context['episode'])
+		context['simpleplayerepisodes'] = getsimpleplayerepisodes(context['episode'], castawaycolordict)
+		context['simplecastawayepisodes'] = getsimplecastawayepisodes(context['episode'], castawaycolordict)
 		return context
 
 def register(request):

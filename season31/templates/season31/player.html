@@ -89,7 +89,7 @@
 
 					<td class="bgblack">
 						{% for pick in playerepisode.get_team_picks %}
-						<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
+						<div class="{% if pick.out_this_episode %}bgout{% else %}bg{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
 							<a href="{% url 'season31:castaway' pick.castaway.id %}" title="{{ pick.jsp_score }} JSPs banked at this point">{{ pick.castaway.name }}
 							<span class="font12 pad0 textbold textsuper">{{ pick.jsp_score }}</span>
 							</a>
@@ -101,7 +101,7 @@
 
 					<td class="bgblack">
 						{% for pick in playerepisode.get_vote_picks %}
-						<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
+						<div class="{% if pick.out_this_episode %}bgout{% else %}bg{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
 							<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack ">{{ pick.castaway.name }}
 							</a>
 						</div>
@@ -161,7 +161,7 @@
 							</form>
 							{% endif %}
 							{% for pick in playerepisode.get_team_picks %}
-							<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
+							<div class="{% if pick.out_this_episode %}bgout{% else %}bg{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
 								<a href="{% url 'season31:castaway' pick.castaway.id %}" title="{{ pick.jsp_score }} JSPs banked at this point">{{ pick.castaway.name }}
 								<span class="font12 pad0 textbold textsuper">{{ pick.jsp_score }}</span>
 								</a>
@@ -173,7 +173,7 @@
 
 						<td class="bgblack">
 							{% for pick in playerepisode.get_vote_picks %}
-							<div class="{% if pick.out_this_episode %}out{% else %}bgtribe{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
+							<div class="{% if pick.out_this_episode %}bgout{% else %}bg{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
 								<a href="{% url 'season31:castaway' pick.castaway.id %}">{{ pick.castaway.name }}
 								</a>
 							</div>
@@ -203,16 +203,16 @@
 					{% if player.get_latest_player_episode == player.playerepisode_set.latest %}
 					<form action="{% url 'season31:pickteams' player.playerepisode_set.latest.id %}" method="post">
 						{% csrf_token %}
-						<div class="bgtribe{{ castawayepisode.tribe.color }}">
+						<div class="bg{{ castawayepisode.tribe.color }}">
 							Pick Your Team! ({{ player.get_next_episode.team_size }} Castaways)
 						</div>
 						<table class="noborder width100">
 						{% for castawayepisode in player.playerepisode_set.latest.get_pick_options %}
 							<tr>
-								<td class="bgtribe{{ castawayepisode.tribe.color }} textright noborder width45">
+								<td class="bg{{ castawayepisode.tribe.color }} textright noborder width45">
 									<input type="checkbox" name="picks" id="{{ castawayepisode.castaway.id }}" value="{{ castawayepisode.castaway.name }}" />
 								</td>
-								<td class="bgtribe{{ castawayepisode.tribe.color }} textleft noborder width55">
+								<td class="bg{{ castawayepisode.tribe.color }} textleft noborder width55">
 									<label for="{{ castawayepisode.castaway.id }}">{{ castawayepisode.castaway }}</label>
 								</td>
 							</tr>
@@ -234,16 +234,16 @@
 					{% if player.get_latest_player_episode == player.playerepisode_set.latest %}
 					<form action="{% url 'season31:pickvotes' player.playerepisode_set.latest.id %}" method="post">
 						{% csrf_token %}
-						<div class="bgtribe{{ castawayepisode.tribe.color }}">
+						<div class="bg{{ castawayepisode.tribe.color }}">
 							Pick Your Votes! (2)
 						</div>
 						<table class="noborder width100">
 						{% for castawayepisode in player.playerepisode_set.latest.get_pick_options %}
 							<tr>
-								<td class="bgtribe{{ castawayepisode.tribe.color }} textright noborder width40">
+								<td class="bg{{ castawayepisode.tribe.color }} textright noborder width40">
 									<input type="checkbox" name="picks" id="{{ castawayepisode.castaway.id }}" value="{{ castawayepisode.castaway.name }}" />
 								</td>
-								<td class="bgtribe{{ castawayepisode.tribe.color }} textleft noborder width60">
+								<td class="bg{{ castawayepisode.tribe.color }} textleft noborder width60">
 									<label for="{{ castawayepisode.castaway.id }}">{{ castawayepisode.castaway }}</label>
 								</td>
 							</tr>

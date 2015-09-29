@@ -19,7 +19,7 @@
 </div>
 
 <span class="title">{{ tribe.name }}</span>
-<div class="subtitle fgtribe{{ tribe.color }}">{{ tribe.color }}</div>
+<div class="subtitle fg{{ tribe.color }}">{{ tribe.color }}</div>
 
 <div class="spacer"></div>
 
@@ -30,7 +30,7 @@
 		<td class="bgblack fgwhite"><a href="{% url 'season31:episode' episode.id %}" class="fgwhite">{{ episode }}</a></td>
 		{% for castawayepisode in tribe.castawayepisode_set.all %}
 		{% if castawayepisode.episode == episode %}
-		<td class="bgtribe{{ castawayepisode.tribe.color }}"><a href="{% url 'season31:castaway' castawayepisode.castaway.id %}">{{ castawayepisode.castaway }}</a></td>
+		<td class="bg{{ castawayepisode.tribe.color }}"><a href="{% url 'season31:castaway' castawayepisode.castaway.id %}">{{ castawayepisode.castaway }}</a></td>
 		{% endif %}
 		{% endfor %}
 	</tr>

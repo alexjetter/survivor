@@ -18,7 +18,7 @@
 			<tr>
 				<td class="bgblack fgwhite pickwidth">Tribes</td>
 				{% for tribe in tribes%}
-				<td class="bgtribe{{ tribe.color }} pickwidth">{{ tribe }}</td>
+				<td class="bg{{ tribe.color }} pickwidth">{{ tribe }}</td>
 				{% endfor %}
 			</tr>
 		</table>
@@ -42,13 +42,14 @@
 				<td>{{ castaway.age }}</td>
 				<td>{{ castaway.occupation }}</td>
 				{% for ce in castaway.castawayepisode_set.all %}
-				<td class="bgtribe{{ ce.tribe.color }}">{{ ce.score }}</td>
+				<td class="bg{{ ce.tribe.color }}">{{ ce.score }}</td>
 				{% endfor %}
 			</tr>
 			{% endfor %}
 		</table>
 
 	</td>
+	<!--
 	{% if user.is_superuser  %}
 	<td class="bgadmin noborder texttop">
 	
@@ -81,7 +82,6 @@
 					</div>
 				</td>
 			</tr>
-			<!--
 			<tr>
 				<td class="bgwhite">
 					<div class="textright">
@@ -97,10 +97,10 @@
 					</div>
 				</td>
 			</tr>
-			-->
 		</table>
 
 	</td>
 	{% endif %}
+	-->
 	
 </tr></table>
