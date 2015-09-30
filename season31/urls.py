@@ -1,11 +1,12 @@
 from django.conf.urls import url
+from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 
 from . import views
 
 urlpatterns = [
 	url(r'^$', TemplateView.as_view(template_name="season31/index.html"), name='index'),
-	url(r'^leaderboard/$', views.LeaderboardView.as_view(), name='leaderboard'),
+	url(r'^leaderboard/$', never_cache(views.LeaderboardView.as_view()), name='leaderboard'),
 	url(r'^castaways/$', views.CastawaysView.as_view(), name='castaways'),
 	url(r'^players/$', views.PlayersView.as_view(), name='players'),
 	url(r'^episodes/$', views.EpisodesView.as_view(), name='episodes'),
@@ -14,7 +15,7 @@ urlpatterns = [
 	url(r'^info/', TemplateView.as_view(template_name="season31/info.html"), name='info'),
 	url(r'^player/(?P<pk>[0-9]+)/$', views.PlayerView.as_view(), name='player'),
 	url(r'^castaway/(?P<pk>[0-9]+)/$', views.CastawayView.as_view(), name='castaway'),
-	url(r'^episode/(?P<pk>[0-9]+)/$', views.EpisodeView.as_view(), name='episode'),
+	url(r'^episode/(?P<pk>[0-9]+)/$', never_cache(views.EpisodeView.as_view()), name='episode'),
 	url(r'^updatescores/$', views.updatescores, name='updatescores'),
 	url(r'^addepisode/$', views.addepisode, name='addepisode'),
 	url(r'^tallyalljsps/$', views.tallyalljsps, name='tallyalljsps'),

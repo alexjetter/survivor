@@ -50,7 +50,7 @@
 				</td>
 				<td class="bgblack"></td>
 				{% if sce.vote %}
-				<td class="bg{{ sce.vote.color }}"><a href="{% url 'season31:castaway' sce.vote.castawayid %}">{{ sce.vote.castawayname }}</a></td>
+				<td class="bg{{ sce.vote.color }}"><a href="{% url 'season31:castaway' sce.vote.id %}">{{ sce.vote.name }}</a></td>
 				{% else %}
 				<td>-</td>
 				{% endif %}
@@ -105,7 +105,7 @@
 					{% endif %}
 					{% for sp in spe.tpicks %}
 					<div class="bg{{sp.color}} pick">
-						<a href="{% url 'season31:castaway' sp.castawayid %}">{{ sp.castawayname }}</a>
+						<a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a>
 					</div>
 					{% endfor %}
 				</td>
@@ -115,7 +115,7 @@
 				<td class="bgblack">
 					{% for sp in spe.vpicks %}
 					<div class="bg{{sp.color}} pick">
-						<a href="{% url 'season31:castaway' sp.castawayid %}">{{ sp.castawayname }}</a>
+						<a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a>
 					</div>
 					{% endfor %}
 				</td>

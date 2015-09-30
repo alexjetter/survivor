@@ -17,14 +17,15 @@ class SimplePlayerEpisode:
 	jsp_score = 0
 	week_score = 0
 	total_score = 0
+	score_delta = 0
 	movement = 0
 	place = 0
 	tpicks = []
 	vpicks = []
 	
-class SimplePick:
-	castawayname = ""
-	castawayid = 0
+class SimplePerson:
+	name = ""
+	id = 0
 	color = ""
 	
 class SimpleAction:
@@ -34,9 +35,15 @@ class SimpleAction:
 	description = ""
 	
 class SimpleEpisodeStats:
-	topscore = 0
-	topscorer = ""
-	topmovement = 0
-	topmover = ""
+	topplayerscore = 0
+	topplayerscorers = []
+	topcastawayscore = 0
+	topcastawayscorers = []
+	topplayermovement = 0
+	topplayermovers = []
+	mostpickedcastaway = ""
+	leastpickedcastaway = ""
+	mostvotecastaway = ""
+	leastvotecastaway = ""
 	correctpredictions = 0
 	

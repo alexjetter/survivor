@@ -16,22 +16,39 @@
 		<div class="halfspacer"></div>
 		
 		
-		<table class="noborder">
+		<table class="whiteborder">
 			<tr>
-				<td class="bgblack fgwhite textright padlr4">Top Score</td>
-				<td class="bgblack fggreen5 padlr4">{{ simpleepisodestats.topscore }}</td>
-				<td class="bglightgrey noborder padlr4 textleft">{{ simpleepisodestats.topscorer }}</td>
+				<td class="whiteborder bgblack fglightgrey textright padlr4">Top Castaway Score</td>
+				<td class="whiteborder bgblack fggreen5 padlr4">{{ simpleepisodestats.topcastawayscore }}</td>
+				<td class="whiteborder textleft">
+					{% for sp in simpleepisodestats.topcastawayscorers %}
+					<div class="floatleft padlr4 marglr1 bg{{ sp.color }}"><a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a></div>
+					{% endfor %}
+				</td>
 			</tr>
-			{% if simpleepisodestats.topmovement > 0 %}
 			<tr>
-				<td class="bgblack fgwhite textright padlr4">Top Movement</td>
-				<td class="bgblack fggreen5 padlr4">+{{ simpleepisodestats.topmovement }}</td>
-				<td class="bglightgrey noborder padlr4 textleft">{{ simpleepisodestats.topmover  }}</td>
+				<td class="whiteborder bgblack fglightgrey textright padlr4">Top Player Score</td>
+				<td class="whiteborder bgblack fggreen5 padlr4">{{ simpleepisodestats.topplayerscore }}</td>
+				<td class="whiteborder textleft">
+					{% for sp in simpleepisodestats.topplayerscorers %}
+					<div class="floatleft padlr4 marglr1 bglightgrey"><a href="{% url 'season31:player' sp.id %}">{{ sp.name }}</a></div>
+					{% endfor %}
+				</td>
+			</tr>
+			{% if simpleepisodestats.topplayermovement > 0 %}
+			<tr>
+				<td class="whiteborder bgblack fglightgrey textright padlr4">Most Spots Climbed</td>
+				<td class="whiteborder bgblack fggreen5 padlr4">+{{ simpleepisodestats.topplayermovement }}</td>
+				<td class="whiteborder textleft">
+					{% for sp in simpleepisodestats.topplayermovers %}
+					<div class="floatleft padlr4 marglr1 bglightgrey"><a href="{% url 'season31:player' sp.id %}">{{ sp.name }}</a></div>
+					{% endfor %}
+				</td>
 			</tr>
 			{% endif %}
 			<tr>
-				<td class="bgblack fgwhite textright padlr4">Correct Predictors</td>
-				<td class="bgblack fggreen5 padlr4">{{ simpleepisodestats.correctpredictions }}</td>
+				<td class="whiteborder bgblack fglightgrey textright padlr4">Correct Predictors</td>
+				<td class="whiteborder bgblack fggreen5 padlr4">{{ simpleepisodestats.correctpredictions }}</td>
 			</tr>
 		</table>
 		
@@ -39,17 +56,18 @@
 		
 		<div class="halfspacer"></div>
 		
-		<table>
+		<table class="noborder">
 			<tr>
 				<td class="bgblack fglightgrey">±</td>
 				<td class="bgblack fglightgrey">Plc</td>
 				<td class="bgblack fglightgrey">Player</td>
 				<td class="bgblack fglightgrey">Pts</td>
-				<td class="bgblack"></td>
+				<td class="bgblack fglightgrey">Δ</td>
+				<td class="bgblack padlr2"></td>
 				<td class="bgblack fglightgrey">{% if latestepisode %}{{ latestepisode.short }}{% else %}Week{% endif %}</td>
 				<td class="bgblack"></td>
 				{% if latestepisode.is_locked %}
-				<td class="bgblack fglightgrey">Vote</td>
+				<td class="bgblack outimg"><img src="{% static 'season31/images/icons/' %}CorrectVote.png" title="Correctly Predicted Vote" class="actionsmall" /></td>
 				<td class="bgblack fglightgrey">Team Members</td>
 				{% endif %}
 			</tr>
@@ -59,7 +77,8 @@
 				<td>{{ spe.place }}</td>
 				<td class="bgblack fgwhite"><a href="{% url 'season31:player' spe.playerid %}" class="fgwhite">{{ spe.playername }}</a></td>
 				<td>{{ spe.total_score }}</td>
-				<td class="bgblack"></td>
+				<td class="bgblack fgdelta">{% if spe.score_delta < 0 %}{{ spe.score_delta }}{% endif %}</td>
+				<td class="bgblack padlr2"></td>
 				<td>{{ spe.week_score }}</td>
 				<td class="bgblack"></td>
 				{% if latestepisode.is_locked %}
@@ -71,7 +90,7 @@
 				<td class="bgblack">
 					{% for sp in spe.tpicks %}
 					<div class="bg{{sp.color}} pick">
-						<a href="{% url 'season31:castaway' sp.castawayid %}">{{ sp.castawayname }}</a>
+						<a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a>
 					</div>
 					{% endfor %}
 				</td>
