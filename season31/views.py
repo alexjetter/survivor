@@ -88,9 +88,6 @@ class EpisodeJSPView(generic.DetailView):
 	template_name = 'season31/episodejsp.html'
 	def get_context_data(self, **kwargs):
 		context = super(EpisodeJSPView, self).get_context_data(**kwargs)
-		context['episodes'] = Episode.objects.all()
-		context['actions'] = Action.objects.all()
-		context['tribes'] = Tribe.objects.all()
 		castawaycolordict = getcastawaycolordict(context['episode'])
 		context['simpleplayerepisodes'] = getsimpleplayerepisodes(context['episode'], castawaycolordict)
 		context['simplecastawayepisodes'] = getsimplecastawayepisodes(context['episode'], castawaycolordict)

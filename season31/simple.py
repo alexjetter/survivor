@@ -160,6 +160,48 @@ def getsimpleplayerepisodes(episode, castawaycolordict):
 			spe.vpicks.append(sp)
 		simpleplayerepisodes.append(spe)
 	return simpleplayerepisodes
+	
+def getsimpleactions():
+	simpleactions = []
+	for action in Action.objects.all():
+		sa = SimpleAction()
+		sa.id = action.id
+		sa.name = action.name
+		sa.score = action.score
+		sa.icon_filename = action.icon_filename
+		sa.description = action.description
+		simpleactions.append(sa)
+	return simpleactions
+	
+def getsimpletribes():
+	simpletribes = []
+	for tribe in Tribe.objects.all():
+		st = SimplePerson()
+		st.id = tribe.id
+		st.name = tribe.name
+		st.color = tribe.color
+		simpletribes.append(st)
+	return simpletribes
+	
+def getsimpleepisodes():
+	simpleepisodes = []
+	for episode in Episode.objects.all():
+		simpleepisodes.append(getsimpleepisode(episode))
+	return simpleepisodes
+	
+def getsimpleepisode(episode):
+	se = SimpleEpisode()
+	se.id = episode.id
+	se.name = "Episode %i" % (episode.number)
+	se.short = episode.short()
+	se.title = episode.title
+	se.number = episode.number
+	se.air_date = episode.air_date
+	se.air_day = episode.air_day()
+	se.team_size = episode.team_size
+	se.is_locked = episode.is_locked
+	se.score_jsps = episode.score_jsps
+	return se
 
 def getsimpleepisodestats(episode, castawaycolordict):
 	simpleepisodestats = SimpleEpisodeStats()
@@ -205,47 +247,36 @@ def getsimpleepisodestats(episode, castawaycolordict):
 			sp.name = castawayepisode.castaway.name
 			sp.color = castawaycolordict[str(sp.name)]
 			simpleepisodestats.topcastawayscorers.append(sp)
+	for castaway in Castaway.objects.all():
+		teampicks = TeamPick.objects.filter(episode = episode, castaway = castaway)
+		if teampicks.count() > simpleepisodestats.mostteamcastawaycount:
+			simpleepisodestats.mostteamcastawaycount = teampicks.count()
+			simpleepisodestats.mostteamcastaways = []
+			sp = SimplePerson()
+			sp.id = castaway.id
+			sp.name = castaway.name
+			sp.color = castawaycolordict[str(sp.name)]
+			simpleepisodestats.mostteamcastaways.append(sp)
+		elif teampicks.count() == simpleepisodestats.mostteamcastawaycount:
+			sp = SimplePerson()
+			sp.id = castaway.id
+			sp.name = castaway.name
+			sp.color = castawaycolordict[str(sp.name)]
+			simpleepisodestats.mostteamcastaways.append(sp)
+		votepicks = VotePick.objects.filter(episode = episode, castaway = castaway)
+		if votepicks.count() > simpleepisodestats.mostvotecastawaycount:
+			simpleepisodestats.mostvotecastawaycount = votepicks.count()
+			simpleepisodestats.mostvotecastaways = []
+			sp = SimplePerson()
+			sp.id = castaway.id
+			sp.name = castaway.name
+			sp.color = castawaycolordict[str(sp.name)]
+			simpleepisodestats.mostvotecastaways.append(sp)
+		elif votepicks.count() == simpleepisodestats.mostvotecastawaycount:
+			sp = SimplePerson()
+			sp.id = castaway.id
+			sp.name = castaway.name
+			sp.color = castawaycolordict[str(sp.name)]
+			simpleepisodestats.mostvotecastaways.append(sp)
 	return simpleepisodestats
-	
-def getsimpleactions():
-	simpleactions = []
-	for action in Action.objects.all():
-		sa = SimpleAction()
-		sa.id = action.id
-		sa.name = action.name
-		sa.score = action.score
-		sa.icon_filename = action.icon_filename
-		sa.description = action.description
-		simpleactions.append(sa)
-	return simpleactions
-	
-def getsimpletribes():
-	simpletribes = []
-	for tribe in Tribe.objects.all():
-		st = SimplePerson()
-		st.id = tribe.id
-		st.name = tribe.name
-		st.color = tribe.color
-		simpletribes.append(st)
-	return simpletribes
-	
-def getsimpleepisodes():
-	simpleepisodes = []
-	for episode in Episode.objects.all():
-		simpleepisodes.append(getsimpleepisode(episode))
-	return simpleepisodes
-	
-def getsimpleepisode(episode):
-	se = SimpleEpisode()
-	se.id = episode.id
-	se.name = "Episode %i" % (episode.number)
-	se.short = episode.short()
-	se.title = episode.title
-	se.number = episode.number
-	se.air_date = episode.air_date
-	se.air_day = episode.air_day()
-	se.team_size = episode.team_size
-	se.is_locked = episode.is_locked
-	se.score_jsps = episode.score_jsps
-	return se
 	
