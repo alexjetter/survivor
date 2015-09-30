@@ -16,6 +16,7 @@ urlpatterns = [
 	url(r'^player/(?P<pk>[0-9]+)/$', views.PlayerView.as_view(), name='player'),
 	url(r'^castaway/(?P<pk>[0-9]+)/$', views.CastawayView.as_view(), name='castaway'),
 	url(r'^episode/(?P<pk>[0-9]+)/$', never_cache(views.EpisodeView.as_view()), name='episode'),
+	url(r'^episode/(?P<pk>[0-9]+)/JSP/$', views.EpisodeJSPView.as_view(), name='episodejsp'),
 	url(r'^updatescores/$', views.updatescores, name='updatescores'),
 	url(r'^addepisode/$', views.addepisode, name='addepisode'),
 	url(r'^tallyalljsps/$', views.tallyalljsps, name='tallyalljsps'),

@@ -10,16 +10,16 @@
 	<td class="content noborder texttop textleft">
 
 		<div class="textitalic">
-			{% for ep in episodes %}
-			{% if ep == episode %}
-			<span class="textbold fgdarkgrey">{{ ep.short }}</span>
+			{% for se in simpleepisodes %}
+			{% if se.number == simpleepisode.number %}
+			<span class="textbold fgdarkgrey">{{ se.short }}</span>
 			{% else %}
-			<a href="{% url 'season31:episode' ep.id %}" class="fggrey">{{ ep.short }}</a>
+			<a href="{% url 'season31:episode' se.id %}" class="fggrey">{{ se.short }}</a>
 			{% endif %}
 			{% endfor %}
 		</div>
-		<div class="title">"{{ episode.title }}"</div>
-		<div class="subtitle">{{ episode.air_day}}, {{ episode.air_date}} ET</div>
+		<div class="title">"{{ simpleepisode.title }}"</div>
+		<div class="subtitle">{{ simpleepisode.air_day}}, {{ simpleepisode.air_date}} ET</div>
 
 		<div class="spacer"></div>
 
@@ -85,7 +85,7 @@
 				<td class="bgblack"></td>
 				<td class="bgblack fglightgrey">Total</td>
 			</tr>
-			{% if not episode.is_locked %}
+			{% if not simpleepisode.is_locked %}
 			<tr>
 				<td colspan=14>Picks will be revealed in {{ episode.time_to_lock }}</td>
 			</tr>
@@ -96,7 +96,7 @@
 
 				<td class="bgblack">
 					{% if spe.tpicks|length == 0 and user.is_superuser %}
-					<form action="{% url 'season31:playerrolloverteam' spe.playerepisodeid %}" method="post">
+					<form action="{% url 'season31:playerrolloverteam' spe.id %}" method="post">
 						{% csrf_token %}
 						<div class="padtb2 padlr0">
 							<input type="submit" value="Rollover Last Week's Picks" class="width100" />
@@ -139,7 +139,7 @@
 	{% if user.is_superuser  %}
 	<td class="bgadmin noborder texttop">
 		<div class="bgdelete pad4 marg4">
-			<form action="{% url 'season31:deleteepisode' episode.id %}" method="post">
+			<form action="{% url 'season31:deleteepisode' simpleepisode.id %}" method="post">
 				{% csrf_token %}
 				<input type="checkbox" name="check1" id="check1" />
 				<input type="submit" class="width60" value="Delete This Episode" />
@@ -147,53 +147,53 @@
 			</form>
 		</div>
 		<div class="bgwhite pad4 marg4">
-			<form action="{% url 'season31:updateepisodetitle' episode.id %}" method="post">
+			<form action="{% url 'season31:updateepisodetitle' simpleepisode.id %}" method="post">
 				{% csrf_token %}
 				<input type="text" class="width50 textcenter" name="title" />
 				<input type="submit" class="width40" value="Update Episode Title" />
 			</form>
 		</div>
 		<div class="bgwhite pad4 marg4">
-			<form action="{% url 'season31:updateepisodedatetime' episode.id %}" method="post">
+			<form action="{% url 'season31:updateepisodedatetime' simpleepisode.id %}" method="post">
 				{% csrf_token %}
 				<input type="text" class="width40 textcenter" name="airdatetime" value="YYYYmmdd HH"/>
 				<input type="submit" class="width50" value="Update Air Date / Time" />
 			</form>
 		</div>
 		<div class="bgwhite pad4 marg4">
-			<form action="{% url 'season31:updateepisodeteamsize' episode.id %}" method="post">
+			<form action="{% url 'season31:updateepisodeteamsize' simpleepisode.id %}" method="post">
 				{% csrf_token %}
-				<input type="number" class="width30 textcenter" name="teamsize" id="teamsize" min="2" max="10" value="{{ episode.team_size }}" />
+				<input type="number" class="width30 textcenter" name="teamsize" id="teamsize" min="2" max="10" value="{{ simpleepisode.team_size }}" />
 				<input type="submit" class="width60" value="Update Team Size" />
 			</form>
 		</div>
 		<div class="bgwhite pad4 marg4">
-			<form action="{% url 'season31:rolloverepisodeteams' episode.id %}" method="post">
+			<form action="{% url 'season31:rolloverepisodeteams' simpleepisode.id %}" method="post">
 				{% csrf_token %}
 				<input type="submit" class="width100" value="Rollover Episode Teams" />
 			</form>
 		</div>
 		<div class="bgwhite pad4 marg4">
-			<form action="{% url 'season31:updateepisodescore' episode.id %}" method="post">
+			<form action="{% url 'season31:updateepisodescore' simpleepisode.id %}" method="post">
 				{% csrf_token %}
 				<input type="submit" class="width100" value="Update Episode Score" />
 			</form>
 		</div>
 		<div class="bgwhite pad4 marg4">
-			<form action="{% url 'season31:togglescorejsps' episode.id %}" method="post">
+			<form action="{% url 'season31:togglescorejsps' simpleepisode.id %}" method="post">
 				{% csrf_token %}
-				<input type="submit" class="width100" value="JSPs {% if not episode.score_jsps %}NOT {% endif %}Scoring" />
+				<input type="submit" class="width100" value="JSPs {% if not simpleepisode.score_jsps %}NOT {% endif %}Scoring" />
 			</form>
 		</div>
 		<div class="bgwhite pad4 marg4">
-			<form action="{% url 'season31:tallyepisodejsps' episode.id %}" method="post">
+			<form action="{% url 'season31:tallyepisodejsps' simpleepisode.id %}" method="post">
 				{% csrf_token %}
 				<input type="submit" class="width100" value="Tally Episode JSPs" />
 			</form>
 		</div>
-		{% if episode.is_locked %}
+		{% if simpleepisode.is_locked %}
 		<div class="bgwhite pad4 marg4">
-			<form action="{% url 'season31:unlockepisode' episode.id %}" method="post">
+			<form action="{% url 'season31:unlockepisode' simpleepisode.id %}" method="post">
 				{% csrf_token %}
 				<input type="submit" class="width100" value="Unlock Episode" />
 			</form>
@@ -206,7 +206,7 @@
 			</tr>
 			<tr>
 				<td class="bgwhite textleft">
-					<form action="{% url 'season31:updateceactions' episode.id %}" method="post">
+					<form action="{% url 'season31:updateceactions' simpleepisode.id %}" method="post">
 						{% csrf_token %}
 						<div class="fggrey">
 							<input type="checkbox" name="delete" id="delete" />
@@ -214,35 +214,35 @@
 						</div>
 						<div class="pad0">
 							<select name="action">
-								{% for action in actions %}
-								<option value="{{ action.id }}">{{ action.name }}</option>
+								{% for sa in simpleactions %}
+								<option value="{{ sa.id }}">{{ sa.name }}</option>
 								{% endfor %}
 							</select>
 						</div>
-						{% for castawayepisode in episode.castawayepisode_set.all %}
-						<div class="pad0 fg{{ castawayepisode.tribe.color }}">
-							<input type="checkbox" name="castaways" id="{{ castawayepisode.id }}" value="{{ castawayepisode.id }}" />
-							<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
+						{% for sce in simplecastawayepisodes %}
+						<div class="pad0 fg{{ sce.color }}">
+							<input type="checkbox" name="castaways" id="{{ sce.id }}" value="{{ sce.id }}" />
+							<label for="{{ sce.id }}">{{ sce.castawayname }}</label>
 						</div>
 						{% endfor %}
 						<input type="submit" value="Update Actions" />
 					</form>
 				</td>
 				<td class="bgwhite textleft">
-					<form action="{% url 'season31:updatecevotes' episode.id %}" method="post">
+					<form action="{% url 'season31:updatecevotes' simpleepisode.id %}" method="post">
 						{% csrf_token %}
 						Votee:
 						<div class="pad0">
 							<select name="votee">
-								{% for castawayepisode in episode.castawayepisode_set.all %}
-								<option value="{{ castawayepisode.castaway.id }}">{{ castawayepisode.castaway }}</option>
+								{% for sce in simplecastawayepisodes %}
+								<option value="{{ sce.castawayid }}">{{ sce.castawayname }}</option>
 								{% endfor %}
 							</select>
 						</div>
-						{% for castawayepisode in episode.castawayepisode_set.all %}
-						<div class="pad0 fg{{ castawayepisode.tribe.color }}">
-							<input type="checkbox" name="voters" id="{{ castawayepisode.id }}" value="{{ castawayepisode.id }}" />
-							<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
+						{% for sce in simplecastawayepisodes %}
+						<div class="pad0 fg{{ sce.color }}">
+							<input type="checkbox" name="voters" id="{{ sce.id }}" value="{{ sce.id }}" />
+							<label for="{{ sce.id }}">{{ sce.castawayname }}</label>
 						</div>
 						{% endfor %}
 						<div>
@@ -251,20 +251,20 @@
 					</form>
 				</td>
 				<td class="bgwhite textleft">
-					<form action="{% url 'season31:updatecetribes' episode.id %}" method="post">
+					<form action="{% url 'season31:updatecetribes' simpleepisode.id %}" method="post">
 						{% csrf_token %}
 						New Tribe:
 						<div class="pad0">
 							<select name="tribe">
-								{% for tribe in tribes %}
-								<option value="{{ tribe.id }}">{{ tribe }}</option>
+								{% for st in simpletribes %}
+								<option value="{{ st.id }}">{{ st.name }}</option>
 								{% endfor %}
 							</select>
 						</div>
-						{% for castawayepisode in episode.castawayepisode_set.all %}
-						<div class="pad0 fg{{ castawayepisode.tribe.color }}">
-							<input type="checkbox" name="castaways" id="{{ castawayepisode.id }}" value="{{ castawayepisode.id }}" />
-							<label for="{{ castawayepisode.id }}">{{ castawayepisode.castaway }}</label>
+						{% for sce in simplecastawayepisodes %}
+						<div class="pad0 fg{{ sce.color }}">
+							<input type="checkbox" name="castaways" id="{{ sce.id }}" value="{{ sce.id }}" />
+							<label for="{{ sce.id }}">{{ sce.castawayname }}</label>
 						</div>
 						{% endfor %}
 						<div>
