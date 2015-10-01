@@ -62,7 +62,7 @@
 			{% for playerepisode in pastplayerepisodes %}
 				{% if playerepisode.episode.number == 1 %}
 					<tr>
-						<td class="bgblack textleft fggrey halftitle pad4" colspan=17>Past Episodes</td>
+						<td class="bgblack textleft fggrey font24 pad4" colspan=17>Past Episodes</td>
 					</tr>
 					<tr>
 						<td class="bgblack"></td>
@@ -137,7 +137,7 @@
 						</tr>
 					{% endif %}
 					<tr>
-						<td class="bgblack textleft pad4" colspan=7><span class="fggrey halftitle">Upcoming  Episode</span><span class="fgred2">{{ playerepisode.episode.time_to_lock }}<script>startTimer("{{ playerepisode.episode.seconds_to_lock }}");</script></span><span class="fggrey">left to make changes to your picks</span></td>
+						<td class="bgblack textleft pad4" colspan=7><span class="fggrey font24">Upcoming  Episode</span><span class="fgred2 font20">{{ playerepisode.episode.time_to_lock }}<script>startTimer("{{ playerepisode.episode.seconds_to_lock }}");</script></span><span class="fggrey">to make changes to your picks</span></td>
 					</tr>
 					<tr>
 						<td class="bgblack"></td>
@@ -151,14 +151,9 @@
 					<tr>
 						<td class="bgblack"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode.short }}</a></td>
 
-						<td class="bgblack">
+						<td class="bgblack mindwidth144">
 							{% if not playerepisode.get_team_picks %}
-							<form action="{% url 'season31:playerrolloverteam' player.playerepisode_set.latest.id %}" method="post">
-								{% csrf_token %}
-								<div class="padtb2 padlr0">
-									<input type="submit" value="Rollover Last Week's Picks" class="width100" />
-								</div>
-							</form>
+								<span class="fglightgrey textitalic">No Current Team</span>
 							{% endif %}
 							{% for pick in playerepisode.get_team_picks %}
 							<div class="{% if pick.out_this_episode %}bgout{% else %}bg{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
@@ -171,7 +166,10 @@
 
 						<td class="bgblack"></td>
 
-						<td class="bgblack">
+						<td class="bgblack mindwidth144">
+							{% if not playerepisode.get_vote_picks %}
+								<span class="fglightgrey textitalic">No Current votes</span>
+							{% endif %}
 							{% for pick in playerepisode.get_vote_picks %}
 							<div class="{% if pick.out_this_episode %}bgout{% else %}bg{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
 								<a href="{% url 'season31:castaway' pick.castaway.id %}">{{ pick.castaway.name }}
@@ -197,8 +195,19 @@
 			</tr>
 			-->
 			<tr>
-				<td class="bgblack" colspan=1></td>
-
+				<td class="bgblack"></td>
+				<td class="bgblack pad4" colspan=3>
+					<form action="{% url 'season31:playerrolloverteam' player.playerepisode_set.latest.id %}" method="post">
+						{% csrf_token %}
+						<div class="padtb2 padlr0">
+							<input type="submit" value="Rollover Last Week's Picks (Overwrites Current Team and Votes)" class="width100" />
+						</div>
+					</form>
+				</td>
+				<td class="bgblack" colspan=3></td>
+			</tr>
+			<tr>
+				<td class="bgblack"></td>
 				<td class="bgblack fggreen4">
 					{% if player.get_latest_player_episode == player.playerepisode_set.latest %}
 					<form action="{% url 'season31:pickteams' player.playerepisode_set.latest.id %}" method="post">
@@ -274,6 +283,14 @@
 				{% if player.paid %}Paid!{% else %}Indebted!{% endif %}
 				<input type="checkbox" name="check" id="check"/>
 				<input type="submit" value="Toggle Paid Status" />
+			</form>
+		</div>
+		<div class="bgwhite pad4 marg4">
+			<form action="{% url 'season31:playerrolloverteam' player.playerepisode_set.latest.id %}" method="post">
+				{% csrf_token %}
+				<div class="padtb2 padlr0">
+					<input type="submit" value="Rollover Last Week's Picks" class="width100" />
+				</div>
 			</form>
 		</div>
 		{% if player.forgot_password %}

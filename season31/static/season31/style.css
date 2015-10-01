@@ -115,6 +115,8 @@ form {margin-bottom: 0;}
 .pick {width: 72; float: left;}
 .picksm {width: 16; float: left;}
 
+.mindwidth144 {min-width: 144;}
+
 .padlr0 {padding-left: 0; padding-right: 0;}
 .padlr1 {padding-left: 1; padding-right: 1;}
 .padlr2 {padding-left: 2; padding-right: 2;}
