@@ -80,28 +80,28 @@
 		
 		<div class="halfspacer"></div>
 		
-		<div class="">
+		<div class="rounded pad8">
 			<div class="pad0">
-				<div class="inline pad0">
-					<div class="inline bgdarkgrey marglrneg3 padlr4 fglightgrey width24  textright roundleft">Plc</div>
-					<div class="inline bgblack    marglrneg2 padlr4 fglightgrey width24  textleft roundright">(±)</div>
-					<div class="inline bgblack    padlr4 fglightgrey width256 rounded">Player</div>
-					<div class="inline bgdarkgrey marglrneg3 padlr4 fglightgrey width24 textleft roundleft">Pts</div>
-					<div class="inline bgblack    marglrneg2 padlr4 fglightgrey width24 textright roundright">(Δ)</div>
-					<div class="inline bgblack    padlr4 fglightgrey textcenter width16  font14 textbold rounded">✓</div>
+				<div class="inline pad0 marglrneg1">
+					<div class="inline bgblack marglrneg3 padlr4 fglightgrey width24 textcenter roundleft">Plc</div>
+					<div class="inline bglightblack marglrneg2 padlr4 fglightgrey width24 textcenter roundright">±</div>
+					<div class="inline bgblack padlr4 fglightgrey width256 rounded">Player</div>
+					<div class="inline bgblack marglrneg3 padlr4 fglightgrey width24 textcenter roundleft">Pts</div>
+					<div class="inline bglightblack marglrneg2 padlr4 fglightgrey width24 textcenter roundright">Δ</div>
+					<div class="inline bgblack width16 padlr4 fglightgrey textcenter textbold rounded">X</div>
 				</div>
 			</div>
 			{% for spe in simpleplayerepisodes %}
 			<div class="pad0">
 				<div class="inline pad0 margneg1">
-					<div class="inline bggreen5 marglrneg3 padlr4 width24 textright bggreen4 roundleft">{{ spe.place }}</div>
-					<div class="inline bgblack marglrneg2 padlr4 width24 textcenter roundright{% if spe.movement > 0 %} fggreen5{% elif spe.movement < 0 %} fgred5{% endif%}">{% if spe.movement > 0 %}+{% endif %}{{ spe.movement }}</div>
+					<div class="inline bgblack fgwhite marglrneg3 padlr4 width24 textcenter roundleft">{{ spe.place }}</div>
+					<div class="inline bglightblack marglrneg2 padlr4 width24 textcenter roundright{% if spe.movement > 0 %} fggreen5{% elif spe.movement < 0 %} fgred5{% endif%}">{% if spe.movement > 0 %}+{% endif %}{{ spe.movement }}</div>
 					<div class="inline bgblack padlr4 width256 fgwhite rounded"><a href="{% url 'season31:player' spe.playerid %}" class="fgwhite">{{ spe.playername }}</a></div>
-					<div class="inline bggreen5 marglrneg2 padlr4 width24 textright roundleft">{{ spe.total_score }}</div>
-					<div class="inline bgblack marglrneg3 padlr4 width24 textcenter{% if spe.score_delta < 0 %} fgdelta{% endif %} roundright">{{ spe.score_delta }}</div>
-					<div class="inline bgblack padlr4 width16 textcenter textbold font14 fggreen5 rounded">{% if spe.vote_off_score > 0 and latestepisode.is_locked%}✓{% else %}&nbsp;{% endif %}</div>
+					<div class="inline bgblack fgwhite marglrneg3 padlr4 width24 textcenter roundleft">{{ spe.total_score }}</div>
+					<div class="inline bglightblack marglrneg2 padlr4 width24 textcenter{% if spe.score_delta < 0 %} fgdelta{% else %} fglightblack{% endif %} roundright">{{ spe.score_delta }}</div>
+					{% if spe.vote_off_score > 0 and latestepisode.is_locked%}<div class="inline width16 bgblack padlr4 textcenter fggreen5 rounded">X</div>{% endif %}
 					{% if latestepisode.is_locked %}
-					<div class="inline">
+					<div class="inline hidden">
 						{% for sp in spe.tpicks %}
 						<div class="inline padlr4 rounded bg{{sp.color}}">
 							<a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a>

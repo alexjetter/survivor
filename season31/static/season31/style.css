@@ -65,6 +65,7 @@ form {margin-bottom: 0;}
 .bglightgrey {background-color: #c8c8c8;}
 .bggrey {background-color: #909090;}
 .bgdarkgrey {background-color: #595959;}
+.bglightblack {background-color: #3d3d3d;}
 .bgblack {background-color: #222222;}
 .bgmerge {background-color: #B4A7D6; color: #222222;}
 .bggreen5 {background-color: #66ff66; color: #222222;}
@@ -89,6 +90,7 @@ form {margin-bottom: 0;}
 .fglightgrey {color: #c8c8c8;}
 .fggrey {color: #999999;}
 .fgdarkgrey {color: #595959;}
+.fglightblack {color: #3d3d3d;}
 .fgblack {color: #222222;}
 .fgmerge {color: #B4A7D6;}
 .fggreen5 {color: #66ff66;;}
@@ -188,10 +190,10 @@ table, th, td{
 .floatleft {float: left;}
 .clear {clear: both;}
 .overflowhidden  {overflow: hidden;}
+.hidden {visibility: hidden;}
 
 .relative {position: relative;}
-.abstopright {position: absolute; right: 0px; top: 0px;}
-.abstopleft {position: absolute; left: 0px; top: 0px;}
+.absright {position: absolute; right: 0px;}
 
 .font0{font-size: 0em;}
 .font8{font-size: 0.5em;}
@@ -237,9 +239,9 @@ table, th, td{
 .textbottom {vertical-align: bottom;}
 .textsuper {vertical-align: top;}
 
-.rounded {border-radius: 4px;}
-.roundleft {border-top-left-radius: 4px; border-bottom-left-radius: 4px;}
-.roundright {border-top-right-radius: 4px; border-bottom-right-radius: 4px;}
+.rounded {border-radius: 3px;}
+.roundleft {border-top-left-radius: 3px; border-bottom-left-radius: 3px;}
+.roundright {border-top-right-radius: 3px; border-bottom-right-radius: 3px;}
 
 .outimg {
     filter: none;
