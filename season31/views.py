@@ -2,6 +2,7 @@ from datetime import datetime
 from decimal import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.urlresolvers import reverse, resolve
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
@@ -15,15 +16,16 @@ from .forms import UserForm
 from .models import Player, Castaway, TeamPick, VotePick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action
 from .simple import SimplePlayerEpisode, SimplePerson, SimpleCastawayEpisode, SimpleAction, SimpleEpisodeStats, getcastawaycolordict, getsimplecastawayepisodes, getsimpleplayerepisodes, getsimpleepisodestats, getsimpleactions, getsimpletribes, getsimpleepisodes, getsimpleepisode
 
+def clear_cache():
+	cache.clear()
+
 class LeaderboardView(generic.ListView):
+	clear_cache()
 	context_object_name = 'simpleplayerepisodes'
 	template_name = 'season31/leaderboard.html'
-	try:
-		latestepisode = Episode.objects.filter(is_locked = True).latest()
-	except:
-		latestepisode = Episode.objects.latest()
+	latestepisode = Episode.objects.filter(is_locked = True).latest()
 	castawaycolordict = getcastawaycolordict(latestepisode)
-	queryset = getsimpleplayerepisodes(latestepisode, castawaycolordict)
+	queryset = getsimpleplayerepisodes(latestepisode, castawaycolordict, '-total_score')
 	def get_context_data(self, **kwargs):
 		context = super(LeaderboardView, self).get_context_data(**kwargs)
 		context['latestepisode'] = self.latestepisode
@@ -79,8 +81,8 @@ class EpisodeView(generic.DetailView):
 		context['simpleactions'] = getsimpleactions()
 		context['simpletribes'] = getsimpletribes()
 		castawaycolordict = getcastawaycolordict(context['episode'])
-		context['simpleplayerepisodes'] = getsimpleplayerepisodes(context['episode'], castawaycolordict)
 		context['simplecastawayepisodes'] = getsimplecastawayepisodes(context['episode'], castawaycolordict)
+		context['simpleplayerepisodes'] = getsimpleplayerepisodes(context['episode'], castawaycolordict, '-week_score')
 		return context
 
 class EpisodeJSPView(generic.DetailView):

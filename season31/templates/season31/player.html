@@ -200,7 +200,7 @@
 					<form action="{% url 'season31:playerrolloverteam' player.playerepisode_set.latest.id %}" method="post">
 						{% csrf_token %}
 						<div class="padtb2 padlr0">
-							<input type="submit" value="Rollover Last Week's Picks (Overwrites Current Team and Votes)" class="width100" />
+							<input type="submit" value="Rollover Last Week's Picks (if empty)" class="width100" />
 						</div>
 					</form>
 				</td>

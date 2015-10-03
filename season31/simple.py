@@ -111,7 +111,7 @@ def getsimplecastawayepisodes(episode, castawaycolordict):
 		simplecastawayepisodes.append(sce)
 	return simplecastawayepisodes
 
-def getsimpleplayerepisodes(episode, castawaycolordict):
+def getsimpleplayerepisodes(episode, castawaycolordict, sortby):
 	#build css reference
 	try:
 		castawayepisodes = CastawayEpisode.objects.filter(episode= episode)
@@ -127,7 +127,7 @@ def getsimpleplayerepisodes(episode, castawaycolordict):
 	#build leaderboardPEs
 	simpleplayerepisodes = []
 	topplayerscore = 0
-	for playerepisode in PlayerEpisode.objects.filter(player__hidden = False, episode = episode).order_by('-total_score'):
+	for playerepisode in PlayerEpisode.objects.filter(player__hidden = False, episode = episode).order_by(sortby):
 		spe = SimplePlayerEpisode()
 		spe.id = playerepisode.id
 		spe.playerid = playerepisode.player.id
