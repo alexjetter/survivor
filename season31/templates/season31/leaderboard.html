@@ -16,106 +16,103 @@
 		<div class="halfspacer"></div>
 		
 		
-		<table class="whiteborder">
-			<tr>
-				<td class="whiteborder bglightgrey textright padlr4">Top Castaway Score</td>
-				<td class="whiteborder bgdarkgrey fggreen4 padlr4">{{ simpleepisodestats.topcastawayscore }} <span class="fggrey">Points</span></td>
-				<td class="whiteborder textleft">
+		<div>
+			<div class="margneg2">
+				<div class="inline width192 bglightgrey rounded textright padlr4 padtb0">Top Castaway Score</div>
+				<div class="inline width24 bgdarkgrey roundleft textright fggreen4 padlr4 padtb0 marglrneg3">{{ simpleepisodestats.topcastawayscore }}</div>
+				<div class="inline width48 bgdarkgrey roundright textleft fggrey padlr4 padtb0 marglrneg3">Points</div>
+				<div class="inline margneg2">
 					{% for sp in simpleepisodestats.topcastawayscorers %}
-					<div class="floatleft padlr4 marglr1 bg{{ sp.color }}"><a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a></div>
+					<div class="inline padlr4 padtb0 rounded bg{{ sp.color }}"><a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a></div>
 					{% endfor %}
-				</td>
-			</tr>
-			<tr>
-				<td class="whiteborder bglightgrey textright padlr4">Most Picked for Teams</td>
-				<td class="whiteborder bgdarkgrey fggreen4 padlr4">{{ simpleepisodestats.mostteamcastawaycount }} <span class="fggrey">Teams</span></td>
-				<td class="whiteborder textleft">
+				</div>
+			</div>
+			<div class="margneg2">
+				<div class="inline width192 bglightgrey rounded textright padlr4 padtb0">Most Picked for Teams</div>
+				<div class="inline width24 bgdarkgrey roundleft textright fggreen4 padlr4 padtb0 marglrneg3">{{ simpleepisodestats.mostteamcastawaycount }}</div>
+				<div class="inline width48 bgdarkgrey roundright textleft fggrey padlr4 padtb0 marglrneg3">Teams</div>
+				<div class="inline margneg2">
 					{% for sp in simpleepisodestats.mostteamcastaways %}
-					<div class="floatleft padlr4 marglr1 bg{{ sp.color }}"><a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a></div>
+					<div class="inline padlr4 padtb0 rounded bg{{ sp.color }}"><a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a></div>
 					{% endfor %}
-				</td>
-			</tr>
-			<tr>
-				<td class="whiteborder bglightgrey textright padlr4">Most Predicted for Vote Off</td>
-				<td class="whiteborder bgdarkgrey fgred4 padlr4">{{ simpleepisodestats.mostvotecastawaycount }} <span class="fggrey">Picks</span></td>
-				<td class="whiteborder textleft">
+				</div>
+			</div>
+			<div class="margneg2">
+				<div class="inline width192 bglightgrey rounded textright padlr4 padtb0">Most Predicted Vote-Off</div>
+				<div class="inline width24 bgdarkgrey roundleft textright fgred4 padlr4 padtb0 marglrneg3">{{ simpleepisodestats.mostvotecastawaycount }}</div>
+				<div class="inline width48 bgdarkgrey roundright textleft fggrey padlr4 padtb0 marglrneg3">Picks</div>
+				<div class="inline margneg2">
 					{% for sp in simpleepisodestats.mostvotecastaways %}
-					<div class="floatleft padlr4 marglr1 bg{{ sp.color }}"><a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a></div>
+					<div class="inline padlr4 padtb0 rounded bg{{ sp.color }}"><a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a></div>
 					{% endfor %}
-				</td>
-			</tr>
-			<tr>
-				<td class="whiteborder bglightgrey textright padlr4">Top Player Score</td>
-				<td class="whiteborder bgdarkgrey fggreen4 padlr4">{{ simpleepisodestats.topplayerscore }} <span class="fggrey">Points</span></td>
-				<td class="whiteborder textleft">
+				</div>
+			</div>
+			<div class="margneg2">
+				<div class="inline width192 bglightgrey rounded textright padlr4 padtb0">Top Player Score</div>
+				<div class="inline width24 bgdarkgrey roundleft textright fggreen4 padlr4 padtb0 marglrneg3">{{ simpleepisodestats.topplayerscore }}</div>
+				<div class="inline width48 bgdarkgrey roundright textleft fggrey padlr4 padtb0 marglrneg3">Points</div>
+				<div class="inline margneg2">
 					{% for sp in simpleepisodestats.topplayerscorers %}
-					<div class="floatleft padlr4 marglr1 bgblack"><a href="{% url 'season31:player' sp.id %}" class="fgwhite">{{ sp.name }}</a></div>
+					<div class="inline padlr4 padtb0 rounded bgblack"><a href="{% url 'season31:player' sp.id %}" class="fgwhite">{{ sp.name }}</a></div>
 					{% endfor %}
-				</td>
-			</tr>
+				</div>
+			</div>
 			{% if simpleepisodestats.topplayermovement > 0 %}
-			<tr>
-				<td class="whiteborder bglightgrey textright padlr4">Most Spots Climbed</td>
-				<td class="whiteborder bgdarkgrey fggreen4 padlr4">+{{ simpleepisodestats.topplayermovement }} <span class="fggrey">Places</span></td>
-				<td class="whiteborder textleft">
+			<div class="margneg2">
+				<div class="inline width192 bglightgrey rounded textright padlr4 padtb0">Most Spots Climbed</div>
+				<div class="inline width24 bgdarkgrey roundleft textright fggreen4 padlr4 padtb0 marglrneg3">+{{ simpleepisodestats.topplayermovement }}</div>
+				<div class="inline width48 bgdarkgrey roundright textleft fggrey padlr4 padtb0 marglrneg3">Places</div>
+				<div class="inline margneg2">
 					{% for sp in simpleepisodestats.topplayermovers %}
-					<div class="floatleft padlr4 marglr1 bgblack"><a href="{% url 'season31:player' sp.id %}" class="fgwhite">{{ sp.name }}</a></div>
+					<div class="inline padlr4 padtb0 rounded bgblack"><a href="{% url 'season31:player' sp.id %}" class="fgwhite">{{ sp.name }}</a></div>
 					{% endfor %}
-				</td>
-			</tr>
+				</div>
+			</div>
 			{% endif %}
-			<tr>
-				<td class="whiteborder bglightgrey textright padlr4">Correct Vote Predictions</td>
-				<td class="whiteborder bgdarkgrey fggreen4 padlr4">{{ simpleepisodestats.correctpredictions }} <span class="fggrey">Seers</span></td>
-			</tr>
-		</table>
+			<div class="margneg2">
+				<div class="inline width192 bglightgrey rounded textright padlr4 padtb0">Correct Vote Predictions</div>
+				<div class="inline width24 bgdarkgrey roundleft textright fggreen4 padlr4 padtb0 marglrneg3">{{ simpleepisodestats.correctpredictions }}</div>
+				<div class="inline width48 bgdarkgrey roundright textleft fggrey padlr4 padtb0 marglrneg3">Seers</div>
+			</div>
+		</div>
 		
 		{% endif %}
 		
 		<div class="halfspacer"></div>
 		
-		<table class="noborder">
-			<tr>
-				<td class="bgblack fglightgrey">±</td>
-				<td class="bgblack fglightgrey">Plc</td>
-				<td class="bgblack fglightgrey">Player</td>
-				<td class="bgblack fglightgrey">Pts</td>
-				<td class="bgblack fglightgrey">Δ</td>
-				<td class="bgblack padlr2"></td>
-				<td class="bgblack fglightgrey">{% if latestepisode %}{{ latestepisode.short }}{% else %}Week{% endif %}</td>
-				<td class="bgblack"></td>
-				{% if latestepisode.is_locked %}
-				<td class="bgblack outimg"><img src="{% static 'season31/images/icons/' %}CorrectVote.png" title="Correctly Predicted Vote" class="actionsmall" /></td>
-				<td class="bgblack fglightgrey">Team Members</td>
-				{% endif %}
-			</tr>
+		<div class="">
+			<div class="pad0">
+				<div class="inline pad0">
+					<div class="inline bgdarkgrey marglrneg3 padlr4 fglightgrey width24  textright roundleft">Plc</div>
+					<div class="inline bgblack    marglrneg2 padlr4 fglightgrey width24  textleft roundright">(±)</div>
+					<div class="inline bgblack    padlr4 fglightgrey width256 rounded">Player</div>
+					<div class="inline bgdarkgrey marglrneg3 padlr4 fglightgrey width24 textleft roundleft">Pts</div>
+					<div class="inline bgblack    marglrneg2 padlr4 fglightgrey width24 textright roundright">(Δ)</div>
+					<div class="inline bgblack    padlr4 fglightgrey textcenter width16  font14 textbold rounded">✓</div>
+				</div>
+			</div>
 			{% for spe in simpleplayerepisodes %}
-			<tr>
-				<td class="bgblack{% if spe.movement > 0 %} fggreen5{% elif spe.movement < 0 %} fgred5{% endif%}">{% if spe.movement > 0 %}+{% endif %}{{ spe.movement }}</td>
-				<td>{{ spe.place }}</td>
-				<td class="bgblack fgwhite"><a href="{% url 'season31:player' spe.playerid %}" class="fgwhite">{{ spe.playername }}</a></td>
-				<td>{{ spe.total_score }}</td>
-				<td class="bgblack fgdelta">{% if spe.score_delta < 0 %}{{ spe.score_delta }}{% endif %}</td>
-				<td class="bgblack padlr2"></td>
-				<td>{{ spe.week_score }}</td>
-				<td class="bgblack"></td>
-				{% if latestepisode.is_locked %}
-				<td class="bgblack">
-					{% if spe.vote_off_score > 0 %}
-					<img src="{% static 'season31/images/icons/' %}CorrectVote.png" title="Correctly Predicted Vote" class="actionsmall" />
-					{% endif %}
-				</td>
-				<td class="bgblack">
-					{% for sp in spe.tpicks %}
-					<div class="bg{{sp.color}} pick">
-						<a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a>
+			<div class="pad0">
+				<div class="inline pad0 margneg1">
+					<div class="inline bggreen5 marglrneg3 padlr4 width24 textright bggreen4 roundleft">{{ spe.place }}</div>
+					<div class="inline bgblack marglrneg2 padlr4 width24 textcenter roundright{% if spe.movement > 0 %} fggreen5{% elif spe.movement < 0 %} fgred5{% endif%}">{% if spe.movement > 0 %}+{% endif %}{{ spe.movement }}</div>
+					<div class="inline bgblack padlr4 width256 fgwhite rounded"><a href="{% url 'season31:player' spe.playerid %}" class="fgwhite">{{ spe.playername }}</a></div>
+					<div class="inline bggreen5 marglrneg2 padlr4 width24 textright roundleft">{{ spe.total_score }}</div>
+					<div class="inline bgblack marglrneg3 padlr4 width24 textcenter{% if spe.score_delta < 0 %} fgdelta{% endif %} roundright">{{ spe.score_delta }}</div>
+					<div class="inline bgblack padlr4 width16 textcenter textbold font14 fggreen5 rounded">{% if spe.vote_off_score > 0 and latestepisode.is_locked%}✓{% else %}&nbsp;{% endif %}</div>
+					{% if latestepisode.is_locked %}
+					<div class="inline">
+						{% for sp in spe.tpicks %}
+						<div class="inline padlr4 rounded bg{{sp.color}}">
+							<a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a>
+						</div>
+						{% endfor %}
 					</div>
-					{% endfor %}
-				</td>
-				{% endif %}
-			</tr>
+					{% endif %}
+				</div>
+			</div>
 			{% endfor %}
-		</table>
+		</div>
 	</td>
 	{% if user.is_superuser  %}
 	<td class="bgadmin noborder texttop">
