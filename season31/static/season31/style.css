@@ -13,7 +13,7 @@
 }
 
 .content {
-	/*min-width: 512;*/
+	min-width: 512;
 	background-color: #FFFFFF;
 	padding: 8;
 }
@@ -65,6 +65,7 @@ form {margin-bottom: 0;}
 .bglightgrey {background-color: #c8c8c8;}
 .bggrey {background-color: #909090;}
 .bgdarkgrey {background-color: #595959;}
+.bglightblack {background-color: #3d3d3d;}
 .bgblack {background-color: #222222;}
 .bgmerge {background-color: #B4A7D6; color: #222222;}
 .bggreen5 {background-color: #66ff66; color: #222222;}
@@ -89,6 +90,7 @@ form {margin-bottom: 0;}
 .fglightgrey {color: #c8c8c8;}
 .fggrey {color: #999999;}
 .fgdarkgrey {color: #595959;}
+.fglightblack {color: #3d3d3d;}
 .fgblack {color: #222222;}
 .fgmerge {color: #B4A7D6;}
 .fggreen5 {color: #66ff66;;}
@@ -109,10 +111,11 @@ form {margin-bottom: 0;}
 .fgdelta {color: #c86959;}
 
 .castawayimgsmall {height: 32;}
-.actionsmall {height: 22;}
+.actionsmall {height: 16;}
+.actionsmaller {height: 16;}
 .maxadminwidth {width: 256;}
 
-.pick {width: 72; float: left;}
+.pick {width: 62;}
 .picksm {width: 16; float: left;}
 
 .mindwidth144 {min-width: 144;}
@@ -135,12 +138,20 @@ form {margin-bottom: 0;}
 .pad4 {padding: 4;}
 .pad8 {padding: 8;}
 
+.marglrneg4 {margin-left: -4; margin-right: -4;}
+.marglrneg3 {margin-left: -3; margin-right: -3;}
+.marglrneg2 {margin-left: -2; margin-right: -2;}
+.marglrneg1 {margin-left: -1; margin-right: -1;}
 .marglr0 {margin-left: 0; margin-right: 0;}
 .marglr1 {margin-left: 1; margin-right: 1;}
 .marglr2 {margin-left: 2; margin-right: 2;}
 .marglr4 {margin-left: 4; margin-right: 4;}
 .marglr8 {margin-left: 8; margin-right: 8;}
 
+.margneg4 {margin: -4;}
+.margneg3 {margin: -3;}
+.margneg2 {margin: -2;}
+.margneg1 {margin: -1;}
 .marg0 {margin: 0;}
 .marg1 {margin: 1;}
 .marg2 {margin: 2;}
@@ -177,6 +188,16 @@ table, th, td{
 .inline {display: inline-block;}
 .floatright {float: right;}
 .floatleft {float: left;}
+.clear {clear: both;}
+.overflowhidden  {overflow: hidden;}
+.teamhide {display:none;}
+.datahide {display:none;}
+.teamshow:hover {background: linear-gradient(to bottom, #222222 0%, #3d3d3d 100%);}
+.teamshow:hover > .teamhide {display:inline-block;}
+.datashow:hover .datahide {display:inline-block;}
+
+.relative {position: relative;}
+.absright {position: absolute; right: 0px;}
 
 .font0{font-size: 0em;}
 .font8{font-size: 0.5em;}
@@ -189,6 +210,20 @@ table, th, td{
 .font20{font-size: 1.25em;}
 .font24{font-size: 1.5em;}
 .font32{font-size: 2em;}
+
+.width16 {width: 16px;}
+.width24 {width: 24px;}
+.width32 {width: 32px;}
+.width48 {width: 48px;}
+.width64 {width: 64px;}
+.width72 {width: 72px;}
+.width128 {width: 128px;}
+.width192 {width: 192px;}
+.width256 {width: 256px;}
+.width320 {width: 320px;}
+.width384 {width: 384px;}
+.width512 {width: 512px;}
+.width768 {width: 768px;}
 
 .width30{width: 30%}
 .width40{width: 40%}
@@ -205,8 +240,12 @@ table, th, td{
 .textstrike {text-decoration: line-through;}
 
 .texttop {vertical-align: top;}
+.textbottom {vertical-align: bottom;}
 .textsuper {vertical-align: top;}
 
+.rounded {border-radius: 4px;}
+.roundleft {border-top-left-radius: 4px; border-bottom-left-radius: 4px;}
+.roundright {border-top-right-radius: 4px; border-bottom-right-radius: 4px;}
 
 .outimg {
     filter: none;
