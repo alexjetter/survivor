@@ -7,16 +7,17 @@
 	<td class="menu noborder texttop">
 		{% include "season31/menu.html" %}
 	</td>
-	<td class="content noborder texttop textleft">
+	<td class="content textcenter noborder texttop textleft">
 
-		<div class="font32"><span class="textbold">Leaderboard</span> <span class="fglightgrey">{{ latestepisode }}</span></div>
+		<div class="font32 textbold">Leaderboard</div>
+		<div class="font24 fggrey margneg4">{{ latestepisode }}</div>
 		
 		{% if latestepisode %}
 		
 		<div class="halfspacer"></div>
 		
 		
-		<div>
+		<div class="inline textleft">
 			<div class="margneg2">
 				<div class="inline width192 bglightgrey rounded textright padlr4 padtb0">Top Castaway Score</div>
 				<div class="inline width24 bgdarkgrey roundleft textright fggreen4 padlr4 padtb0 marglrneg3">{{ simpleepisodestats.topcastawayscore }}</div>
@@ -80,30 +81,35 @@
 		
 		<div class="halfspacer"></div>
 		
-		<div class="rounded pad8">
+		<div class="inline rounded pad2 bgdarkgrey datashow">
 			<div class="pad0">
-				<div class="inline pad0 marglrneg1">
-					<div class="inline bgblack marglrneg3 padlr4 fglightgrey width24 textcenter roundleft">Plc</div>
-					<div class="inline bglightblack marglrneg2 padlr4 fglightgrey width24 textcenter roundright">±</div>
-					<div class="inline bgblack padlr4 fglightgrey width256 rounded">Player</div>
-					<div class="inline bgblack marglrneg3 padlr4 fglightgrey width24 textcenter roundleft">Pts</div>
-					<div class="inline bglightblack marglrneg2 padlr4 fglightgrey width24 textcenter roundright">Δ</div>
-					<div class="inline bgblack width16 padlr4 fglightgrey textcenter textbold rounded">X</div>
+				<div class="pad0 bgblack rounded marg1">
+					<div class="datahide padlr2 width32  fglightgrey">±</div>
+					<div class="inline   padlr4 width48  fglightgrey">Plc</div>
+					<div class="inline   padlr8 width256 fglightgrey">Player</div>
+					<div class="inline   padlr4 width48  fglightgrey">Pts</div>
+					<div class="datahide padlr2 width32  fglightgrey">Δ</div>
 				</div>
 			</div>
 			{% for spe in simpleplayerepisodes %}
 			<div class="pad0">
-				<div class="inline pad0 margneg1">
-					<div class="inline bgblack fgwhite marglrneg3 padlr4 width24 textcenter roundleft">{{ spe.place }}</div>
-					<div class="inline bglightblack marglrneg2 padlr4 width24 textcenter roundright{% if spe.movement > 0 %} fggreen5{% elif spe.movement < 0 %} fgred5{% endif%}">{% if spe.movement > 0 %}+{% endif %}{{ spe.movement }}</div>
-					<div class="inline bgblack padlr4 width256 fgwhite rounded"><a href="{% url 'season31:player' spe.playerid %}" class="fgwhite">{{ spe.playername }}</a></div>
-					<div class="inline bgblack fgwhite marglrneg3 padlr4 width24 textcenter roundleft">{{ spe.total_score }}</div>
-					<div class="inline bglightblack marglrneg2 padlr4 width24 textcenter{% if spe.score_delta < 0 %} fgdelta{% else %} fglightblack{% endif %} roundright">{{ spe.score_delta }}</div>
-					{% if spe.vote_off_score > 0 and latestepisode.is_locked%}<div class="inline width16 bgblack padlr4 textcenter fggreen5 rounded">X</div>{% endif %}
+				<div class="pad0 bgblack rounded marg1 teamshow">
+					<div class="pad0">
+						<div class="datahide padlr2 width32  {% if spe.movement > 0 %} fggreen5{% elif spe.movement < 0 %} fgred5{% endif%}">{% if spe.movement > 0 %}+{% endif %}{{ spe.movement }}</div>
+						<div class="inline   padlr4 width48  bgwhite roundleft">{{ spe.place }}</div>
+						<div class="inline   padlr8 width256 fgwhite textleft">
+							<a href="{% url 'season31:player' spe.playerid %}" class="fgwhite">{{ spe.playername }}</a>
+							{% if spe.vote_off_score > 0 and latestepisode.is_locked%}
+							<img src="{% static 'season31/images/icons/'%}CorrectVote.png" class="actionsmall marglr4" title="Correctly Predicted Vote" />
+							{% endif %}
+						</div>
+						<div class="inline   padlr4 width48  bgwhite roundright">{{ spe.total_score }}</div>
+						<div class="datahide padlr2 width32  {% if spe.score_delta < 0 %} fgdelta{% endif %}">{{ spe.score_delta }}</div>
+					</div>
 					{% if latestepisode.is_locked %}
-					<div class="inline hidden">
+					<div class="pad4 teamhide textleft" id="{{spe.playername}}">
 						{% for sp in spe.tpicks %}
-						<div class="inline padlr4 rounded bg{{sp.color}}">
+						<div class="inline padlr8 marglrneg1 rounded bg{{sp.color}}">
 							<a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a>
 						</div>
 						{% endfor %}
