@@ -14,7 +14,7 @@ from random import randint
 
 from .forms import UserForm
 from .models import Player, Castaway, TeamPick, VotePick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action
-from .simple import SimplePlayerEpisode, SimplePerson, SimpleCastawayEpisode, SimpleAction, SimpleEpisodeStats, getcastawaycolordict, getsimplecastawayepisodes, getsimpleplayerepisodes, getsimpleepisodestats, getsimpleactions, getsimpletribes, getsimpleepisodes, getsimpleepisode
+from .simple import SimplePlayerEpisode, SimplePerson, SimpleCastawayEpisode, SimpleAction, SimpleEpisodeStats, getcastawaycolordict, getsimplecastawayepisodes, getsimpleplayerepisodes, getsimpleepisodestats, getsimpleactions, getsimpletribes, getsimpleepisodes, getsimpleepisode, getsimplejspsforepisode
 
 def clear_cache():
 	cache.clear()
@@ -86,13 +86,14 @@ class EpisodeView(generic.DetailView):
 		return context
 
 class EpisodeJSPView(generic.DetailView):
+	clear_cache()
 	model = Episode
 	template_name = 'season31/episodejsp.html'
 	def get_context_data(self, **kwargs):
 		context = super(EpisodeJSPView, self).get_context_data(**kwargs)
-		castawaycolordict = getcastawaycolordict(context['episode'])
-		context['simpleplayerepisodes'] = getsimpleplayerepisodes(context['episode'], castawaycolordict)
-		context['simplecastawayepisodes'] = getsimplecastawayepisodes(context['episode'], castawaycolordict)
+		context['simpleepisode'] = getsimpleepisode(context['episode'])
+		context['simpleepisodes'] = getsimpleepisodes()
+		context['simplejsps'] = getsimplejspsforepisode(context['episode'])
 		return context
 
 def register(request):

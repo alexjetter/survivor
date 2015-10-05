@@ -65,6 +65,15 @@ class SimpleEpisodeStats:
 	mostvotecastaways = []
 	correctpredictions = 0
 
+class SimpleObjectWithChildren:
+	name = ""
+	value = 0
+	children = []
+
+class SimpleObject:
+	name = ""
+	value = 0
+
 # Functions
 
 def getcastawaycolordict(episode):
@@ -202,6 +211,28 @@ def getsimpleepisode(episode):
 	se.is_locked = episode.is_locked
 	se.score_jsps = episode.score_jsps
 	return se
+	
+def getsimplejspsforepisode(episode):
+	simplejsps = []
+	headerobject = SimpleObjectWithChildren()
+	headerobject.name = "Player"
+	headerobject.children = []
+	for castaway in Castaway.objects.all():
+		headerobject.children.append(castaway.name)
+	simplejsps.append(headerobject)
+	for player in Player.objects.filter(hidden = False):
+		playerjsp = SimpleObjectWithChildren()
+		playerjsp.name = player.user.username
+		playerjsp.children = []
+		for castaway in Castaway.objects.all():
+			if castaway.out_episode_number == 0 or castaway.out_episode_number > episode.number:
+				count = TeamPick.objects.filter(player = player, castaway = castaway, episode__number__lte = episode.number).count()
+			else:
+				count = 0
+			playerjsp.children.append(count)
+			playerjsp.value += count
+		simplejsps.append(playerjsp)
+	return simplejsps
 
 def getsimpleepisodestats(episode, castawaycolordict):
 	simpleepisodestats = SimpleEpisodeStats()

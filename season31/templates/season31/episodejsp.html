@@ -9,16 +9,38 @@
 	</td>
 	<td class="content noborder texttop textleft">
 
-		<span class="title">Episodes</span>
+		<div class="textitalic">
+			{% for se in simpleepisodes %}
+			{% if se.number == simpleepisode.number %}
+			<span class="textbold fgdarkgrey">{{ se.short }}</span>
+			{% else %}
+			<a href="{% url 'season31:episodejsp' se.id %}" class="fggrey">{{ se.short }}</a>
+			{% endif %}
+			{% endfor %}
+		</div>
+		<div class="title">"{{ simpleepisode.title }}"</div>
+		<div class="subtitle">Jury Survivor Point (JSP) counts</div>
 
 		<div class="spacer"></div>
 
+		<div class="spacer"></div>
+		
 		<table>
+			{% for object in simplejsps %}
 			<tr>
-				<td class="bgblack fglightgrey">#</td>
-				<td class="bgblack fglightgrey">Name</td>
-				<td class="bgblack fglightgrey">Air Date</td>
+				<td class="bgblack fgwhite textright padlr4">
+					{{ object.name }}
+				</td>
+				{% for child in object.children %}
+				<td class="{% if forloop.parentloop.counter == 1 %}bgblack fgwhite{% endif %}{% if child > 0 %} bggreen{{child}}{% else %} bgdarkgrey{% endif %}">
+					{{ child}}
+				</td>
+				{% endfor %}
+				<td class="bgblack fgwhite textright padlr4">
+					{% if object.value > 0 %}{{ object.value }}{% endif %}
+				</td>
 			</tr>
+			{% endfor %}
 		</table>
 
 	</td>
