@@ -23,169 +23,142 @@
 
 		{% if player == user.player%}
 		<div class="pad4">
-			<table class="noborder">
-				<tr>
-					<td class="bgdarkgrey fgwhite pad4 noborder">Settings</td>
-					<td class="noborder">
-					</td>
-					<td class="bggrey pad4 noborder">
-						<form action="{% url 'season31:togglehelptext' player.id %}" method="post">
-							{% csrf_token %}
-							<input class="padtb0 padlr4" type="submit" value="{% if player.show_help_text %}Hide Help Text{% else %}Show Help Text{% endif %}" />
-						</form>
-					</td>
-					<td class="noborder">
-					</td>
-					<td class="bggrey fgwhite pad4 noborder">
-						<form action="{% url 'season31:resetpassword' player.id %}" method="post">
-							{% csrf_token %}
-							Change Password? <input type="text" name="password" value="" size="30"/>
-							<input type="submit" value="Change Password" />
-						</form>
-					</td>
-					{% if reset_password_error_message %}
-					<td class="noborder">
-					</td>
-					<td class="bgred4 pad4 noborder">
-						{{ reset_password_error_message }}
-					</td>
-					{% endif %}
-				</tr>
-			</table>
+			<div class="inline bgdarkgrey fgwhite pad4">Settings</div>
+
+			<div class="inline bggrey pad4">
+				<form action="{% url 'season31:togglehelptext' player.id %}" method="post">
+					{% csrf_token %}
+					<input class="padtb0 padlr4" type="submit" value="{% if player.show_help_text %}Hide Help Text{% else %}Show Help Text{% endif %}" />
+				</form>
+			</div>
+			
+			<div class="inline bggrey fgwhite pad4">
+				<form action="{% url 'season31:resetpassword' player.id %}" method="post">
+					{% csrf_token %}
+					Change Password? <input type="text" name="password" value="" size="30"/>
+					<input type="submit" value="Change Password" />
+				</form>
+			</div>
+			
+			{% if reset_password_error_message %}
+			<div class="inline bgred4 pad4">
+				{{ reset_password_error_message }}
+			</div>
+			{% endif %}
 		</div>
 		{% endif %}
 
 		<div class="halfspacer"></div>
-
+		
 		<!-- PAST -->
-		<table class="noborder">
+		<div class="bgdarkgrey rounded">
 			{% for playerepisode in pastplayerepisodes %}
 				{% if playerepisode.episode.number == 1 %}
-					<tr>
-						<td class="bgblack textleft fggrey font24 pad4" colspan=17>Past Episodes</td>
-					</tr>
-					<tr>
-						<td class="bgblack"></td>
-						<td class="bgblack fggreen4">Team Members<span class="font11 textsuper">JSPs</td>
-						<td class="bgblack"></td>
-						<td class="bgblack fgred4">Vote Off Picks</td>
-						<td class="bgblack"></td>
-						<td class="bgblack fglightgrey">LB</td>
-						<td class="bgblack"></td>
-						<td class="bgblack fggreen4">Action</td>
-						<td class="bgblack fgred4">VO</td>
-						<td class="bgblack fglightgrey">JSP</td>
-						<td class="bgblack"></td>
-						<td class="bgblack fglightgrey">Week</td>
-						<td class="bgblack"></td>
-						<td class="bgblack fglightgrey">±</td>
-						<td class="bgblack fglightgrey">Plc</td>
-						<td class="bgblack fglightgrey">Total</td>
-						<td class="bgblack"></td>
-					</tr>
+				<div class="textleft fglightgrey font24 pad4 rounded marg1">Past Episodes</div>
+				<div class="pad0 bgblack rounded marg1">
+					<div class="inline textcenter width24 fglightgrey" title="Leaderboard Movement Since Previous Week">±</div>
+					<div class="inline textcenter width24 fglightgrey" title="Leaderboard Position">Plc</div>
+					<div class="inline textcenter width48 fglightgrey textbold" title="Total Score">Total</div>
+					<div class="inline textcenter width96 fglightgrey">Episode</div>
+					<div class="inline textcenter width24 marglrneg1 fglightgrey textbold" title="This Week's Score">Wk</div>
+					<div class="inline textcenter width24 marglrneg1 fglightgrey" title="Loyalty Bonus Points">LB</div>
+					<div class="inline textcenter width24 marglrneg1 fggreen4" title="Team Action Points">TA</div>
+					<div class="inline textcenter width24 marglrneg1 fgred4" title="Vote-Off Prediction Points">VO</div>
+					<div class="inline textcenter width24 fglightgrey" title="Jury Survivor Points"><a href="{% url 'season31:playerjsps' player.id %}" class="fgwhite">JSP</a></div>
+					<div class="inline textcenter width160 fgred4">Vote Off Picks</div>
+					<div class="inline fggreen4">Team Members</div>
+				</div>
 				{% endif %}
-				<tr>
-					<td class="bgblack"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode.short }}</a></td>
-
-					<td class="bgblack">
-						{% for pick in playerepisode.get_team_picks %}
-						<div class="{% if pick.out_this_episode %}bgout{% else %}bg{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
-							<a href="{% url 'season31:castaway' pick.castaway.id %}" title="{{ pick.jsp_score }} JSPs banked at this point">{{ pick.castaway.name }}
-							<span class="font12 pad0 textbold textsuper">{{ pick.jsp_score }}</span>
-							</a>
-						</div>
-						{% endfor %}
-					</td>
-
-					<td class="bgblack"></td>
-
-					<td class="bgblack">
+				<div class="pad0 bgblack rounded marg1">
+					<div class="inline textcenter width24{% if playerepisode.movement > 0 %} fggreen5{% elif playerepisode.movement < 0 %} fgred5{% endif%}">{{ playerepisode.movement }}</div>
+					<div class="inline textcenter width24 bgwhite">{{ playerepisode.place }}</div>
+					<div class="inline textcenter width48 bgwhite textbold">{{ playerepisode.total_score }}</div>
+					<div class="inline textcenter width96"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode }}</a></div>
+					<div class="inline textcenter width24 bgwhite textbold">{{ playerepisode.week_score }}</div>
+					<div class="inline textcenter width24 marglrneg1 bglightgrey">{{ playerepisode.loyalty_bonus }}</div>
+					<div class="inline textcenter width24 marglrneg1 bglightgrey">{{ playerepisode.action_score }}</div>
+					<div class="inline textcenter width24 marglrneg1 bglightgrey">{{ playerepisode.vote_off_score }}</div>
+					<div class="inline textcenter width24 marglrneg1 bglightgrey">{{ playerepisode.jsp_score }}</div>
+					<div class="inline textcenter width160">
 						{% for pick in playerepisode.get_vote_picks %}
-						<div class="{% if pick.out_this_episode %}bgout{% else %}bg{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
+						<div class="inline padlr8 marglrneg1 rounded {% if pick.out_this_episode %}bgout{% else %}bg{{ pick.castaway_episode.tribe.color }}{% endif %}">
 							<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack ">{{ pick.castaway.name }}
 							</a>
 						</div>
 						{% endfor %}
-					</td>
-
-					<td class="bgblack"></td>
-					<td>{{ playerepisode.loyalty_bonus }}</td>
-					<td class="bgblack"></td>
-					<td>{{ playerepisode.action_score }}</td>
-					<td>{{ playerepisode.vote_off_score }}</td>
-					<td>{{ playerepisode.jsp_score }}</td>
-					<td class="bgblack"></td>
-					<td>{{ playerepisode.week_score }}</td>
-					<td class="bgblack"></td>
-					<td class="bgblack{% if playerepisode.movement > 0 %} fggreen5{% elif playerepisode.movement < 0 %} fgred5{% endif%}">{{ playerepisode.movement }}</td>
-					<td>{{ playerepisode.place }}</td>
-					<td>{{ playerepisode.total_score }}</td>
-					<td class="bgblack"></td>
-				</tr>
+					</div>
+					<div class="inline">
+						{% for pick in playerepisode.get_team_picks %}
+						<div class="inline padlr8 marglrneg1 rounded {% if pick.out_this_episode %}bgout{% else %}bg{{ pick.castaway_episode.tribe.color }}{% endif %}">
+							<a href="{% url 'season31:castaway' pick.castaway.id %}">{{ pick.castaway.name }}</a>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
 			{% endfor %}
-		</table>
+		</div>
 		
 		<div class="halfspacer"></div>
+		{% if futureplayerepisodes and player == user.player and player.show_help_text %}
+			<div class="pad4">
+				Below are your picks for the next episode.  Your<span class="textbold">Team</span>is on the left and your<span class="textbold">Vote Off Predictions</span>are on the right.<br>You have until<span class="textbold">8:00 PM EST / 5:00 PST</span>to make your picks each week.<br>This form will automatically lock if you refresh after that.
+			</div>
+		{% endif %}
 		
 		<!-- FUTURE -->
-		<table class="noborder">
+		<div class="bgdarkgrey rounded">
 			{% for playerepisode in futureplayerepisodes %}
 				{% if player == user.player %}
-					{% if player.show_help_text %}
-						<tr>
-							<td class="fgblack textleft pad8 noborder" colspan=7>Below are your picks for the next episode.  Your<span class="textbold">Team</span>is on the left and your<span class="textbold">Vote Off Predictions</span>are on the right.<br>You have until<span class="textbold">8:00 PM EST / 5:00 PST</span>to make your picks each week.<br>This form will automatically lock if you refresh after that.</td>
-						</tr>
-					{% endif %}
-					<tr>
-						<td class="bgblack textleft pad4" colspan=7><span class="fggrey font24">Upcoming  Episode</span><span class="fgred2 font20">{{ playerepisode.episode.time_to_lock }}<script>startTimer("{{ playerepisode.episode.seconds_to_lock }}");</script></span><span class="fggrey">to make changes to your picks</span></td>
-					</tr>
-					<tr>
-						<td class="bgblack"></td>
-						<td class="bgblack fggreen4">Team Members<span class="font11 textsuper">JSPs</td>
-						<td class="bgblack"></td>
-						<td class="bgblack fgred4">Vote Off Picks</td>
-						<td class="bgblack"></td>
-						<td class="bgblack fglightgrey">LB</td>
-						<td class="bgblack"></td>
-					</tr>
-					<tr>
-						<td class="bgblack"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode.short }}</a></td>
-
-						<td class="bgblack mindwidth144">
-							{% if not playerepisode.get_team_picks %}
-								<span class="fglightgrey textitalic">No Current Team</span>
-							{% endif %}
-							{% for pick in playerepisode.get_team_picks %}
-							<div class="{% if pick.out_this_episode %}bgout{% else %}bg{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
-								<a href="{% url 'season31:castaway' pick.castaway.id %}" title="{{ pick.jsp_score }} JSPs banked at this point">{{ pick.castaway.name }}
-								<span class="font12 pad0 textbold textsuper">{{ pick.jsp_score }}</span>
-								</a>
-							</div>
-							{% endfor %}
-						</td>
-
-						<td class="bgblack"></td>
-
-						<td class="bgblack mindwidth144">
+					<div class="textleft fglightgrey pad4 rounded marg1">
+						<div class="inline font24">Upcoming Episode</div>
+						<div class="inline padlr8 bgred2 marg0 font20">{{ playerepisode.episode.time_to_lock }}<script>startTimer("{{ playerepisode.episode.seconds_to_lock }}");</script></div>
+					</div>
+					<div class="pad0 bgblack rounded marg1">
+						<div class="inline textcenter width96"></div>
+						<div class="inline textcenter width24 fglightgrey" title="Loyalty Bonus Points">LB</div>
+						<div class="inline textcenter width160 fgred4">Vote Off Picks</div>
+						<div class="inline textcenter fggreen4">Team Members</div>
+					</div>
+					<div class="pad0 bgblack rounded marg1">
+						<div class="inline textcenter width96"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite">{{ playerepisode.episode }}</a></div>
+						<div class="inline textcenter width24 bglightgrey">{{ playerepisode.loyalty_bonus }}</div>
+						<div class="inline textcenter width160">
 							{% if not playerepisode.get_vote_picks %}
-								<span class="fglightgrey textitalic">No Current votes</span>
+								<form action="{% url 'season31:playerrolloverteam' player.playerepisode_set.latest.id %}" method="post">
+									{% csrf_token %}
+									<div class="padtb2 padlr0">
+										<input type="submit" value="None. Rollover?" class="width100" />
+									</div>
+								</form>
 							{% endif %}
 							{% for pick in playerepisode.get_vote_picks %}
-							<div class="{% if pick.out_this_episode %}bgout{% else %}bg{{ pick.castaway_episode.tribe.color }}{% endif %} pick">
-								<a href="{% url 'season31:castaway' pick.castaway.id %}">{{ pick.castaway.name }}
+							<div class="inline padlr8 marglrneg1 rounded {% if pick.out_this_episode %}bgout{% else %}bg{{ pick.castaway_episode.tribe.color }}{% endif %}">
+								<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack ">{{ pick.castaway.name }}
 								</a>
 							</div>
 							{% endfor %}
-						</td>
-
-						<td class="bgblack"></td>
-						<td>{{ playerepisode.loyalty_bonus }}</td>
-						<td class="bgblack"></td>
-					</tr>
+						</div>
+						<div class="inline">
+							{% if not playerepisode.get_team_picks %}
+								<form action="{% url 'season31:playerrolloverteam' player.playerepisode_set.latest.id %}" method="post">
+									{% csrf_token %}
+									<div class="padtb2 padlr0">
+										<input type="submit" value="No Current Team.  Rollover Last Week's Picks?" class="width100" />
+									</div>
+								</form>
+							{% endif %}
+							{% for pick in playerepisode.get_team_picks %}
+							<div class="inline padlr8 marglrneg1 rounded {% if pick.out_this_episode %}bgout{% else %}bg{{ pick.castaway_episode.tribe.color }}{% endif %}">
+								<a href="{% url 'season31:castaway' pick.castaway.id %}" class="fgblack ">{{ pick.castaway.name }}
+								</a>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
 					{% else %}
-					<tr>
-						<td class="noborder"><a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgblack textbold">{{ playerepisode.episode }}</a> Picks will be revealed in<span>{{ playerepisode.episode.time_to_lock }}<script>startTimer("{{ playerepisode.episode.seconds_to_lock }}");</script></span></td>
-					</tr>
+					<div class="pad0 bgblack rounded marg1 fglightgrey">
+						<a href="{% url 'season31:episode' playerepisode.episode.id %}" class="fgwhite textbold">{{ playerepisode.episode }}</a> Picks will be revealed in<span>{{ playerepisode.episode.time_to_lock }}<script>startTimer("{{ playerepisode.episode.seconds_to_lock }}");</script></span>
+					</div>
 				{% endif %}
 			{% endfor %}
 			{% if user.player == player and not player.playerepisode_set.latest.episode.is_locked %}
@@ -194,70 +167,22 @@
 				<td class="bgwhite noborder"></td>
 			</tr>
 			-->
-			<tr>
-				<td class="bgblack"></td>
-				<td class="bgblack pad4" colspan=3>
-					<form action="{% url 'season31:playerrolloverteam' player.playerepisode_set.latest.id %}" method="post">
-						{% csrf_token %}
-						<div class="padtb2 padlr0">
-							<input type="submit" value="Rollover Last Week's Picks (if empty)" class="width100" />
-						</div>
-					</form>
-				</td>
-				<td class="bgblack" colspan=3></td>
-			</tr>
-			<tr>
-				<td class="bgblack"></td>
-				<td class="bgblack fggreen4">
-					{% if player.get_latest_player_episode == player.playerepisode_set.latest %}
-					<form action="{% url 'season31:pickteams' player.playerepisode_set.latest.id %}" method="post">
-						{% csrf_token %}
-						<div class="bg{{ castawayepisode.tribe.color }}">
-							Pick Your Team! ({{ player.get_next_episode.team_size }} Castaways)
-						</div>
-						<table class="noborder width100">
-						{% for castawayepisode in player.playerepisode_set.latest.get_pick_options %}
-							<tr>
-								<td class="bg{{ castawayepisode.tribe.color }} textright noborder width45">
-									<input type="checkbox" name="picks" id="{{ castawayepisode.castaway.id }}" value="{{ castawayepisode.castaway.name }}" />
-								</td>
-								<td class="bg{{ castawayepisode.tribe.color }} textleft noborder width55">
-									<label for="{{ castawayepisode.castaway.id }}">{{ castawayepisode.castaway }}</label>
-								</td>
-							</tr>
-						{% endfor %}
-						</table>
-						<div class="padtb2 padlr0">
-							<input type="submit" value="Update Team" class="width100" />
-						</div>
-					</form>
-					{% if team_error_message %}
-					<div class="bgred4">{{ team_error_message }}</div>
-					{% endif %}
-					{% endif %}
-				</td>
-
-				<td class="bgblack"></td>
-
-				<td class="bgblack fgred4">
+			<div class="pad0 bgblack rounded marg1">
+				<div class="inline textcenter width96"></div>
+				<div class="inline textcenter width24"></div>
+				<div class="inline textcenter width160">
 					{% if player.get_latest_player_episode == player.playerepisode_set.latest %}
 					<form action="{% url 'season31:pickvotes' player.playerepisode_set.latest.id %}" method="post">
 						{% csrf_token %}
-						<div class="bg{{ castawayepisode.tribe.color }}">
+						<div class="fgred4">
 							Pick Your Votes! (2)
 						</div>
-						<table class="noborder width100">
 						{% for castawayepisode in player.playerepisode_set.latest.get_pick_options %}
-							<tr>
-								<td class="bg{{ castawayepisode.tribe.color }} textright noborder width40">
-									<input type="checkbox" name="picks" id="{{ castawayepisode.castaway.id }}" value="{{ castawayepisode.castaway.name }}" />
-								</td>
-								<td class="bg{{ castawayepisode.tribe.color }} textleft noborder width60">
-									<label for="{{ castawayepisode.castaway.id }}">{{ castawayepisode.castaway }}</label>
-								</td>
-							</tr>
+							<div class="textleft padlr8 marg1 rounded bg{{ castawayepisode.tribe.color }}">
+								<input type="checkbox" name="picks" id="{{ castawayepisode.castaway.id }}" value="{{ castawayepisode.castaway.name }}" />
+								<label for="{{ castawayepisode.castaway.id }}">{{ castawayepisode.castaway }}</label>
+							</div>
 						{% endfor %}
-						</table>
 						<div class="padtb2 padlr0">
 							<input type="submit" value="Update Votes" class="width100" />
 						</div>
@@ -266,13 +191,32 @@
 					<div class="bgred4">{{ vote_error_message }}</div>
 					{% endif %}
 					{% endif %}
-				</td>
-
-				<td class="bgblack"></td>
-				<td class="bgblack" colspan=12></td>
-			</tr>
+				</div>
+				<div class="inline textcenter">
+					{% if player.get_latest_player_episode == player.playerepisode_set.latest %}
+					<form action="{% url 'season31:pickteams' player.playerepisode_set.latest.id %}" method="post">
+						{% csrf_token %}
+						<div class="fggreen4">
+							Pick Your Team! ({{ player.get_next_episode.team_size }} Castaways)
+						</div>
+						{% for castawayepisode in player.playerepisode_set.latest.get_pick_options %}
+							<div class="textleft padlr8 marg1 rounded bg{{ castawayepisode.tribe.color }}">
+								<input type="checkbox" name="picks" id="{{ castawayepisode.castaway.id }}" value="{{ castawayepisode.castaway.name }}" />
+								<label for="{{ castawayepisode.castaway.id }}">{{ castawayepisode.castaway }}</label>
+							</div>
+						{% endfor %}
+						<div class="padtb2 padlr0">
+							<input type="submit" value="Update Team" class="width100" />
+						</div>
+					</form>
+					{% if team_error_message %}
+					<div class="bgred4">{{ team_error_message }}</div>
+					{% endif %}
+					{% endif %}
+				</div>
+			</div>
 			{% endif %}
-		</table>
+		</div>
 
 	</td>
 	{% if user.is_superuser  %}

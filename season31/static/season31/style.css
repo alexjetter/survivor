@@ -189,7 +189,7 @@ table, th, td{
 .floatright {float: right;}
 .floatleft {float: left;}
 .clear {clear: both;}
-.overflowhidden  {overflow: hidden;}
+.overflowhidden {overflow: hidden;}
 .teamhide {display:none;}
 .datahide {display:none;}
 .teamshow:hover {background: linear-gradient(to bottom, #222222 0%, #3d3d3d 100%);}
@@ -217,10 +217,13 @@ table, th, td{
 .width48 {width: 48px;}
 .width64 {width: 64px;}
 .width72 {width: 72px;}
+.width96 {width: 96px;}
 .width128 {width: 128px;}
+.width160 {width: 160px;}
 .width192 {width: 192px;}
 .width256 {width: 256px;}
 .width320 {width: 320px;}
+.width448 {width: 448px;}
 .width384 {width: 384px;}
 .width512 {width: 512px;}
 .width768 {width: 768px;}

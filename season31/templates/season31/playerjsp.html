@@ -8,24 +8,7 @@
 		{% include "season31/menu.html" %}
 	</td>
 	<td class="content noborder texttop textleft">
-
-		<div class="textitalic">
-			{% for se in simpleepisodes %}
-			{% if se.number == simpleepisode.number %}
-			<span class="textbold fgdarkgrey">{{ se.short }}</span>
-			{% else %}
-			<a href="{% url 'season31:episodejsps' se.id %}" class="fggrey">{{ se.short }}</a>
-			{% endif %}
-			{% endfor %}
-		</div>
-		<div class="title">"{{ simpleepisode.title }}"</div>
-		<div class="subtitle">Jury Survivor Point (JSP) counts</div>
-
-		<div class="spacer"></div>
-
-		<div class="spacer"></div>
 		
-		{% if episode.is_locked %}
 		<table>
 			{% for object in simplejsps %}
 			<tr>
@@ -43,7 +26,6 @@
 			</tr>
 			{% endfor %}
 		</table>
-		{% endif %}
 
 	</td>
 	

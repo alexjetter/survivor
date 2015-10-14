@@ -213,6 +213,8 @@ def getsimpleepisode(episode):
 	return se
 	
 def getsimplejspsforepisode(episode):
+	if not episode.is_locked:
+		return None
 	simplejsps = []
 	headerobject = SimpleObjectWithChildren()
 	headerobject.name = "Player"
@@ -232,6 +234,28 @@ def getsimplejspsforepisode(episode):
 			playerjsp.children.append(count)
 			playerjsp.value += count
 		simplejsps.append(playerjsp)
+	return simplejsps
+	
+def getsimplejspsforplayer(player):
+	simplejsps = []
+	headerobject = SimpleObjectWithChildren()
+	headerobject.name = "Episode"
+	headerobject.children = []
+	for episode in Episode.objects.filter(is_locked = True):
+		headerobject.children.append(episode.short)
+	simplejsps.append(headerobject)
+	for castaway in Castaway.objects.all():
+		castawayjsp = SimpleObjectWithChildren()
+		castawayjsp.name = castaway.name
+		castawayjsp.children = []
+		for episode in Episode.objects.filter(is_locked = True):
+			if castaway.out_episode_number == 0 or castaway.out_episode_number > episode.number:
+				count = TeamPick.objects.filter(player = player, castaway = castaway, episode__number__lte = episode.number).count()
+			else:
+				count = 0
+			castawayjsp.children.append(count)
+			castawayjsp.value += count
+		simplejsps.append(castawayjsp)
 	return simplejsps
 
 def getsimpleepisodestats(episode, castawaycolordict):

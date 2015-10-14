@@ -14,22 +14,21 @@ from random import randint
 
 from .forms import UserForm
 from .models import Player, Castaway, TeamPick, VotePick, Episode, PlayerEpisode, CastawayEpisode, Tribe, Vote, Action
-from .simple import SimplePlayerEpisode, SimplePerson, SimpleCastawayEpisode, SimpleAction, SimpleEpisodeStats, getcastawaycolordict, getsimplecastawayepisodes, getsimpleplayerepisodes, getsimpleepisodestats, getsimpleactions, getsimpletribes, getsimpleepisodes, getsimpleepisode, getsimplejspsforepisode
+from .simple import *
 
 def clear_cache():
 	cache.clear()
 
 class LeaderboardView(generic.ListView):
-	clear_cache()
-	context_object_name = 'simpleplayerepisodes'
+	context_object_name = 'tribes'
 	template_name = 'season31/leaderboard.html'
-	latestepisode = Episode.objects.filter(is_locked = True).latest()
-	castawaycolordict = getcastawaycolordict(latestepisode)
-	queryset = getsimpleplayerepisodes(latestepisode, castawaycolordict, '-total_score')
+	queryset = Tribe.objects.all()
 	def get_context_data(self, **kwargs):
 		context = super(LeaderboardView, self).get_context_data(**kwargs)
-		context['latestepisode'] = self.latestepisode
-		context['simpleepisodestats'] = getsimpleepisodestats(self.latestepisode, self.castawaycolordict)
+		context['latestepisode'] = Episode.objects.filter(is_locked = True).latest()
+		castawaycolordict = getcastawaycolordict(context['latestepisode'])
+		context['simpleepisodestats'] = getsimpleepisodestats(context['latestepisode'], castawaycolordict)
+		context['simpleplayerepisodes'] = getsimpleplayerepisodes(context['latestepisode'], castawaycolordict, '-total_score')
 		return context
 
 class CastawaysView(generic.ListView):
@@ -65,6 +64,15 @@ class PlayerView(generic.DetailView):
 		context = super(PlayerView, self).get_context_data(**kwargs)
 		context['pastplayerepisodes'] = PlayerEpisode.objects.filter(player = context['player'], episode__is_locked = True)
 		context['futureplayerepisodes'] = PlayerEpisode.objects.filter(player = context['player'], episode__is_locked = False)
+		return context
+
+class PlayerJSPView(generic.DetailView):
+	clear_cache()
+	model = Player
+	template_name = 'season31/playerjsp.html'
+	def get_context_data(self, **kwargs):
+		context = super(PlayerJSPView, self).get_context_data(**kwargs)
+		context['simplejsps'] = getsimplejspsforplayer(context['player'])
 		return context
 
 class CastawayView(generic.DetailView):
