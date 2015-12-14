@@ -68,6 +68,11 @@ form {margin-bottom: 0;}
 .bglightblack {background-color: #3d3d3d;}
 .bgblack {background-color: #222222;}
 .bgmerge {background-color: #B4A7D6; color: #222222;}
+.bggreen10 {background-color: #66ff66; color: #222222;}
+.bggreen9 {background-color: #66ff66; color: #222222;}
+.bggreen8 {background-color: #66ff66; color: #222222;}
+.bggreen7 {background-color: #66ff66; color: #222222;}
+.bggreen6 {background-color: #66ff66; color: #222222;}
 .bggreen5 {background-color: #66ff66; color: #222222;}
 .bggreen4 {background-color: #88ff66; color: #222222;}
 .bggreen3 {background-color: #aaff66; color: #222222;}
@@ -81,6 +86,7 @@ form {margin-bottom: 0;}
 .bgGreen {background-color: #64e4b8; color: #222222;}
 .bgMagenta {background-color: #ff5cad; color: #222222;}
 .bgYellow{background-color: #ffd81a; color: #222222;}
+.bgOrange{background-color: #ff8c2c; color: #222222;}
 .bgout {text-decoration: line-through; background-color: #909090;}
 .bgdarkred {background-color: #CC2222;}
 .bgadmin {background-color: #332222;}
@@ -106,6 +112,7 @@ form {margin-bottom: 0;}
 .fgGreen {color: #64e4b8;}
 .fgMagenta {color: #ff5cad;}
 .fgYellow{color: #ffd81a;}
+.fgOrange{color: #ee6c00;}
 .fgout {text-decoration: line-through; color: #909090;}
 .fgdarkred {color: #CC2222;}
 .fgdelta {color: #c86959;}
@@ -176,6 +183,7 @@ table, th, td{
 
 .border {border: 1px solid #222222;}
 .whiteborder {border: 1px solid #ffffff;}
+.darkgreyborder {border: 1px solid #595959;}
 .borderleft {border-left: 1px solid #222222;}
 .borderright {border-right: 1px solid #222222;}
 .bordertop {border-top: 1px solid #222222;}

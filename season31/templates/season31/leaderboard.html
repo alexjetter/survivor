@@ -7,117 +7,131 @@
 	<td class="menu noborder texttop">
 		{% include "season31/menu.html" %}
 	</td>
-	<td class="content textcenter noborder texttop textleft">
-
-		<div class="font32 textbold">Leaderboard</div>
-		<div class="font24 fggrey margneg4">{{ latestepisode }}</div>
+	<td class="content noborder texttop textleft">
 		
 		{% if latestepisode %}
+		
+		<div class="title">{{ latestepisode }}</div>
 		
 		<div class="halfspacer"></div>
 		
 		
-		<div class="inline textleft">
-			<div class="margneg2">
-				<div class="inline width192 bglightgrey rounded textright padlr4 padtb0">Top Castaway Score</div>
-				<div class="inline width24 bgdarkgrey roundleft textright fggreen4 padlr4 padtb0 marglrneg3">{{ simpleepisodestats.topcastawayscore }}</div>
-				<div class="inline width48 bgdarkgrey roundright textleft fggrey padlr4 padtb0 marglrneg3">Points</div>
-				<div class="inline margneg2">
-					{% for sp in simpleepisodestats.topcastawayscorers %}
-					<div class="inline padlr4 padtb0 rounded bg{{ sp.color }}"><a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a></div>
-					{% endfor %}
-				</div>
-			</div>
-			<div class="margneg2">
-				<div class="inline width192 bglightgrey rounded textright padlr4 padtb0">Most Picked for Teams</div>
-				<div class="inline width24 bgdarkgrey roundleft textright fggreen4 padlr4 padtb0 marglrneg3">{{ simpleepisodestats.mostteamcastawaycount }}</div>
-				<div class="inline width48 bgdarkgrey roundright textleft fggrey padlr4 padtb0 marglrneg3">Teams</div>
-				<div class="inline margneg2">
-					{% for sp in simpleepisodestats.mostteamcastaways %}
-					<div class="inline padlr4 padtb0 rounded bg{{ sp.color }}"><a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a></div>
-					{% endfor %}
-				</div>
-			</div>
-			<div class="margneg2">
-				<div class="inline width192 bglightgrey rounded textright padlr4 padtb0">Most Predicted Vote-Off</div>
-				<div class="inline width24 bgdarkgrey roundleft textright fgred4 padlr4 padtb0 marglrneg3">{{ simpleepisodestats.mostvotecastawaycount }}</div>
-				<div class="inline width48 bgdarkgrey roundright textleft fggrey padlr4 padtb0 marglrneg3">Picks</div>
-				<div class="inline margneg2">
-					{% for sp in simpleepisodestats.mostvotecastaways %}
-					<div class="inline padlr4 padtb0 rounded bg{{ sp.color }}"><a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a></div>
-					{% endfor %}
-				</div>
-			</div>
-			<div class="margneg2">
-				<div class="inline width192 bglightgrey rounded textright padlr4 padtb0">Top Player Score</div>
-				<div class="inline width24 bgdarkgrey roundleft textright fggreen4 padlr4 padtb0 marglrneg3">{{ simpleepisodestats.topplayerscore }}</div>
-				<div class="inline width48 bgdarkgrey roundright textleft fggrey padlr4 padtb0 marglrneg3">Points</div>
-				<div class="inline margneg2">
-					{% for sp in simpleepisodestats.topplayerscorers %}
-					<div class="inline padlr4 padtb0 rounded bgblack"><a href="{% url 'season31:player' sp.id %}" class="fgwhite">{{ sp.name }}</a></div>
-					{% endfor %}
-				</div>
-			</div>
-			{% if simpleepisodestats.topplayermovement > 0 %}
-			<div class="margneg2">
-				<div class="inline width192 bglightgrey rounded textright padlr4 padtb0">Most Spots Climbed</div>
-				<div class="inline width24 bgdarkgrey roundleft textright fggreen4 padlr4 padtb0 marglrneg3">+{{ simpleepisodestats.topplayermovement }}</div>
-				<div class="inline width48 bgdarkgrey roundright textleft fggrey padlr4 padtb0 marglrneg3">Places</div>
-				<div class="inline margneg2">
-					{% for sp in simpleepisodestats.topplayermovers %}
-					<div class="inline padlr4 padtb0 rounded bgblack"><a href="{% url 'season31:player' sp.id %}" class="fgwhite">{{ sp.name }}</a></div>
-					{% endfor %}
-				</div>
-			</div>
-			{% endif %}
-			<div class="margneg2">
-				<div class="inline width192 bglightgrey rounded textright padlr4 padtb0">Correct Vote Predictions</div>
-				<div class="inline width24 bgdarkgrey roundleft textright fggreen4 padlr4 padtb0 marglrneg3">{{ simpleepisodestats.correctpredictions }}</div>
-				<div class="inline width48 bgdarkgrey roundright textleft fggrey padlr4 padtb0 marglrneg3">Seers</div>
-			</div>
+		<div class="bgdarkgrey rounded pad2">
+			<div class="textleft fglightgrey font24 pad4 rounded marg1">Stats</div>
+			<table class="textcenter">
+				<tr>
+					<td class="bgblack  padlr4 textright fglightgrey">Top Castaway Score</td>
+					<td class="bggreen4 padlr4 textcenter">{{ simpleepisodestats.topcastawayscore }}</td>
+					<td class="bgblack  padlr4 textleft fggreen4">Points</td>
+					<td class="bgblack textleft">
+						{% for sp in simpleepisodestats.topcastawayscorers %}
+						<div class="inline padlr4 marglrneg2 bg{{ sp.color }}"><a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a></div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td class="bgblack  padlr4 textright fglightgrey">Most Picked for Teams</td>
+					<td class="bggreen4 padlr4 textcenter">{{ simpleepisodestats.mostteamcastawaycount }}</td>
+					<td class="bgblack  padlr4 textleft fggreen4">Teams</td>
+					<td class="bgblack textleft">
+						{% for sp in simpleepisodestats.mostteamcastaways %}
+						<div class="inline padlr4 marglrneg2 bg{{ sp.color }}"><a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a></div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td class="bgblack  padlr4 textright fglightgrey">Most Predicted Vote-Off</td>
+					<td class="bgred4   padlr4 textcenter">{{ simpleepisodestats.mostvotecastawaycount }}</td>
+					<td class="bgblack  padlr4 textleft fgred4">Picks</td>
+					<td class="bgblack textleft">
+						{% for sp in simpleepisodestats.mostvotecastaways %}
+						<div class="inline padlr4 marglrneg2 bg{{ sp.color }}"><a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a></div>
+						{% endfor %}
+					</td>
+				</tr>
+				<tr>
+					<td class="bgblack  padlr4 textright fglightgrey">Top Player Score</td>
+					<td class="bggreen4 padlr4 textcenter">{{ simpleepisodestats.topplayerscore }}</td>
+					<td class="bgblack  padlr4 textleft fggreen4">Points</td>
+					<td class="bgblack textleft">
+						{% for sp in simpleepisodestats.topplayerscorers %}
+						<div class="inline padlr4 marglrneg2"><a href="{% url 'season31:player' sp.id %}" class="fgwhite">{{ sp.name }}</a></div>
+						{% endfor %}
+					</td>
+				</tr>
+				{% if simpleepisodestats.topplayermovement > 0 %}
+				<tr>
+					<td class="bgblack  padlr4 textright fglightgrey">Most Spots Climbed</td>
+					<td class="bggreen4 padlr4 textcenter">+{{ simpleepisodestats.topplayermovement }}</td>
+					<td class="bgblack  padlr4 textleft fggreen4">Places</td>
+					<td class="bgblack textleft">
+						{% for sp in simpleepisodestats.topplayermovers %}
+						<div class="inline padlr4 marglrneg2"><a href="{% url 'season31:player' sp.id %}" class="fgwhite">{{ sp.name }}</a></div>
+						{% endfor %}
+					</td>
+				</tr>
+				{% endif %}
+				<tr>
+					<td class="bgblack  padlr4 textright fglightgrey">Correct Vote Predictions</td>
+					<td class="bggreen4 padlr4 textcenter">{{ simpleepisodestats.correctpredictions }}</td>
+					<td class="bgblack  padlr4 textleft fggreen4">Seers</td>
+					<td class="bgblack"></td>
+				</tr>
+			</table>
 		</div>
 		
 		{% endif %}
 		
 		<div class="halfspacer"></div>
 		
-		<div class="inline rounded pad2 bgdarkgrey datashow">
-			<div class="pad0">
-				<div class="pad0 bgblack rounded marg1">
-					<div class="datahide padlr2 width32  fglightgrey">±</div>
-					<div class="inline   padlr4 width48  fglightgrey">Plc</div>
-					<div class="inline   padlr8 width256 fglightgrey">Player</div>
-					<div class="inline   padlr4 width48  fglightgrey">Pts</div>
-					<div class="datahide padlr2 width32  fglightgrey">Δ</div>
-				</div>
+		{% if user.player.show_help_text %}
+			<div class="pad4 textleft">
+				Mouseover the table to see movement and delta.  Mouseover a player to see their team.
 			</div>
-			{% for spe in simpleplayerepisodes %}
-			<div class="pad0">
-				<div class="pad0 bgblack rounded marg1 teamshow">
-					<div class="pad0">
-						<div class="datahide padlr2 width32  {% if spe.movement > 0 %} fggreen5{% elif spe.movement < 0 %} fgred5{% endif%}">{% if spe.movement > 0 %}+{% endif %}{{ spe.movement }}</div>
-						<div class="inline   padlr4 width48  bgwhite roundleft">{{ spe.place }}</div>
-						<div class="inline   padlr8 width256 fgwhite textleft">
-							<a href="{% url 'season31:player' spe.playerid %}" class="fgwhite">{{ spe.playername }}</a>
-							{% if spe.vote_off_score > 0 and latestepisode.is_locked%}
-							<img src="{% static 'season31/images/icons/'%}CorrectVote.png" class="actionsmall marglr4" title="Correctly Predicted Vote" />
-							{% endif %}
-						</div>
-						<div class="inline   padlr4 width48  bgwhite roundright">{{ spe.total_score }}</div>
-						<div class="datahide padlr2 width32  {% if spe.score_delta < 0 %} fgdelta{% endif %}">{{ spe.score_delta }}</div>
-					</div>
+		{% endif %}
+		<div class="bgdarkgrey rounded pad2 datashow">
+			<div class="textleft fglightgrey font24 pad4 rounded marg1">Leaderboard</div>
+			<table class="textcenter">
+				<tr>
+					<td class="bgblack padlr4 fglightgrey width32"><div class="pad0 datahide">±</div></td>
+					<td class="bgblack padlr4 fglightgrey">Place</td>
+					<td class="bgblack padlr8 fglightgrey"></td>
+					<td class="bgblack padlr4 fglightgrey">Points</td>
+					<td class="bgblack padlr4 fglightgrey width32"><div class="pad0 datahide">Δ</div></td>
+				</tr>
+				{% for spe in simpleplayerepisodes %}
+				<tr class="teamshow">
+					<td class="bgblack padlr4 width32 {% if spe.movement > 0 %} fggreen5{% elif spe.movement < 0 %} fgred5{% endif%}"><div class="pad0 datahide">{% if spe.movement > 0 %}+{% endif %}{{ spe.movement }}</div></td>
+					<td class="bgwhite padlr4">{{ spe.place }}</td>
+					<td class="bgblack padlr8 textleft">
+						<a href="{% url 'season31:player' spe.playerid %}" class="fgwhite">{{ spe.playername }}</a>
+						{% if spe.vote_off_score > 0 and latestepisode.is_locked%}
+						<img src="{% static 'season31/images/icons/'%}CorrectVote.png" class="actionsmall marglr4" title="Correctly Predicted Vote" />
+						{% endif %}
+					</td>
+					<td class="bgwhite padlr4">{{ spe.total_score }}</td>
+					<td class="bgblack padlr4 width32 {% if spe.score_delta < 0 %} fgdelta{% endif %}"><div class="pad0 datahide">{{ spe.score_delta }}</div></td>
 					{% if latestepisode.is_locked %}
-					<div class="pad4 teamhide textleft" id="{{spe.playername}}">
-						{% for sp in spe.tpicks %}
-						<div class="inline padlr8 marglrneg1 rounded bg{{sp.color}}">
-							<a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a>
-						</div>
-						{% endfor %}
-					</div>
+					<td class="teamhide darkgreyborder" id="{{spe.playername}}">
+						<table class="tablecenter darkgreyborder"><tr>
+							{% for sp in spe.tpicks %}
+							<td class="padlr4 castawayimgsmall darkgreyborder bg{{sp.color}}">
+								<a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a>
+							</td>
+							{% endfor %}
+						</tr></table>
+					</td>
 					{% endif %}
-				</div>
-			</div>
-			{% endfor %}
+				</tr>
+				{% endfor %}
+				<tr>
+					<td class="bgblack padlr4 fglightgrey width32"><div class="pad0 datahide">±</div></td>
+					<td class="bgblack padlr4 fglightgrey">Place</td>
+					<td class="bgblack padlr4 fglightgrey"></td>
+					<td class="bgblack padlr4 fglightgrey">Points</td>
+					<td class="bgblack padlr4 fglightgrey width32"><div class="pad0 datahide">Δ</div></td>
+				</tr>
+			</table>
 		</div>
 	</td>
 	{% if user.is_superuser  %}

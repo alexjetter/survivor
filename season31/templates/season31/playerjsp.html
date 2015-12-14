@@ -8,6 +8,10 @@
 		{% include "season31/menu.html" %}
 	</td>
 	<td class="content noborder texttop textleft">
+	
+		<span class="title">{{ player.user.username }}</span>
+		<span class="halftitle">Jury Survivor Points</span>
+		<div class="halfspacer"></div>
 		
 		<table>
 			{% for object in simplejsps %}
@@ -20,9 +24,6 @@
 					{{ child}}
 				</td>
 				{% endfor %}
-				<td class="bgblack fgwhite textright padlr4">
-					{% if object.value > 0 %}{{ object.value }}{% endif %}
-				</td>
 			</tr>
 			{% endfor %}
 		</table>

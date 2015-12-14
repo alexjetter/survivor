@@ -25,40 +25,37 @@
 
 		<!-- Castaway Table -->
 
-		<table>
-			<tr>
-				<td class="bgblack fgwhite textright"><a href="{% url 'season31:castaways' %}" class="fgwhite">Castaway</a></td>
-				<td class="bgblack fglightgrey">Tribe</td>
-				<td class="bgblack"></td>
-				<td class="bgblack fgwhite"><a href="{% url 'season31:actions' %}" class="fgwhite">Actions</a></td>
-				<td class="bgblack"></td>
-				<td class="bgblack fglightgrey">Votee</td>
-				<td class="bgblack"></td>
-				<td class="bgblack fglightgrey">Score</td>
-			</tr>
-			{% for sce in simplecastawayepisodes %}
-			<tr>
-				<td class="bgblack textright"><a href="{% url 'season31:castaway' sce.castawayid %}" class="fg{{ sce.color }}">{{ sce.castawayname }}</a></td>
-				<td class="bg{{ sce.color }}">{{ sce.tribe }}</td>
-				<td class="bgblack"></td>
-				<td>
-				{% for sa in sce.actions %}
-					<img src="{% static 'season31/images/icons/'%}{{ sa.icon_filename }}.png" title="{{ sa.name }}:
+		<div class="bgdarkgrey rounded pad2 datashow">
+			<div class="textleft fglightgrey font24 pad4 rounded marg1">Castaway Actions</div>
+			<table class="textcenter">
+				<tr>
+					<td class="bgblack padlr2"></td>
+					<td class="bgblack padlr2"><a href="{% url 'season31:actions' %}" class="fgwhite">Actions</a></td>
+					<td class="bgblack padlr2 datahide fglightgrey">Tribe</td>
+					<td class="bgblack padlr2 datahide fglightgrey">Votee</td>
+					<td class="bgblack padlr2 fglightgrey">Pts.</td>
+				</tr>
+				{% for sce in simplecastawayepisodes %}
+				<tr>
+					<td class="bgblack padlr2 textright"><a href="{% url 'season31:castaway' sce.castawayid %}" class="fg{{ sce.color }}">{{ sce.castawayname }}</a></td>
+					<td class="bgblack padlr2">
+					{% for sa in sce.actions %}
+						<img src="{% static 'season31/images/icons/'%}{{ sa.icon_filename }}.png" title="{{ sa.name }}:
 {{ sa.score }} Point(s)
 {{ sa.description }}" />
+					{% endfor %}
+					</td>
+					<td class="bgblack padlr2 datahide bg{{ sce.color }}">{{ sce.tribe }}</td>
+					{% if sce.vote %}
+					<td class="bgblack padlr2 datahide bg{{ sce.vote.color }}"><a href="{% url 'season31:castaway' sce.vote.id %}">{{ sce.vote.name }}</a></td>
+					{% else %}
+					<td class="bgblack padlr2 datahide">-</td>
+					{% endif %}
+					<td class="bgwhite padlr2">{{ sce.score }}</td>
+				</tr>
 				{% endfor %}
-				</td>
-				<td class="bgblack"></td>
-				{% if sce.vote %}
-				<td class="bg{{ sce.vote.color }}"><a href="{% url 'season31:castaway' sce.vote.id %}">{{ sce.vote.name }}</a></td>
-				{% else %}
-				<td>-</td>
-				{% endif %}
-				<td class="bgblack"></td>
-				<td>{{ sce.score }}</td>
-			</tr>
-			{% endfor %}
-		</table>
+			</table>
+		</div>
 
 		<div class="spacer"></div>
 	
@@ -67,73 +64,69 @@
 	<td class="content noborder texttop textleft">
 	-->
 
+		{% if user.player.show_help_text %}
+			<div class="pad4 textright">
+				Mouseover column headers for their full names.
+			</div>
+		{% endif %}
 		<!-- Player Table -->
-		<table>
-			<tr>
-				<td class="bgblack fgwhite textright"><a href="{% url 'season31:players' %}" class="fgwhite">Player</a></td>
-				<td class="bgblack fglightgrey">Team Members</td>
-				<td class="bgblack"></td>
-				<td class="bgblack fglightgrey">Vote Off Picks</td>
-				<td class="bgblack"></td>
-				<td class="bgblack fglightgrey">LB</td>
-				<td class="bgblack"></td>
-				<td class="bgblack fglightgrey">Action</td>
-				<td class="bgblack fglightgrey">Vote</td>
-				<td class="bgblack fglightgrey">JSP</td>
-				<td class="bgblack"></td>
-				<td class="bgblack fglightgrey">Week</td>
-				<td class="bgblack"></td>
-				<td class="bgblack fglightgrey">Total</td>
-			</tr>
-			{% if not simpleepisode.is_locked %}
-			<tr>
-				<td colspan=14>Picks will be revealed in {{ episode.time_to_lock }}</td>
-			</tr>
-			{% else %}
-			{% for spe in simpleplayerepisodes %}
-			<tr>
-				<td class="bgblack fgwhite textright"><a href="{% url 'season31:player' spe.playerid %}" class="fgwhite">{{ spe.playername }}</a></td>
+		<div class="bgdarkgrey rounded pad2">
+			<div class="textleft fglightgrey font24 pad4 rounded marg1">Player Points</div>
+			<table class="textcenter">
+				<tr>
+					<td class="bgblack parlr2"></td>
+					<td class="bgblack padlr2 fggreen4">Team Members</td>
+					<td class="bgblack padlr2 fgred4">Vote Off Picks</td>
+					<td class="bgblack padlr2 fglightgrey" title="Loyalty Bonus Points">LB</td>
+					<td class="bgblack padlr2 fggreen4" title="Team Action Points">TA</td>
+					<td class="bgblack padlr2 fgred4" title="Vote-Off Prediction Points">VO</td>
+					<td class="bgblack parlr2 fglightgrey" title="Jury Survivor Points">JSP</td>
+					<td class="bgblack parlr2 fglightgrey textbold" title="This Episode's Score">Week</td>
+					<td class="bgblack parlr2 fglightgrey textbold" title="Total Score Score">Total</td>
+				</tr>
+				{% if not simpleepisode.is_locked %}
+				<tr>
+					<td colspan=14>Picks will be revealed in {{ episode.time_to_lock }}</td>
+				</tr>
+				{% else %}
+				{% for spe in simpleplayerepisodes %}
+				<tr>
+					<td class="bgblack padlr2 textright">
+						{% if spe.vote_off_score > 0 %}
+							<img src="{% static 'season31/images/icons/'%}CorrectVote.png" class="actionsmall marglr4" title="Correctly Predicted Vote" />
+						{% endif %}
+						<a href="{% url 'season31:player' spe.playerid %}" class="fgwhite">{{ spe.playername }}</a>
+					</td>
 
-				<td class="bgblack">
-					{% if spe.tpicks|length == 0 and user.is_superuser %}
-					<form action="{% url 'season31:playerrolloverteam' spe.id %}" method="post">
-						{% csrf_token %}
-						<div class="padtb2 padlr0">
-							<input type="submit" value="Rollover Last Week's Picks" class="width100" />
-						</div>
-					</form>
-					{% endif %}
-					{% for sp in spe.tpicks %}
-					<div class="bg{{sp.color}} pick">
-						<a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a>
-					</div>
-					{% endfor %}
-				</td>
-
-				<td class="bgblack"></td>
-
-				<td class="bgblack">
-					{% for sp in spe.vpicks %}
-					<div class="bg{{sp.color}} pick">
-						<a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a>
-					</div>
-					{% endfor %}
-				</td>
-
-				<td class="bgblack"></td>
-				<td>{{ spe.loyalty_bonus }}</td>
-				<td class="bgblack"></td>
-				<td>{{ spe.action_score }}</td>
-				<td>{{ spe.vote_off_score }}</td>
-				<td>{{ spe.jsp_score }}</td>
-				<td class="bgblack"></td>
-				<td>{{ spe.week_score }}</td>
-				<td class="bgblack"></td>
-				<td>{{ spe.total_score }}</td>
-			</tr>
-			{% endfor %}
-			{% endif %}
-		</table>
+					<td class="bgblack padlr4">
+						<table class="tablecenter noborder"><tr>
+							{% for sp in spe.tpicks %}
+							<td class="noborder padlr8 padtb2 marg0 bg{{sp.color}}">
+								<a href="{% url 'season31:castaway' sp.id %}" class="fgblack">{{ sp.name }}</a>
+							</td>
+							{% endfor %}
+						</tr></table>
+					</td>
+					<td class="bgblack padlr4">
+						<table class="tablecenter noborder"><tr>
+							{% for sp in spe.vpicks %}
+							<td class="noborder padlr8 padtb2 marg0 bg{{sp.color}}">
+								<a href="{% url 'season31:castaway' sp.id %}">{{ sp.name }}</a>
+							</td>
+							{% endfor %}
+						</tr></table>
+					</td>
+					<td class="bglightgrey padlr2">{{ spe.loyalty_bonus }}</td>
+					<td class="bglightgrey padlr2">{{ spe.action_score }}</td>
+					<td class="bglightgrey padlr2">{{ spe.vote_off_score }}</td>
+					<td class="bglightgrey padlr2">{{ spe.jsp_score }}</td>
+					<td class="bgwhite padlr2 textbold">{{ spe.week_score }}</td>
+					<td class="bgwhite padlr2 textbold">{{ spe.total_score }}</td>
+				</tr>
+				{% endfor %}
+				{% endif %}
+			</table>
+		</div>
 
 	</td>
 	{% if user.is_superuser  %}

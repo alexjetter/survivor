@@ -254,7 +254,6 @@ def getsimplejspsforplayer(player):
 			else:
 				count = 0
 			castawayjsp.children.append(count)
-			castawayjsp.value += count
 		simplejsps.append(castawayjsp)
 	return simplejsps
 
@@ -288,6 +287,8 @@ def getsimpleepisodestats(episode, castawaycolordict):
 		if playerepisode.vote_off_score > 0:
 			simpleepisodestats.correctpredictions += 1
 	for castawayepisode in CastawayEpisode.objects.filter(episode = episode).order_by('-score'):
+		if castawayepisode.score <= 0:
+			continue
 		if castawayepisode.score > simpleepisodestats.topcastawayscore:
 			simpleepisodestats.topcastawayscore = castawayepisode.score
 			simpleepisodestats.topcastawayscorers = []
