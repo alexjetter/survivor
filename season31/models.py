@@ -204,7 +204,10 @@ class PlayerEpisode(models.Model):
 		survivingcastaways = Castaway.objects.filter(out_episode_number = 0)
 		pastepisodes = Episode.objects.filter(number__lte = self.episode.number)
 		pastteampicks = TeamPick.objects.filter(castaway__in = survivingcastaways, episode__in = pastepisodes, player = self.player)
-		self.jsp_score = pastteampicks.count()
+		if(self.episode.title != "Reunion"):
+			self.jsp_score = pastteampicks.count()
+		else:
+			self.jsp_score = pastteampicks.count() * 2
 		self.save()
 	def update_score(self):
 		try:

@@ -320,19 +320,20 @@ def getsimpleepisodestats(episode, castawaycolordict):
 			sp.color = castawaycolordict[str(sp.name)]
 			simpleepisodestats.mostteamcastaways.append(sp)
 		votepicks = VotePick.objects.filter(episode = episode, castaway = castaway)
-		if votepicks.count() > simpleepisodestats.mostvotecastawaycount:
-			simpleepisodestats.mostvotecastawaycount = votepicks.count()
-			simpleepisodestats.mostvotecastaways = []
-			sp = SimplePerson()
-			sp.id = castaway.id
-			sp.name = castaway.name
-			sp.color = castawaycolordict[str(sp.name)]
-			simpleepisodestats.mostvotecastaways.append(sp)
-		elif votepicks.count() == simpleepisodestats.mostvotecastawaycount:
-			sp = SimplePerson()
-			sp.id = castaway.id
-			sp.name = castaway.name
-			sp.color = castawaycolordict[str(sp.name)]
-			simpleepisodestats.mostvotecastaways.append(sp)
+		if votepicks.count() > 0:
+			if votepicks.count() > simpleepisodestats.mostvotecastawaycount:
+				simpleepisodestats.mostvotecastawaycount = votepicks.count()
+				simpleepisodestats.mostvotecastaways = []
+				sp = SimplePerson()
+				sp.id = castaway.id
+				sp.name = castaway.name
+				sp.color = castawaycolordict[str(sp.name)]
+				simpleepisodestats.mostvotecastaways.append(sp)
+			elif votepicks.count() == simpleepisodestats.mostvotecastawaycount:
+				sp = SimplePerson()
+				sp.id = castaway.id
+				sp.name = castaway.name
+				sp.color = castawaycolordict[str(sp.name)]
+				simpleepisodestats.mostvotecastaways.append(sp)
 	return simpleepisodestats
 	
